@@ -1,81 +1,175 @@
+// HTML elements for resource display on icon bar
+function ResourceIcon(res_name, sub_displays) {
+    this.div = document.getElementById(res_name+"_res_display");
+    this.sub_displays = sub_displays;
+    this.update = function() {
+        sub_displays.forEach(display => {
+            display.update();
+        });
+    }
+    this.reveal_el = function(num) {
+        sub_displays[num].display_self();
+    }
+}
+
+function ResourceIconSubDisplay(name, update_function = function() {return null;}) {
+    this.el = document.getElementById(name);
+    this.update = function() {
+        this.el.innerHTML = update_function();
+    }
+    this.display_self = function() {
+        this.el.style.display = "block";
+    }
+}
+
+function gen_color_coded_span_for_rate(rate) {
+    let span_ = "<span>"
+    if(rate > 0) {
+        span_ = "<span style='color: #28ca5e;'>+"
+    } else if(rate < 0) {
+        span_ = "<span style='color: #ca4e28;'>-"
+    }
+    return span_;
+}
+
+var berry_display = new ResourceIcon("berry", [
+    new ResourceIconSubDisplay("berry_sub1", function() {
+        return Math.floor(berry.cur) + "/" + berry.max;
+    }),
+    new ResourceIconSubDisplay("berry_sub2", function() {
+        return "Basket (" + (berry_basket.size.berry + berry_basket.bonuses.size.berry) + "): " + berry_basket.count;
+    }),
+    new ResourceIconSubDisplay("berry_sub2_1", function() {
+        return "Granary (" + (granary.size.berry + granary.bonuses.size.berry) + "): " + granary.count;
+    }),
+    new ResourceIconSubDisplay("berry_sub3", function() {
+        let span_begin = "<span>";
+        let span_end = "</span>"
+        span_begin = gen_color_coded_span_for_rate(berry.pas_rate);
+        return span_begin + parseFloat(berry.pas_rate).toPrecision(3) + span_end;
+    }),
+]);
+
+var log_display = new ResourceIcon("log", [
+    new ResourceIconSubDisplay("log_sub1", function() {
+        return Math.floor(log.cur) + "/" + log.max;
+    }),
+    new ResourceIconSubDisplay("log_sub2", function() {
+        return "Stacks (" + (log_stack.size.log + log_stack.bonuses.size.log) + "): " + log_stack.count;
+    }),
+    new ResourceIconSubDisplay("log_sub2_1", function() {
+        return "L.Yard (" + (lumber_yard.size.log + lumber_yard.bonuses.size.log) + "): " + lumber_yard.count;
+    }),
+    new ResourceIconSubDisplay("log_sub3", function() {
+        let span_begin = "<span>";
+        let span_end = "</span>"
+        span_begin = gen_color_coded_span_for_rate(log.pas_rate);
+        return span_begin + parseFloat(log.pas_rate).toPrecision(3) + span_end;
+    }),
+]);
+
+var ilarun_display = new ResourceIcon("ilarun", [
+    new ResourceIconSubDisplay("ilarun_sub1", function() {
+        return Math.floor(ilarun.cur) + "/" + ilarun.max + "(I:" + idle.count + ")";
+    }),
+    new ResourceIconSubDisplay("ilarun_sub2", function() {
+        return (forager.count + logger.count) + "/" + worker_max + "(F:" + forager.count + " L:" + logger.count + ")";
+    }),
+    new ResourceIconSubDisplay("ilarun_sub3", function() {
+        return baroness.count + "/" + baroness_max;
+    }),
+    new ResourceIconSubDisplay("ilarun_sub4", function() {
+        return "Warrens (" + (warren.size.ilarun + warren.bonuses.size.ilarun) + "): " + warren.count;
+    }),
+    new ResourceIconSubDisplay("ilarun_sub5", function() {
+        let span_begin = "<span>";
+        let span_end = "</span>"
+        span_begin = gen_color_coded_span_for_rate(ilarun.pas_rate);
+        return span_begin + parseFloat(ilarun.pas_rate).toPrecision(3) + span_end;
+    }),
+]);
+
+var influence_display = new ResourceIcon("influence", [
+    new ResourceIconSubDisplay("influence_sub1", function() {
+        return Math.floor(influence.cur);
+    }),
+    new ResourceIconSubDisplay("influence_sub2", function() {
+        let span_begin = "<span>";
+        let span_end = "</span>"
+        span_begin = gen_color_coded_span_for_rate(influence.pas_rate);
+        return span_begin + parseFloat(influence.pas_rate).toPrecision(3) + span_end;
+    }),
+]);
+
+// Main Tab UI
+function BuyButton(el, update_function) {
+    this.el = document.getElementById(el);
+    this.update = function() {
+        this.el.innerHTML = update_function();
+    }
+}
+
+var berry_basket_button = new BuyButton(
+    "berry_storage_add", function() {
+        return "Make Berry Basket (T1/Cost:" + berry_basket.cost.log + " Logs)";
+    }
+);
+
+var log_basket_button = new BuyButton(
+    "log_storage_add", function() {
+        return "Set Log Stack (T1/Cost:" + berry_basket.cost.log + " Berries)";
+    }
+);
+
+var warren_button = new BuyButton(
+    "ilarun_storage_add", function() {
+        return "Dig Ilarun Warren (T1/Cost:" + warren.cost.log + " Logs)";
+    }
+);
+
+var granary_button = new BuyButton(
+    "berry_storage_2_add", function() {
+        return "Build Granary (T1.5/Cost:" + granary.cost.log + " Logs)";
+    }
+);
+
+var lumber_yard_button = new BuyButton(
+    "log_storage_2_add", function() {
+        return "Build Lumber Yard (T1.5/Cost:" + lumber_yard.cost.berry + " Berries)";
+    }
+);
+
+var hamlet_button = new BuyButton(
+    "ilarun_storage_2_add", function() {
+        return "Establish Hamlet (T1.5/Cost:" + hamlet.cost.log + " Berries & Logs)";
+    }
+);
+
 // Display & GUI
-function update_tier1_res_display() {
-    ft1_el.innerHTML = Math.floor(tier1_res.ft1.cur);
-    ft1_max_el.innerHTML = Math.floor(tier1_res.ft1.max);
-    
-    log_el.innerHTML = Math.floor(tier1_res.log.cur);
-    log_max_el.innerHTML = Math.floor(tier1_res.log.max);
-
-    ilarun_el.innerHTML = Math.floor(tier1_res.ilarun.cur);
-    ilarun_max_el.innerHTML = Math.floor(tier1_res.ilarun.max);
-    ilarun_worker_el.innerHTML = Math.floor(tier1_pop.worker.total);
-    ilarun_worker_max_el.innerHTML = Math.floor(tier1_pop.worker.max);
-    baroness_el.innerHTML = Math.floor(tier1_pop.baroness.total);
-    baroness_max_el.innerHTML = Math.floor(tier1_pop.baroness.max);
-
-    influence_el.innerHTML = Math.floor(tier1_res.influence.cur);
+function update_display() {
+    berry_display.update();
+    log_display.update();
+    ilarun_display.update();
+    influence_display.update();
 }
 
-function update_tier1_cost_and_buildings() {
-    let keys = Object.keys(tier1_buttons);
-    let data = [
-        tier1_res.ft1.act_rate, 
-        tier1_res.log.act_rate, 
-        tier1_res.ilarun.act_rate,
-        tier1_buildings.berryBasket.cost.log,
-        tier1_buildings.logStack.cost.ft1,
-        tier1_buildings.ilarunWarren.cost.log,
-        tier1_buildings.granary.cost.log,
-        tier1_buildings.lumberYard.cost.ft1,
-        tier1_buildings.hamlet.cost.ft1,
-    ];
-    for(let i = 0; i < keys.length; i++) {
-        tier1_buttons[keys[i]].update(data[i]);
-    }
-
-    let keys_ = Object.keys(tier1_res_tooltip);
-    let data_ = [
-        [tier1_buildings.berryBasket.count, tier1_buildings.granary.count],
-        [tier1_buildings.logStack.count, tier1_buildings.lumberYard.count],
-        [tier1_buildings.ilarunWarren.count, tier1_buildings.hamlet.count],
-        [tier1_pop.baroness.total],
-    ];
-    for(let i = 0; i < keys_.length; i++) {
-        tier1_res_tooltip[keys_[i]].update(data_[i]);
-    }
+function update_buttons() {
+    berry_basket_button.update();
+    log_basket_button.update();
+    warren_button.update();
+    granary_button.update();
+    lumber_yard_button.update();
+    hamlet_button.update();
 }
 
-function update_tier1_demographic_ui() {
-    let keys = Object.keys(tier1_pop_ui);
-    let data = [
-        tier1_pop.idle.total,
-        tier1_pop.worker.total,
-        tier1_pop.worker.forager.count,
-        tier1_pop.worker.logger.count,
-        (tier1_pop.worker.forager.income + tier1_pop_bonuses.worker.forager.income) * tier1_pop.worker.forager.count,
-        (tier1_pop.worker.logger.income + tier1_pop_bonuses.worker.logger.income) * tier1_pop.worker.logger.count,
-        (tier1_pop.idle.upkeep + tier1_pop_bonuses.idle.upkeep) * tier1_pop.idle.total,
-        tier1_pop.worker.upkeep * tier1_pop.worker.total,
-        tier1_pop.worker.breeder.count,
-        (tier1_pop.worker.breeder.income + tier1_pop_bonuses.worker.breeder.income) * tier1_pop.worker.breeder.count,
-        tier1_pop.baroness.total,
-        (tier1_pop.baroness.income + tier1_pop_bonuses.baroness.income) * tier1_pop.baroness.total,
-    ];
-    for(let i = 0; i < keys.length; i++) {
-        tier1_pop_ui[keys[i]].update(data[i]);
-    }
-}
-
-function update_tier1_ui() {
-    let keys = Object.keys(tier1_unlocks);
+function update_ui() {
+    let keys = Object.keys(unlocks);
     keys.forEach(key => {
-        if(tier1_unlocks[key].isOpen && !tier1_unlocks[key].isUnlocked) {
-            console.log("DEBUG::"+key+" unlocked");
-            if(tier1_unlocks[key].resUnlock != null)
-                tier1_res_icons[tier1_unlocks[key].resUnlock].style.display = "block";
-            tier1_unlocks[key].isUnlocked = true;
-            tier1_unlocks[key].el.style.display = "block";
-            tier1_res_update_flag = false;
-        }  
+        if(unlocks[key]) {
+            unlockable_el[key].forEach(el => {
+                el.style.display = "block";
+            });
+        }
     });
+    ui_update_flag = false;
 }

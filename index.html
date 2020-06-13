@@ -3,54 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Green 0.1.1</title>
+    <title>Project Green 0.2.1</title>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/tier1.css">
     <link rel="stylesheet" href="./css/hero.css">
 </head>
 <body>
     <div class="icon-bar">
-        <div class="tooltip" id="ft1_res_display" style="display: none;">
+        <div id="berry_res_display" style="display: none;">
             <img src="./res/food_tier_1.png" alt="">
             <p><span class="berry">Berries:</span>
-                <span style="display: block;">
-                    <span id="ft1_count">0</span>/<span id="ft1_max">0</span>
-                </span>
+                <br><span id="berry_sub1">0/0</span>
+                <br><span id="berry_sub2">Baskets (15): 0</span>
+                <span id="berry_sub2_1" style="display: none;">Granary (100): 0</span>
+                <span id="berry_sub3">0.0</span>
             </p>
-            <span class="tooltiptext" id="ft1_res_tooltip">Basket: 0</span>
         </div>
-        <div class="tooltip" id="log_res_display" style="display: none;">
+        <div id="log_res_display" style="display: none;">
             <img src="./res/log.png" alt="">
             <p><span class="log">Wood:</span>
-                <span style="display: block;">
-                    <span id="log_count">0</span>/<span id="log_max" style=>0</span>
-                </span>
+                <br><span id="log_sub1">0/0</span>
+                <br><span id="log_sub2">Stacks (15): 0</span>
+                <span id="log_sub2_1" style="display: none;">L.Yard (100): 0</span>
+                <span id="log_sub3">0.0</span>
             </p>
-            <span class="tooltiptext" id="log_res_tooltip">Log Stack: 0</span>
         </div>
-        <div class="tooltip" id="ilarun_res_display" style="display: none;">    
+        <div id="ilarun_res_display" style="display: none;">    
             <img src="./res/ilarun.png" alt="">
             <p><span class="ilaruns">Ilaruns:</span>
-                <span style="display: block;">
-                    <span id="ilarun_count">0</span>/<span id="ilarun_max">0</span>
-                </span>
-                <span style="display: block;">
-                    <span class="ilarun_worker" id="ilarun_worker_count">0</span>/<span class="ilarun_worker" id="ilarun_worker_max">0</span>
-                </span>
-                <span style="display: none;" id="baroness_res_display">
-                    <span class="influence" id="baroness_count">0</span>/<span class="influence" id="baroness_max">0</span>
-                </span>
+                <br><span id="ilarun_sub1">0/0</span>
+                <br><span id="ilarun_sub2" class="ilarun_worker">0/0</span>
+                <br><span id="ilarun_sub3" class="influence">0/0</span>
+                <br><span id="ilarun_sub4">Warren (5): 0</span>
+                <br><span id="ilarun_sub5">0.0</span>
             </p>
-            <span class="tooltiptext" id="ilarun_res_tooltip">Warren: 0</span>
         </div>
-        <div class="tooltip" id="influence_res_display" style="display: none;">
+        <div id="influence_res_display" style="display: none;">
             <img src="./res/influence.png" alt="">
             <p><span class="influence">Influence:</span>
-                <span style="display: block;">
-                    <span id="influence_count">0</span>
-                </span>
+                <br><span id="influence_sub1">0</span>
+                <br><span id="influence_sub2">0.0</span>
             </p>
-            <span class="tooltiptext" id="influence_res_tooltip">Baroness: 0</span>
         </div>
     </div>
 
@@ -64,46 +57,39 @@
         <div id="Tier_1" class="tabcontent">
             <h3>World Tree - Vicinity</h3>
             <p>Humble Beginnings... You awake in front of a budding tree.</p>
-            <div class="unlockable" id="ft1_harvest" style="display: none;">
+            <div class="unlockable" id="berry_harvest" style="display: none;">
                 <p>Some berry shrubs are visible, let's get some.</p>
-                <button class="berryButton" id="ft1_add" onclick="gain_resource('ft1', tier1_res.ft1.act_rate + tier1_res_bonuses.ft1.act_rate)">Pick 1 Berries</button>
+                <button class="berryButton" id="berry_add" onclick="gain_resource('berry', berry.act_rate + berry.bonuses.act_rate)">Pick 1 Berries</button>
             </div>
             <div class="unlockable" id="log_harvest" style="display: none;">
                 <p>Your hands are full of berries... we need to make some permanent storages.</p>
-                <button class="logButton" id="log_add" onclick="gain_resource('log', tier1_res.log.act_rate + tier1_res_bonuses.log.act_rate)">Pick 1 Twig(s)</button>
-                <button class="logButton" id="ft1_storage_add" onclick="buy_resource_tier1('berryBasket', 'building')">Make Berry Basket (T1/Cost:10)</button>
-                <button class="berryButton" id="log_storage_add" onclick="buy_resource_tier1('logStack', 'building')">Set Log Stack (T1/Cost:10)</button>
+                <button class="logButton" id="log_add" onclick="gain_resource('log', log.act_rate + log.bonuses.act_rate)">Pick 1 Twig(s)</button>
+                <button class="logButton" id="berry_storage_add" onclick="buy_building('berry_basket', 1)">Make Berry Basket (T1/Cost:10 Logs)</button>
+                <button class="berryButton" id="log_storage_add" onclick="buy_building('log_stack', 1)">Set Log Stack (T1/Cost:10 Berries)</button>
             </div>
             <div class="unlockable" id="ilarun_recruit" style="display: none;">
                 <p>You find short bunny people sniffing about your storages... perhaps they want to help?</p>
                 <h3>Ilaruns</h3>
                 <p>Ilaruns require more management and depth.</p>
-                <p><span class="ilaruns">40</span>% of the Ilarun's total population can work. You can maintain <span class="ilaruns">1</span> Ilarun Baroness per <span class="ilaruns">10</span> workers (Without modifiers).</p>
-                <p>Each idle Ilarun consumes <span class="berry">1 Berries per 10 seconds</span>, each worker Ilarun consumes <span class="berry">1 Berries per 4 seconds</span>.</p>
-                <p>Currently, you have <span class='ilaruns' id="idle_display">0</span> idle Ilaruns consuming <span class='berry' id="idle_upkeep_display">0</span> Berries total per second. You also have <span class='ilaruns' id="total_worker_display">0</span> worker Ilaruns consuming <span class='berry' id="worker_upkeep_display">0</span> Berries total per second.</p>
-                <p>Currently, you have <span class="berry" id="ft1_worker_display">0</span> Foragers, generating <span class="berry" id="ft1_income_display">0</span> Berries per second.</p>
-                <p>Currently, you have <span class="log" id="log_worker_display">0</span> Loggers, generating <span class="log" id="log_income_display">0</span> Logs per second.</p>
-                <button class="berryButton" id="ilarun_add" onclick="buy_resource_tier1('ilarun', 'pop_special')">Host 1 Ilarun(s)</button>
-                <button class="logButton" id="ilarun_storage_add" onclick="buy_resource_tier1('ilarunWarren', 'building')">Dig Ilarun Warren (T1/Cost:100)</button>
-                <button class="ilarunButton" id="ft1_worker_add" onclick="buy_resource_tier1('forager', 'pop')">Train Forager (T1/Cost:100 Berries / 1 Ilarun)</button>
-                <button class="ilarunButton" id="log_worker_add" onclick="buy_resource_tier1('logger', 'pop')">Train Logger (T1/Cost:100 Logs / 1 Ilarun)</button>
-                <button class="ilarunButton" id="ft1_worker_remove" onclick="sell_resource_tier1('forager')">Dismiss Forager (No Refund!)</button>
-                <button class="ilarunButton" id="log_worker_remove" onclick="sell_resource_tier1('logger')">Dismiss Logger (No Refund!)</button>
+                <p><span class="ilaruns">40</span>% of the Ilarun's total population can work. You can maintain <span class="ilaruns">1</span> Ilarun Baroness per <span class="ilaruns">10</span> workers cap (Without modifiers).</p>
+                <p>Each idle Ilarun consumes <span class="berry">0.1 Berries per second</span>, each worker Ilarun consumes <span class="berry">0.25 Berries per second</span>. Each idle Ilarun produces 0.01 Ilarun per second.</p>
+                <button class="berryButton" id="ilarun_add" onclick="buy_pop('ilarun', 1)">Host 1 Ilarun(s)</button>
+                <button class="logButton" id="ilarun_storage_add" onclick="buy_building('warren', 1)">Dig Ilarun Warren (T1/Cost:100 Logs)</button>
+                <button class="ilarunButton" id="berry_worker_add" onclick="buy_pop('forager', 1)">Train Forager (T1/Cost:100 Berries / 1 Ilarun)</button>
+                <button class="ilarunButton" id="log_worker_add" onclick="buy_pop('logger', 1)">Train Logger (T1/Cost:100 Logs / 1 Ilarun)</button>
+                <button class="ilarunButton" id="berry_worker_remove" onclick="sell_pop('forager', 1)">Dismiss Forager (No Refund!)</button>
+                <button class="ilarunButton" id="log_worker_remove" onclick="sell_pop('logger', 1)">Dismiss Logger (No Refund!)</button>
             </div>
             <div class="unlockable" id="tier1_2_storage" style="display: none;">
                 <p>We can't hold all our resources with just baskets and stacks, we need a proper space!</p>
-                <button class="berryButton" id="log_storage_2_add" onclick="buy_resource_tier1('lumberYard', 'building')">Build Lumber Yard (T1.5/Cost:200)</button>
-                <button class="logButton" id="ft1_storage_2_add" onclick="buy_resource_tier1('granary', 'building')">Build Granary (T1.5/Cost:200)</button>
+                <button class="berryButton" id="log_storage_2_add" onclick="buy_building('lumber_yard', 1)">Build Lumber Yard (T1.5/Cost:75 Berries)</button>
+                <button class="logButton" id="berry_storage_2_add" onclick="buy_building('granary', 1)">Build Granary (T1.5/Cost:75 Logs)</button>
             </div>
             <div class="unlockable" id="baroness_tech" style="display: none;">
                 <p>With a small community forming, the Ilaruns elected their own subleader of sorts. They also start to expand the community on their own as well!</p>
                 <p><span class="influence">Influence</span> is used to unlock more complex features and upgrade existing ones. One of the features currently available to you is hiring heroes.</p>
-                <p>Currently, you have <span class="ilaruns" id="ilarun_worker_display">0</span> Breeders, generating <span class="ilaruns" id="ilarun_income_display">0</span> Ilaruns per second.</p>
-                <p>Currently, you have <span class="influence" id="baroness_display">0</span> Baronesses, generating <span class="influence" id="influence_income_display">0</span> Influence per second.</p>
-                <button class="ilarunButton" id="baroness_add" onclick="buy_resource_tier1('baroness', 'pop_baroness')">Elect Baroness (T1/Cost:250 Berries & 100 Logs)</button>
-                <button class="ilarunButton" id="ilarun_worker_add" onclick="buy_resource_tier1('breeder', 'pop')">Designate Breeder (T1/Cost:125 Berries & Logs / 1 Ilarun)</button>
-                <button class="ilarunButton" id="ilarun_worker_remove" onclick="sell_resource_tier1('breeder')">Dismiss Breeder (No Refund!)</button>
-                <button class="logButton" id="ilarun_storage_2_add" onclick="buy_resource_tier1('hamlet', 'building')" style="display: none;">Establish Hamlet (T1.5/Cost:125 Berries & Logs)</button>
+                <button class="ilarunButton" id="baroness_add" onclick="buy_pop('baroness', 1)">Elect Baroness (T1/Cost:250 Berries & 100 Logs)</button>
+                <button class="logButton" id="ilarun_storage_2_add" onclick="buy_building('hamlet', 1)" style="display: none;">Establish Hamlet (T1.5/Cost:125 Berries & Logs)</button>
             </div>
         </div>
 
@@ -192,6 +178,7 @@
     </div>
     
     <script>const TICK = 100;</script>
+    <!--<script>window.localStorage.clear();</script>-->
     <script src="./script/data/tier1_data.js"></script>
     <script src="./script/src/tier1_ui.js"></script>
     <script src="./script/src/tier1.js"></script>

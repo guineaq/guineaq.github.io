@@ -1,91 +1,107 @@
-var affinities = {
+var affinities = fetch("affinities", true) || {
     virtue: 0,
     nobility: 0,
-};
+}
 
 var active_perks = {
     cilia: {
-        hired: false,
-        perk1: false,
-        perk2: false,
-        perk3: false,
-        perk4: false,
-        perk4_1: false,
+        hired: fetch("cilia.hired", true) || {active: false, btn_id: null},
+        perk1: fetch("cilia.perk1", true) || {active: false, btn_id: null},
+        perk2: fetch("cilia.perk2", true) || {active: false, btn_id: null},
+        perk3: fetch("cilia.perk3", true) || {active: false, btn_id: null},
+        perk4: fetch("cilia.perk4", true) || {active: false, btn_id: null},
+        perk4_1: fetch("cilia.perk4_1", true) || {active: false, btn_id: null},
         apply_perk4_1: function() {
-            tier1_pop_bonuses.baroness.max -= 1;
+            baroness_ratio_bonus -= 1;
         }
     },
     goldbeak: {
-        hired: false,
-        perk1: false,
-        perk2: false,
-        perk3: false,
-        perk4: false,
+        hired: fetch("goldbeak.hired", true) || {active: false, btn_id: null},
+        perk1: fetch("goldbeak.perk1", true) || {active: false, btn_id: null},
+        perk2: fetch("goldbeak.perk2", true) || {active: false, btn_id: null},
+        perk3: fetch("goldbeak.perk3", true) || {active: false, btn_id: null},
+        perk4: fetch("goldbeak.perk4", true) || {active: false, btn_id: null},
     }
 }
 
 var heroes = {
     cilia: {
         on_hire: function(btn_id) {
-            if(tier1_res.influence.cur >= 100) {
-                tier1_res.influence.cur -= 100;
-                tier1_res_bonuses.influence.pas_rate += 0.5;
-                tier1_buildings_bonuses.ilarunWarren.size.ilarun += 1;
-                active_perks.cilia.hired = true;
-                document.getElementById(btn_id).disabled = true;
-                document.getElementById(btn_id).innerHTML += "(Purchased)";
+            if(influence.cur >= 100) {
+                influence.cur -= 100;
+                influence.bonuses.pas_rate += 0.5;
+                warren.bonuses.size.ilarun += 1;
+                active_perks.cilia.hired.active = true;
+                active_perks.cilia.hired.btn_id = btn_id;
+                deactivate_button(btn_id);
                 affinities.virtue += 1;
                 affinities.nobility += 1;
             }
         },
         perk1: function(btn_id) {
-            if(tier1_res.influence.cur >= 250) {
-                tier1_res.influence.cur -= 250;
-                tier1_buildings_bonuses.ilarunWarren.size.ilarun += 2;
-                active_perks.cilia.perk1 = true;
-                document.getElementById(btn_id).disabled = true;
-                document.getElementById(btn_id).innerHTML += "(Purchased)";
+            if(influence.cur >= 250) {
+                influence.cur -= 250;
+                warren.bonuses.size.ilarun += 2;
+                active_perks.cilia.perk1.active = true;
+                active_perks.cilia.perk1.btn_id = btn_id;
+                deactivate_button(btn_id);
             }
         },
         perk2: function(btn_id) {
-            if(tier1_res.influence.cur >= 500) {
-                tier1_res.influence.cur -= 500;
-                tier1_pop_bonuses.baroness.income += 0.1;
-                active_perks.cilia.perk2 = true;
-                document.getElementById(btn_id).disabled = true;
-                document.getElementById(btn_id).innerHTML += "(Purchased)";
+            if(influence.cur >= 500) {
+                influence.cur -= 500;
+                baroness.bonuses.income.influence += 0.1;
+                active_perks.cilia.perk2.active = true;
+                active_perks.cilia.perk2.btn_id = btn_id;
+                deactivate_button(btn_id);
             }
         },
         perk3: function(btn_id) {
-            if(tier1_res.influence.cur >= 1000) {
-                tier1_res.influence.cur -= 1000;
-                tier1_pop_bonuses.idle.upkeep -= 0.05;
-                tier1_pop_bonuses.worker.upkeep -= 0.05;
-                active_perks.cilia.perk3 = true;
-                document.getElementById(btn_id).disabled = true;
-                document.getElementById(btn_id).innerHTML += "(Purchased)";
+            if(influence.cur >= 1000) {
+                influence.cur -= 1000;
+                idle.bonuses.upkeep.berry += 0.05;
+                forager.bonuses.upkeep.berry += 0.05;
+                logger.bonuses.upkeep.berry += 0.05;
+                active_perks.cilia.perk3.active = true;
+                active_perks.cilia.perk3.btn_id = btn_id;
+                deactivate_button(btn_id);
             }
         },
         perk4: function(btn_id) {
-            if(tier1_res.influence.cur >= 2500) {
-                tier1_res.influence.cur -= 2500;
-                active_perks.cilia.perk4 = true;
+            if(influence.cur >= 2500) {
+                influence.cur -= 2500;
+                active_perks.cilia.perk4.active = true;
+                active_perks.cilia.perk4.btn_id = btn_id;
                 if(affinities.virtue >= 2) {
-                    active_perks.cilia.perk4_1 = true;
+                    active_perks.cilia.perk4_1.active = true;
                     active_perks.cilia.apply_perk4_1();
                 }
-                document.getElementById(btn_id).disabled = true;
-                document.getElementById(btn_id).innerHTML += "(Purchased)";
+                deactivate_button(btn_id);
             }
         }
     }
 }
 
-//TODO implement hero upgrades
+function on_load() {
+    let perks_cilia = Object.keys(active_perks.cilia);
+    let perks_goldbeak = Object.keys(active_perks.goldbeak);
+    console.log(perks_cilia);
+    perks_cilia.forEach(key => {
+        if(key.indexOf('apply_') === -1) {
+            if(active_perks.cilia[key].active && active_perks.cilia[key].btn_id != null) {
+                deactivate_button(active_perks.cilia[key].btn_id);
+            }
+        }
+    });
+}
+
+function is_function(functionToCheck) {
+    return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+   }
+
 function purchase_perk(hero_code, perk_code, id) {
     heroes[hero_code][perk_code](id);
     update_ilarun_pop_demographic();
-    update_tier1_demographic_ui();
     update_tier1_res_max();
     update_tier1_res_rate();
     if(perk_code == "on_hire")
@@ -99,4 +115,27 @@ function affinity_check() {
             active_perks.cilia.apply_perk4_1();
         }
     }
+}
+
+function deactivate_button(btn_id) {
+    document.getElementById(btn_id).disabled = true;
+    document.getElementById(btn_id).innerHTML += "<br>(Purchased)";
+    document.getElementById(btn_id).className = "hero_button_disabled";
+}
+
+function update_save_heroes() {
+    store("affinities", affinities, true);
+
+    store("cilia.hired", active_perks.cilia.hired, true);
+    store("cilia.perk1", active_perks.cilia.perk1, true);
+    store("cilia.perk2", active_perks.cilia.perk2, true);
+    store("cilia.perk3", active_perks.cilia.perk3, true);
+    store("cilia.perk4", active_perks.cilia.perk4, true);
+    store("cilia.perk4_1", active_perks.cilia.perk4_1, true);
+
+    store("goldbeak.hired", active_perks.goldbeak.hired, true);
+    store("goldbeak.perk1", active_perks.goldbeak.perk1, true);
+    store("goldbeak.perk2", active_perks.goldbeak.perk2, true);
+    store("goldbeak.perk3", active_perks.goldbeak.perk3, true);
+    store("goldbeak.perk4", active_perks.goldbeak.perk4, true);
 }

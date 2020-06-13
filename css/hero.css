@@ -62,6 +62,19 @@
     float: right;
 }
 
+.hero_button_disabled {
+    background-color: #969696;
+    color: #272727;
+    border: 1px solid;
+    border-radius: 5px;
+    outline: none;
+    cursor: default;
+    height: 100%;
+    width: 130px;
+    padding: 14px 4px;
+    float: right;
+}
+
 .hero_button:hover {
     background-color: #efefef;
 }

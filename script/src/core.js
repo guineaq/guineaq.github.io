@@ -23,3 +23,4 @@ function openTab(ev, tabName) {
 // Ticks
 
 window.setInterval(update_tier1, TICK);
+window.setInterval(update_save, 60000);
