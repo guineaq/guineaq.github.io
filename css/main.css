@@ -1,0 +1,141 @@
+body {
+    font: 14px/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #f0e7d5;
+    background-color: #252525;
+}
+
+.main {
+    margin-left: 120px;
+}
+
+/* Core Tabs and Styling */
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #5d910b;
+    background-color: #93bd20;
+}
+
+.tab button {
+    background-color: inherit;
+    color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+.tab button:hover {
+    background-color: #739d00;
+}
+
+.tab button:active {
+    background-color: #83ad10;
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #d7cfbe;
+    border-top: none;
+}
+
+/* Resource Bar */
+
+.icon-bar {
+    height: 100%;
+    width: 120px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    background-color: #555;
+}
+
+.icon-bar img {
+    display: block;
+    padding: 0px 28px 0px 28px;
+    width: 64px;
+    height: 64px;
+}
+
+.icon-bar p {
+    display: block;
+    text-align: center;
+}
+
+.icon-bar p span {
+    font-weight: bold;
+}
+
+span {
+    font-weight: bold;
+}
+
+span.log {
+    color: #159f12;
+}
+
+span.berry {
+    color: #c94e4e;
+}
+
+span.ilaruns {
+    color: #206a9b;
+}
+
+span.ilarun_worker {
+    color: #dee04b;
+}
+
+span.influence {
+    color: #c570ec
+}
+
+span.power {
+    color: rgb(0, 0, 0)
+}
+
+/* tooltip */
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background: #777;
+    color: inherit;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 1;
+    top: 105%;
+    left: 50%;
+    margin-left: -60px;
+
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #777 transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

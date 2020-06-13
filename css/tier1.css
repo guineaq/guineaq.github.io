@@ -1,0 +1,118 @@
+.unlockable {
+    padding: 0px;
+    margin: 0px;
+}
+
+.unlockable button {
+    display: inline-block;
+}
+
+/* ---------------------------------------------------------------------- */
+
+button.berryButton {
+    background-color: #d83e3e;
+    color: #f0e7d5;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    height: 60px;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+button.berryButton:hover {
+    background-color: #972b2b;
+}
+
+button.berryButton:active {
+    background-color: #af5656;
+}
+
+/* ---------------------------------------------------------------------- */
+
+button.logButton {
+    background-color: #339e2f;
+    color: #f0e7d5;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    height: 60px;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+button.logButton:hover {
+    background-color: #276e25;
+}
+
+button.logButton:active {
+    background-color: #4d7e4b;
+}
+
+/* ---------------------------------------------------------------------- */
+
+button.ilarunButton {
+    background-color: #206a9b;
+    color: #f0e7d5;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    height: 60px;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+button.ilarunButton:hover {
+    background-color: #304f63;
+}
+
+button.ilarunButton:active {
+    background-color: #255677;
+}
+
+/* ---------------------------------------------------------------------- */
+
+button.militaryButton {
+    background-color: #3d3d3d;
+    color: #f0e7d5;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    height: 60px;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+button.militaryButton:hover {
+    background-color: #1a1a1a;
+}
+
+button.militaryButton:active {
+    background-color: #272727;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/*
+    Berry & Log Hybrid
+    linear-gradient(90deg, rgba(56,176,28,1) 0%, rgba(241,54,54,1) 100%);
+*/
+
+button.flButton {
+    background-color: linear-gradient(90deg, rgba(56,176,28,1) 0%, rgba(241,54,54,1) 100%);
+    color: #f0e7d5;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    height: 60px;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+button.flButton:hover {
+    background-color: linear-gradient(90deg, rgba(47,133,27,1) 0%, rgba(182,41,41,1) 100%);
+}
+
+button.flButton:active {
+    background-color: linear-gradient(90deg, rgba(93,195,69,1) 0%, rgba(214,91,91,1) 100%);
+}
