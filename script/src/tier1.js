@@ -33,6 +33,7 @@ function update_tier1_res_rate() {
     });
 
     ilarun.pas_rate = (idle.count / 7) * idle.income.ilarun / Math.log(2);
+    military.pas_rate = get_military_income_total() + military.bonuses.pas_rate + goldbeak_perk4_bonus;
 }
 
 function update_tier1_res_max() {
@@ -186,8 +187,6 @@ function update_unlocks() {
 
     if(berry_basket.count >= 25 && log_stack.count >= 25 && unlocks.tier1_2_storage == false) {
         console.log("Tier 1.5 Storage unlocked")
-        berry_display.reveal_el(2);
-        log_display.reveal_el(2);
         unlocks.tier1_2_storage = true;
         ui_update_flag = true;
         return;
@@ -199,17 +198,33 @@ function update_unlocks() {
         ui_update_flag = true;
         return;
     }
+
+    if(active_perks.cilia.perk2.active == true && unlocks.conquest == false) {
+        console.log("Conquest Unlocked")
+        unlocks.conquest = true;
+        ui_update_flag = true;
+        return;
+    }
+
+    if(active_perks.cilia.perk4.active == true && unlocks.hamlet == false) {
+        console.log("Hamlets Unlocked")
+        unlocks.hamlet = true;
+        ui_update_flag = true;
+        return;
+    }
 }
 
 console.log(res_all);
 console.log(buildings_all);
 console.log(pop_all);
+update_buttons();
 function update_tier1() {
     let res = Object.keys(res_all);
     res.forEach(r => { update_res(res_all[r]) });
     update_display();
     update_ilarun_pop_demographic();
     update_tier1_res_rate();
+    update_military();
     update_unlocks();
     if(ui_update_flag) {
         update_ui();

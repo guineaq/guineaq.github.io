@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Green 0.2.1</title>
+    <title>Project Green 0.2.2</title>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/tier1.css">
     <link rel="stylesheet" href="./css/hero.css">
+    <link rel="stylesheet" href="./css/conquest.css">
 </head>
 <body>
     <div class="icon-bar">
@@ -35,7 +36,8 @@
                 <br><span id="ilarun_sub2" class="ilarun_worker">0/0</span>
                 <br><span id="ilarun_sub3" class="influence">0/0</span>
                 <br><span id="ilarun_sub4">Warren (5): 0</span>
-                <br><span id="ilarun_sub5">0.0</span>
+                <span id="ilarun_sub4_1">Hamlet (25): 0</span>
+                <span id="ilarun_sub5">0.0</span>
             </p>
         </div>
         <div id="influence_res_display" style="display: none;">
@@ -43,6 +45,13 @@
             <p><span class="influence">Influence:</span>
                 <br><span id="influence_sub1">0</span>
                 <br><span id="influence_sub2">0.0</span>
+            </p>
+        </div>
+        <div id="military_res_display" style="display: none;">
+            <img src="./res/influence.png" alt="">
+            <p><span class="power">Power:</span>
+                <br><span id="military_sub1">0.0</span>
+                <br><span id="military_sub2">Squires(s): 0/0</span>
             </p>
         </div>
     </div>
@@ -136,18 +145,18 @@
                         <h4>Color Identity: <span style="color: #afafaf">Virtue 1</span> / <span style="color: #2a2a2a">Nobility 1</span></h4>
                         <i>He's fat?</i>
                         <p>-Perks-</p>
-                        <p><span class="perk">On Hire</span>: Generates <span class="power">1</span> military power by base.</p>
-                        <p><span class="perk">Aviary</span>: Unlocks construction of <span class="feature_unlock">Aviary</span>, which grants <span class="power">+1</span> military power gain per Squire.</p>
+                        <p><span class="perk">On Hire</span>: Generates <span class="power">+10</span> military power by base.</p>
+                        <p><span class="perk">Aviary</span>: Grants <span class="power">+1</span> military power gain per Squire.</p>
                         <p><span class="perk">Enlist Pigeons</span>: Improves all Forager income by <span class="berry">+1</span>.</p>
-                        <p><span class="perk">Prince of Talons</span>: Improves Cilia's On Hire perk by additional <span class="influence">+1.5</span>.</p>
+                        <p><span class="perk">Prince of Talons</span>: Improves Cilia's On Hire perk by additional <span class="influence">+1.5</span> and <span class="ilaruns">+1</span> respectively.</p>
                         <p><span class="perk">Combined Arms</span>: For every perk unlocked from Cilia and Goldbeak combined,</p>
-                        <p>Goldbeak generates additional <span class="power">+1</span> military power.</p>
+                        <p>Goldbeak generates additional <span class="power">+5</span> military power.</p>
                     </div>
-                    <!----><button class="hero_button" id="goldbeak_perk4">Unlock <br>"Combined Arms" for 5000 Influence<br>(Req: 1 Territory)</button>
-                    <!----><button class="hero_button" id="goldbeak_perk3">Unlock <br>"Prince of Talons" for 1000 Influence<br>(Req: Cilia Hired)</button>
-                    <!----><button class="hero_button" id="goldbeak_perk2">Unlock <br>"Enlist Pigeons" for 1000 Influence<br>(Req: Aviary)</button>
-                    <!----><button class="hero_button" id="goldbeak_perk1">Unlock <br>"Aviary" for 500 Influence<br>(Req: 1 Territory)</button>
-                    <!----><button class="hero_button" id="hire_cilia">Hire Goldbeak for 250 Influence<br>(Req: 1 Territory)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk4" onclick="purchase_perk('goldbeak', 'perk4', 'goldbeak_perk4')">Unlock <br>"Combined Arms" for 50000 Influence<br>(Req: 1 Territory)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk3" onclick="purchase_perk('goldbeak', 'perk3', 'goldbeak_perk3')">Unlock <br>"Prince of Talons" for 10000 Influence<br>(Req: Cilia Hired)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk2" onclick="purchase_perk('goldbeak', 'perk2', 'goldbeak_perk2')">Unlock <br>"Enlist Pigeons" for 10000 Influence<br>(Req: Aviary)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk1" onclick="purchase_perk('goldbeak', 'perk1', 'goldbeak_perk1')">Unlock <br>"Aviary" for 5000 Influence</button>
+                    <!----><button class="hero_button" id="hire_goldbeak" onclick="purchase_perk('goldbeak', 'on_hire', 'hire_goldbeak')">Hire Goldbeak for 2500 Influence</button>
                 </div>
             </div>
         </div>
@@ -155,23 +164,27 @@
         <div id="Conquest" class="tabcontent">
             <h3>Welcome to Conquest</h3>
             <p>The land near the World Tree is fogged and barren. There lies dangerous critters which do not dare approach us, but requires use of force to clear out.</p>
-            <p>You can manage your standing army here. Currently, your troops generate total of <span id="power_total_display" class="power">0</span> military power per second.</p>
             <p>Any unused, uninvested military power is <b>lost!</b></p>
             <p>You may click on a button to start conquering territories. Each territory provides unique one time bonuses or unlock features!</p>
             <div>
                 <h3>Recruitment</h3>
                 <p>You may recruit various types of troops below. Each troop type has different upkeep and requirements!</p>
                 <div id="recruit_squire">
-                    <p>Currently, you have <span class="power" id="squire_total_display">0</span> Squires. Generating <span class="power" id="squire_total_income_display">0</span> military power per second.</p>
-                    <p>Each squire requires <span class="influence" id="squire_upkeep_display">0.05</span> influence to maintain. They each generate <span class="power" id="squire_income_display">1</span> military power per second.</p>
-                    <p>You may have up to <span class="power" id="squire_max_display">0</span> Squires.</p>
-                    <button class="militaryButton" id="squire_add">Train Squire (T1/Cost: 10 Influence / 1 Ilarun)</button>
-                    <button class="militaryButton" id="squire_remove">Dismiss Squire (No Refund!)</button>
+                    <p>Each squire requires <span class="influence" id="squire_upkeep_display">0.1</span> influence to maintain. They each generate <span class="power" id="squire_income_display">1</span> military power per second.</p>
+                    <button class="militaryButton" id="squire_add" onclick="buy_pop('squire', 1)">Train Squire (T1/Cost: 10 Influence / 1 Ilarun)</button>
+                    <button class="militaryButton" id="squire_remove" onclick="sell_pop('squire', 1)">Dismiss Squire (No Refund!)</button>
                 </div>
             </div>
-            <div id="territoryList">
-                <div id="territory1">
-                    
+            <div id="territoryList" class="territoryList">
+                <h1>Territories</h1>
+                <div id="territory1" class="territory">
+                    <h2>Morhaven</h2>
+                    <h4>A vacant plain next to the World Tree</h4>
+                    <p>Morhaven, when conquered, <span class="positive_bonus">doubles</span> the storage of <span class="berry">berry basket</span>, <span class="log">berry basket</span>, and income by <span class="ilaruns">foragers & loggers</span>.</p>
+                    <p>This bonus is applied to base values, does not multiply value granted by other bonuses.</p>
+                    <img src="./res/territory1.jpg" alt="">
+                    <div id="t0_progress_bar" class="progress_bar"><div id="t0_progress" class="progress">0/100000</div></div>
+                    <button class="militaryButton" id="target_t0" onclick="set_conquest_target('morhaven')">Conquer Morhaven</button>
                 </div>
             </div>
         </div>

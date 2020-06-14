@@ -48,9 +48,7 @@ var res_all = {
     influence: influence,
 }
 
-/*
-Ilaruns have complex management system
-*/
+// Pop Related
 function res_arr(berry = 0, log = 0, ilarun = 0, influence = 0) {
     return {berry: berry, log: log, ilarun: ilarun, influence: influence};
 }
@@ -82,10 +80,10 @@ var baroness_max = 0;
 var squire_max = 0;
 
 const BASE_WORKER_PERC = 0.4;
-var worker_perc_bonus = 0;
+var worker_perc_bonus = fetch("worker_perc_bonus") || 0;
 
 const BASE_BARONESS_RATIO = 10;
-var baroness_ratio_bonus = 0;
+var baroness_ratio_bonus = fetch("baroness_ratio_bonus") || 0;
 
 var squire_max = 0;
 
@@ -146,9 +144,11 @@ var ui_update_flag = true;
 var unlockable_el = {
     berry_harvest: [document.getElementById("berry_harvest"), document.getElementById("berry_res_display")],
     log_harvest: [document.getElementById("log_harvest"), document.getElementById("log_res_display")],
-    tier1_2_storage: [document.getElementById("tier1_2_storage")],
+    tier1_2_storage: [document.getElementById("tier1_2_storage"), document.getElementById("berry_sub2_1"), document.getElementById("log_sub2_1")],
     ilarun_recruit: [document.getElementById("ilarun_recruit"), document.getElementById("ilarun_res_display")],
     baroness_tech: [document.getElementById("baroness_tech"), document.getElementById("influence_res_display"), document.getElementById("heroTab")],
+    hamlet: [document.getElementById("ilarun_storage_2_add"), document.getElementById("ilarun_sub4_1")],
+    conquest: [document.getElementById("conquestTab"), document.getElementById("military_res_display")],
 }
 var unlocks = fetch("unlocks", true) || {
     berry_harvest: true,
@@ -156,6 +156,8 @@ var unlocks = fetch("unlocks", true) || {
     tier1_2_storage: false,
     ilarun_recruit: false,
     baroness_tech: false,
+    hamlet: false,
+    conquest: false,
 }
 
 function update_save() {
@@ -170,6 +172,8 @@ function update_save() {
     save_pop("logger", logger);
     save_pop("baroness", baroness);
     save_pop("squire", squire);
+    store("worker_perc_bonus", worker_perc_bonus);
+    store("baroness_ratio_bonus", baroness_ratio_bonus);
 
     save_building("berry_basket", berry_basket);
     save_building("log_stack", log_stack);
@@ -181,4 +185,22 @@ function update_save() {
     store("unlocks", unlocks, true);
 
     update_save_heroes();
+    update_save_military();
+}
+
+function update_unlocks_data() {
+    let master_keys = Object.keys({
+        berry_harvest: true,
+        log_harvest: false,
+        tier1_2_storage: false,
+        ilarun_recruit: false,
+        baroness_tech: false,
+        hamlet: false,
+        conquest: false,
+    });
+    master_keys.forEach(key => {
+        if(unlocks[key] == null) {
+            unlocks[key] = false;
+        }
+    });
 }

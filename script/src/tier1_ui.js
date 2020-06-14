@@ -81,6 +81,9 @@ var ilarun_display = new ResourceIcon("ilarun", [
     new ResourceIconSubDisplay("ilarun_sub4", function() {
         return "Warrens (" + (warren.size.ilarun + warren.bonuses.size.ilarun) + "): " + warren.count;
     }),
+    new ResourceIconSubDisplay("ilarun_sub4_1", function() {
+        return "Hamlet (" + (hamlet.size.ilarun + hamlet.bonuses.size.ilarun) + "): " + hamlet.count;
+    }),
     new ResourceIconSubDisplay("ilarun_sub5", function() {
         let span_begin = "<span>";
         let span_end = "</span>"
@@ -98,6 +101,18 @@ var influence_display = new ResourceIcon("influence", [
         let span_end = "</span>"
         span_begin = gen_color_coded_span_for_rate(influence.pas_rate);
         return span_begin + parseFloat(influence.pas_rate).toPrecision(3) + span_end;
+    }),
+]);
+
+var military_display = new ResourceIcon("military", [
+    new ResourceIconSubDisplay("military_sub1", function() {
+        let span_begin = "<span>";
+        let span_end = "</span>"
+        span_begin = gen_color_coded_span_for_rate(military.pas_rate);
+        return span_begin + parseFloat(military.pas_rate).toPrecision(3) + span_end;
+    }),
+    new ResourceIconSubDisplay("military_sub2", function() {
+        return "Squire(s): " + squire.count + "/" + squire_max;
     }),
 ]);
 
@@ -151,6 +166,7 @@ function update_display() {
     log_display.update();
     ilarun_display.update();
     influence_display.update();
+    military_display.update();
 }
 
 function update_buttons() {
