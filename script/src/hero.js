@@ -33,11 +33,24 @@ var active_perks = {
     }
 }
 
+const hero_cost = {
+    cilia_on_hire: 50,
+    cilia_perk1: 100,
+    cilia_perk2: 200,
+    cilia_perk3: 200,
+    cilia_perk4: 500,
+    goldbeak_on_hire: 200,
+    goldbeak_perk1: 500,
+    goldbeak_perk2: 500,
+    goldbeak_perk3: 1000,
+    goldbeak_perk4: 2500,
+}
+
 var heroes = {
     cilia: {
         on_hire: function(btn_id) {
-            if(influence.cur >= 100) {
-                influence.cur -= 100;
+            if(influence.cur >= hero_cost.cilia_on_hire) {
+                influence.cur -= hero_cost.cilia_on_hire;
                 influence.bonuses.pas_rate += 0.5;
                 warren.bonuses.size.ilarun += 1;
                 active_perks.cilia.hired.active = true;
@@ -48,8 +61,8 @@ var heroes = {
             }
         },
         perk1: function(btn_id) {
-            if(influence.cur >= 250) {
-                influence.cur -= 250;
+            if(influence.cur >= hero_cost.cilia_perk1) {
+                influence.cur -= hero_cost.cilia_perk1;
                 warren.bonuses.size.ilarun += 2;
                 active_perks.cilia.perk1.active = true;
                 active_perks.cilia.perk1.btn_id = btn_id;
@@ -57,8 +70,8 @@ var heroes = {
             }
         },
         perk2: function(btn_id) {
-            if(influence.cur >= 500) {
-                influence.cur -= 500;
+            if(influence.cur >= hero_cost.cilia_perk2) {
+                influence.cur -= hero_cost.cilia_perk2;
                 baroness.bonuses.income.influence += 0.1;
                 active_perks.cilia.perk2.active = true;
                 active_perks.cilia.perk2.btn_id = btn_id;
@@ -66,8 +79,8 @@ var heroes = {
             }
         },
         perk3: function(btn_id) {
-            if(influence.cur >= 1000) {
-                influence.cur -= 1000;
+            if(influence.cur >= hero_cost.cilia_perk3) {
+                influence.cur -= hero_cost.cilia_perk3;
                 idle.bonuses.upkeep.berry += 0.05;
                 forager.bonuses.upkeep.berry += 0.05;
                 logger.bonuses.upkeep.berry += 0.05;
@@ -77,8 +90,8 @@ var heroes = {
             }
         },
         perk4: function(btn_id) {
-            if(influence.cur >= 2500) {
-                influence.cur -= 2500;
+            if(influence.cur >= hero_cost.cilia_perk4) {
+                influence.cur -= hero_cost.cilia_perk4;
                 active_perks.cilia.perk4.active = true;
                 active_perks.cilia.perk4.btn_id = btn_id;
                 if(affinities.virtue >= 2) {
@@ -92,8 +105,8 @@ var heroes = {
 
     goldbeak: {
         on_hire: function(btn_id) {
-            if(influence.cur >= 2500) {
-                influence.cur -= 2500;
+            if(influence.cur >= hero_cost.goldbeak_on_hire && active_perks.cilia.perk2.active) {
+                influence.cur -= hero_cost.goldbeak_on_hire;
                 military.bonuses.pas_rate += 10;
                 active_perks.goldbeak.hired.active = true;
                 active_perks.goldbeak.hired.btn_id = btn_id;
@@ -103,8 +116,8 @@ var heroes = {
             }
         },
         perk1: function(btn_id) {
-            if(influence.cur >= 5000) {
-                influence.cur -= 5000;
+            if(influence.cur >= hero_cost.goldbeak_perk1) {
+                influence.cur -= hero_cost.goldbeak_perk1;
                 military_income_bonuses.squire += 1;
                 active_perks.goldbeak.perk1.active = true;
                 active_perks.goldbeak.perk1.btn_id = btn_id;
@@ -112,8 +125,8 @@ var heroes = {
             }
         },
         perk2: function(btn_id) {
-            if(influence.cur >= 10000 && active_perks.goldbeak.perk1.active) {
-                influence.cur -= 10000;
+            if(influence.cur >= hero_cost.goldbeak_perk2 && active_perks.goldbeak.perk1.active) {
+                influence.cur -= hero_cost.goldbeak_perk2;
                 forager.bonuses.income.berry += 1;
                 active_perks.goldbeak.perk2.active = true;
                 active_perks.goldbeak.perk2.btn_id = btn_id;
@@ -121,8 +134,8 @@ var heroes = {
             }
         },
         perk3: function(btn_id) {
-            if(influence.cur >= 10000 && active_perks.cilia.hired.active) {
-                influence.cur -= 10000;
+            if(influence.cur >= hero_cost.goldbeak_perk3 && active_perks.cilia.hired.active) {
+                influence.cur -= hero_cost.goldbeak_perk3;
                 warren.bonuses.size.ilarun += 1;
                 influence.bonuses.pas_rate += 1.5;
                 active_perks.goldbeak.perk3.active = true;
@@ -131,8 +144,8 @@ var heroes = {
             }
         },
         perk4: function(btn_id) {
-            if(influence.cur >= 50000 && territory_count >= 1) {
-                influence.cur -= 50000;
+            if(influence.cur >= hero_cost.goldbeak_perk4 && territory_count >= 1) {
+                influence.cur -= hero_cost.goldbeak_perk4;
                 active_perks.goldbeak.apply_perk4();
                 active_perks.goldbeak.perk4.active = true;
                 active_perks.goldbeak.perk4.btn_id = btn_id;

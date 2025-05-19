@@ -33,11 +33,17 @@ function get_military_income_total() {
     return sum;
 }
 
-function set_conquest_target(target) {
-    if(conquest_target == null)
+function set_conquest_target(id, target) {
+    el = document.getElementById(id)
+    let suffix = " (Targetted)"
+    
+    if(conquest_target == null) {
         conquest_target = target;
-    else if(conquest_target == target)
+        el.innerHTML += suffix
+    } else if(conquest_target == target) {
         conquest_target = null;
+        el.innerHTML = el.innerHTML.slice(0, -suffix.length);
+    }
 }
 
 function update_military() {

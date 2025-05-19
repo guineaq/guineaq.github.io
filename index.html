@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Green 0.2.2</title>
+    <title>Idle Prototype 0.2.3</title>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/tier1.css">
     <link rel="stylesheet" href="./css/hero.css">
@@ -129,11 +129,11 @@
                         <p>2.) Number of Worker Max required for each Baroness is decreased by <span class="positive_bonus">-1</span>.</p>
                         <p><span style="color: #afafaf">(2) requires Virtue 2 Affinity.</span></p>
                     </div>
-                    <!----><button class="hero_button" id="cilia_perk4" onclick="purchase_perk('cilia', 'perk4', 'cilia_perk4')">Unlock <br>"Hamlets" for 2500 Influence</button>
-                    <!----><button class="hero_button" id="cilia_perk3" onclick="purchase_perk('cilia', 'perk3', 'cilia_perk3')">Unlock <br>"Serfdom" for 1000 Influence</button>
-                    <!----><button class="hero_button" id="cilia_perk2" onclick="purchase_perk('cilia', 'perk2', 'cilia_perk2')">Unlock <br>"Squire System" for 500 Influence</button>
-                    <!----><button class="hero_button" id="cilia_perk1" onclick="purchase_perk('cilia', 'perk1', 'cilia_perk1')">Unlock <br>"Peasant Levy" for 250 Influence</button>
-                    <!----><button class="hero_button" id="hire_cilia" onclick="purchase_perk('cilia', 'on_hire', 'hire_cilia')">Hire Cilia for 100 Influence</button>
+                    <!----><button class="hero_button" id="cilia_perk4" onclick="purchase_perk('cilia', 'perk4', 'cilia_perk4')">Unlock <br>"Hamlets" for 500 Influence</button>
+                    <!----><button class="hero_button" id="cilia_perk3" onclick="purchase_perk('cilia', 'perk3', 'cilia_perk3')">Unlock <br>"Serfdom" for 200 Influence</button>
+                    <!----><button class="hero_button" id="cilia_perk2" onclick="purchase_perk('cilia', 'perk2', 'cilia_perk2')">Unlock <br>"Squire Cohort" for 200 Influence</button>
+                    <!----><button class="hero_button" id="cilia_perk1" onclick="purchase_perk('cilia', 'perk1', 'cilia_perk1')">Unlock <br>"Peasant Levy" for 100 Influence</button>
+                    <!----><button class="hero_button" id="hire_cilia" onclick="purchase_perk('cilia', 'on_hire', 'hire_cilia')">Hire Cilia for 50 Influence</button>
                 </div>
             </div>
             <div class="hero_tab white_black" id="goldbeak_tab">
@@ -151,11 +151,11 @@
                         <p><span class="perk">Combined Arms</span>: For every perk unlocked from Cilia and Goldbeak combined,</p>
                         <p>Goldbeak generates additional <span class="power">+5</span> military power.</p>
                     </div>
-                    <!----><button class="hero_button" id="goldbeak_perk4" onclick="purchase_perk('goldbeak', 'perk4', 'goldbeak_perk4')">Unlock <br>"Combined Arms" for 50000 Influence<br>(Req: 1 Territory)</button>
-                    <!----><button class="hero_button" id="goldbeak_perk3" onclick="purchase_perk('goldbeak', 'perk3', 'goldbeak_perk3')">Unlock <br>"Prince of Talons" for 10000 Influence<br>(Req: Cilia Hired)</button>
-                    <!----><button class="hero_button" id="goldbeak_perk2" onclick="purchase_perk('goldbeak', 'perk2', 'goldbeak_perk2')">Unlock <br>"Enlist Pigeons" for 10000 Influence<br>(Req: Aviary)</button>
-                    <!----><button class="hero_button" id="goldbeak_perk1" onclick="purchase_perk('goldbeak', 'perk1', 'goldbeak_perk1')">Unlock <br>"Aviary" for 5000 Influence</button>
-                    <!----><button class="hero_button" id="hire_goldbeak" onclick="purchase_perk('goldbeak', 'on_hire', 'hire_goldbeak')">Hire Goldbeak for 2500 Influence</button>
+                    <!----><button class="hero_button" id="goldbeak_perk4" onclick="purchase_perk('goldbeak', 'perk4', 'goldbeak_perk4')">Unlock <br>"Combined Arms" for 2500 Influence<br>(Req: 1 Territory)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk3" onclick="purchase_perk('goldbeak', 'perk3', 'goldbeak_perk3')">Unlock <br>"Prince of Talons" for 1000 Influence<br>(Req: Cilia Hired)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk2" onclick="purchase_perk('goldbeak', 'perk2', 'goldbeak_perk2')">Unlock <br>"Enlist Pigeons" for 500 Influence<br>(Req: Aviary)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk1" onclick="purchase_perk('goldbeak', 'perk1', 'goldbeak_perk1')">Unlock <br>"Aviary" for 500 Influence</button>
+                    <!----><button class="hero_button" id="hire_goldbeak" onclick="purchase_perk('goldbeak', 'on_hire', 'hire_goldbeak')">Hire Goldbeak for 200 Influence<br>(Req: Squire Cohort)</button>
                 </div>
             </div>
         </div>
@@ -183,7 +183,7 @@
                     <p>This bonus is applied to base values, does not multiply value granted by other bonuses.</p>
                     <img src="./res/territory1.jpg" alt="">
                     <div id="t0_progress_bar" class="progress_bar"><div id="t0_progress" class="progress">0/100000</div></div>
-                    <button class="militaryButton" id="target_t0" onclick="set_conquest_target('morhaven')">Conquer Morhaven</button>
+                    <button class="militaryButton" id="target_t0" onclick="set_conquest_target('target_t0', 'morhaven')">Conquer Morhaven</button>
                 </div>
             </div>
         </div>
