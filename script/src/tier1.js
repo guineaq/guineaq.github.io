@@ -221,11 +221,13 @@ update_buttons();
 function update_tier1() {
     let res = Object.keys(res_all);
     res.forEach(r => { update_res(res_all[r]) });
+    
     update_display();
     update_ilarun_pop_demographic();
     update_tier1_res_rate();
     update_military();
     update_unlocks();
+
     if(ui_update_flag) {
         update_ui();
         on_load();

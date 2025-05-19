@@ -130,9 +130,9 @@ var berry_basket_button = new BuyButton(
     }
 );
 
-var log_basket_button = new BuyButton(
+var log_stack_button = new BuyButton(
     "log_storage_add", function() {
-        return "Set Log Stack (T1/Cost:" + log_basket.cost.log + " Berries)";
+        return "Set Log Stack (T1/Cost:" + log_stack.cost.berry + " Berries)";
     }
 );
 
@@ -171,7 +171,7 @@ function update_display() {
 
 function update_buttons() {
     berry_basket_button.update();
-    log_basket_button.update();
+    log_stack_button.update();
     warren_button.update();
     granary_button.update();
     lumber_yard_button.update();

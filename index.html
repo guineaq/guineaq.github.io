@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./css/conquest.css">
 </head>
 <body>
+    <!--TODO componentify/factory-fy buttons and UI elements-->
     <div class="icon-bar">
         <div id="berry_res_display" style="display: none;">
             <img src="./res/food_tier_1.png" alt="">
@@ -65,7 +66,7 @@
 
         <div id="Tier_1" class="tabcontent">
             <h3>World Tree - Vicinity</h3>
-            <p>Humble Beginnings... You awake in front of a budding tree.</p>
+            <p>Humble Beginnings... You awake in front of a budding tree. (You can click and then hold down enter key for rapid resource collection)</p>
             <div class="unlockable" id="berry_harvest" style="display: none;">
                 <p>Some berry shrubs are visible, let's get some.</p>
                 <button class="berryButton" id="berry_add" onclick="gain_resource('berry', berry.act_rate + berry.bonuses.act_rate)">Pick 1 Berries</button>
