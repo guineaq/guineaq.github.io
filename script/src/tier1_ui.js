@@ -132,7 +132,7 @@ var berry_basket_button = new BuyButton(
 
 var log_basket_button = new BuyButton(
     "log_storage_add", function() {
-        return "Set Log Stack (T1/Cost:" + berry_basket.cost.log + " Berries)";
+        return "Set Log Stack (T1/Cost:" + log_basket.cost.log + " Berries)";
     }
 );
 
