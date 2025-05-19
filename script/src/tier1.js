@@ -171,42 +171,42 @@ function buy_building(building, amount) {
 // Core - Tier 1
 ui_update_flag = true;
 function update_unlocks() {
-    if(berry.cur == berry.max && unlocks.log_harvest == false) {
+    if(berry.cur == berry.max && !unlocks.log_harvest) {
         console.log("Log Harvest Unlocked")
         unlocks.log_harvest = true;
         ui_update_flag = true;
         return;
     }
 
-    if(berry_basket.count >= 10 && log_stack.count >= 10 && unlocks.ilarun_recruit == false) {
+    if(berry_basket.count >= 10 && log_stack.count >= 10 && !unlocks.ilarun_recruit) {
         console.log("Ilarun Recruit Unlocked")
         unlocks.ilarun_recruit = true;
         ui_update_flag = true;
         return;
     }
 
-    if(berry_basket.count >= 25 && log_stack.count >= 25 && unlocks.tier1_2_storage == false) {
+    if(berry_basket.count >= 25 && log_stack.count >= 25 && !unlocks.tier1_2_storage) {
         console.log("Tier 1.5 Storage unlocked")
         unlocks.tier1_2_storage = true;
         ui_update_flag = true;
         return;
     }
 
-    if(baroness_max >= 1 && unlocks.baroness_tech == false) {
+    if(baroness_max >= 1 && !unlocks.baroness_tech) {
         console.log("Heroes & Baroness Tech Unlocked")
         unlocks.baroness_tech = true;
         ui_update_flag = true;
         return;
     }
 
-    if(active_perks.cilia.perk2.active == true && unlocks.conquest == false) {
+    if(active_perks.cilia.perk2.active && !unlocks.conquest) {
         console.log("Conquest Unlocked")
         unlocks.conquest = true;
         ui_update_flag = true;
         return;
     }
 
-    if(active_perks.cilia.perk4.active == true && unlocks.hamlet == false) {
+    if(active_perks.cilia.perk4.active && !unlocks.hamlet) {
         console.log("Hamlets Unlocked")
         unlocks.hamlet = true;
         ui_update_flag = true;
