@@ -237,3 +237,71 @@ button.berryLogButton:active {
     color: #272727;
     cursor: default;
 }
+
+/** Tech Tree **/
+.techTree {
+    display: grid;
+    grid-template-rows: repeat(10, 120px);   /* 3 rows, each 120px tall */
+    grid-template-columns: repeat(10, 120px);/* 3 columns, each 120px wide */
+    gap: 16px;                             /* space between icons */
+    padding: 10px;
+    width: max-content;
+}
+
+.tech {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+}
+
+.tech_button,
+.tech_button_disabled {
+    border: 1px solid;
+    border-radius: 5px;
+    outline: none;
+    height: 100%;
+    width: 130px;
+    padding: 14px 4px;
+    float: right;
+}
+
+.tech_button {
+    background-color: #7fafcf;
+    color: #3b3b3b;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.tech_button:hover { background-color: #6f9fbf; }
+.tech_button:active { background-color: #3f6f9f; }
+
+.tech_button_disabled {
+    background-color: #265676;
+    color: #272727;
+    cursor: default;
+}
+
+.tech .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    width: 160px;
+    background: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.tech:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}

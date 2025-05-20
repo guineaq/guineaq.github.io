@@ -12,7 +12,7 @@
             <img src="./res/food_tier_1.png" alt="">
             <p><span class="berry">Berries:</span>
                 <br><span id="berry_sub1">0/0</span>
-                <br><span id="berry_sub2">Baskets (15): 0</span>
+                <br><span id="berry_sub2" style="display: none;">Baskets (15): 0</span>
                 <span id="berry_sub2_1" style="display: none;">Granary (100): 0</span>
                 <span id="berry_sub3">0.0</span>
             </p>
@@ -33,7 +33,7 @@
                 <br><span id="ilarun_sub2" class="ilarun_worker">0/0</span>
                 <br><span id="ilarun_sub3" class="influence">0/0</span>
                 <br><span id="ilarun_sub4">Warren (5): 0</span>
-                <span id="ilarun_sub4_1">Hamlet (25): 0</span>
+                <span id="ilarun_sub4_1" style="display: none;">Hamlet (25): 0</span>
                 <span id="ilarun_sub5">0.0</span>
             </p>
         </div>
@@ -72,13 +72,13 @@
                 <button class="logButton unlockable" id="log_add" onclick="gain_resource('log', log.act_rate + log.bonuses.act_rate)" style="display: none;">Pick 1 Twig(s)</button>
                 <button class="berryButton unlockable" id="ilarun_add" onclick="buy_pop('ilarun', 1)" style="display: none;">Host 1 Ilarun(s)</button>
             </div>
-            <div class="action-bar">
+            <div class="action-bar unlockable" style="display: none;" id="building_action_bar">
                 <h3>Buildings</h3>
                 <button class="berryButton unlockable" id="berry_storage_add" style="display: none;" onclick="buy_building('berry_basket', 1)">Make Berry Basket (T1/Cost:10 Logs)</button>
                 <button class="berryButton unlockable" id="berry_storage_2_add" style="display: none;" onclick="buy_building('granary', 1)">Build Granary (T1.5/Cost:75 Logs)</button>
                 <button class="logButton unlockable" id="log_storage_add" style="display: none;" onclick="buy_building('log_stack', 1)">Set Log Stack (T1/Cost:10 Berries)</button>
                 <button class="logButton unlockable" id="log_storage_2_add" style="display: none;" onclick="buy_building('lumber_yard', 1)">Build Lumber Yard (T1.5/Cost:75 Berries)</button>
-                <button class="logButton" id="ilarun_storage_add" onclick="buy_building('warren', 1)">Dig Ilarun Warren (T1/Cost:100 Logs)</button>
+                <button class="logButton unlockable" id="ilarun_storage_add" style="display: none;" onclick="buy_building('warren', 1)">Dig Ilarun Warren (T1/Cost:100 Logs)</button>
                 <button class="berryLogButton unlockable" id="ilarun_storage_2_add" style="display: none;" onclick="buy_building('hamlet', 1)" style="display: none;">Establish Hamlet (T1.5/Cost:125 Berries & Logs)</button>
             </div>
             <div class="action-bar unlockable" style="display: none;" id="ilarun_action_bar">
@@ -197,6 +197,25 @@
 
         <div id="TechTree" class="tabcontent">
             <h3>Tech Tree</h3>
+            <p>Each column has set number of technologies you can unlock.</p>
+            <p>There are no particular orders in which you can unlock the technologies, but you must unlock 6 technologies of a given column to unlock the next column.</p>
+            <div class="techTree">
+                <!--Column 1-->
+                <div class="tech" id="tech11" style="grid-area: 1 / 1;">
+                    <button class="tech_button" id="tech11_btn" onclick="purchase_tech('tech11', 'tech11_btn')">Improved Collection<br>(Cost: 50 Berries & Logs)</button>
+                    <span class="tooltip-text">Increases manual collection of berries and logs by 1.</span>
+                </div>
+                <div class="tech" id="tech21" style="grid-area: 2 / 1;">
+                    <button class="tech_button" id="tech21_btn" onclick="purchase_tech('tech21', 'tech21_btn')">Wintermark Efficiency<br>(Req: 100 Ilaruns)</button>
+                    <span class="tooltip-text">Each Forager and Logger provides +10 bonus to capacity.</span>
+                </div>
+                <div class="tech" id="tech31" style="grid-area: 3 / 1;">
+                    <button class="tech_button" id="tech31_btn" onclick="purchase_tech('tech31', 'tech31_btn')">Extra Bits<br>(Cost: 300 Berries & Logs)</button>
+                    <span class="tooltip-text">Berry Baskets and Log Stacks produce 0.1 Berries or Wood.</span>
+                </div>
+                <!--Column 2-->
+                
+            </div>
         </div>
     </div>
     
@@ -208,6 +227,7 @@
     <script src="./script/src/core.js"></script>
     <script src="./script/src/hero.js"></script>
     <script src="./script/src/conquest.js"></script>
+    <script src="./script/src/techtree.js"></script>
     <script>
         document.getElementById("defaultTab").click();
     </script>

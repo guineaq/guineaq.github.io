@@ -129,6 +129,18 @@ function BuyButton(el, update_function) {
     }
 }
 
+const berry_add_button = new BuyButton(
+    "berry_add", function() {
+        return "Pick " + (berry.act_rate + berry.bonuses.act_rate) + " Berries";
+    }
+);
+
+const log_add_button = new BuyButton(
+    "log_add", function() {
+        return "Pick " + (log.act_rate + log.bonuses.act_rate) + " Logs";
+    }
+);
+
 const berry_basket_button = new BuyButton(
     "berry_storage_add", function() {
         return "Make Berry Basket (T1/Cost:" + berry_basket.cost.log + " Logs)";
@@ -175,6 +187,8 @@ function update_display() {
 }
 
 function update_buttons() {
+    berry_add_button.update();
+    log_add_button.update();
     berry_basket_button.update();
     log_stack_button.update();
     warren_button.update();

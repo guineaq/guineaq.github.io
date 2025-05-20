@@ -24,11 +24,16 @@ function update_res(res) {
 function update_tier1_res_rate() {
     let res_types = Object.keys(res_all);
     let pop_types = Object.keys(pop_all);
+    let building_types = Object.keys(buildings_all);
+
     res_types.forEach(name => {
         res_all[name].pas_rate = 0 + res_all[name].bonuses.pas_rate;
         pop_types.forEach(type => {
             res_all[name].pas_rate -= (pop_all[type].upkeep[name] - pop_all[type].bonuses.upkeep[name]) * pop_all[type].count;
             res_all[name].pas_rate += (pop_all[type].income[name] + pop_all[type].bonuses.income[name]) * pop_all[type].count;
+        });
+        building_types.forEach(b_type => {
+            res_all[name].pas_rate += (buildings_all[b_type].income[name] * buildings_all[b_type].count);
         });
     });
 
@@ -46,6 +51,14 @@ function update_tier1_res_max() {
         let res_key = Object.keys(res_all)
         res_key.forEach(rk => {
             res_all[rk].max += (buildings_all[key].size[rk] + buildings_all[key].bonuses.size[rk]) * buildings_all[key].count;
+        });
+    });
+
+    let pop = Object.keys(pop_all);
+    pop.forEach(key => {
+        let res_key = Object.keys(res_all)
+        res_key.forEach(rk => {
+            res_all[rk].max += (pop_all[key].bonuses.size[rk]) * pop_all[key].count;
         });
     });
 }
@@ -178,9 +191,10 @@ function update_unlocks() {
         return;
     }
 
-    if(berry_basket.count >= 10 && log_stack.count >= 10 && !unlocks.ilarun_recruit) {
-        console.log("Ilarun Recruit Unlocked")
+    if(berry_basket.count >= 10 && log_stack.count >= 10 && !unlocks.ilarun_recruit && !unlocks.techtree) {
+        console.log("Ilarun Recruit & Tech Tree Unlocked")
         unlocks.ilarun_recruit = true;
+        unlocks.techtree = true;
         ui_update_flag = true;
         return;
     }
@@ -230,6 +244,9 @@ function update_tier1() {
 
     if(ui_update_flag) {
         update_ui();
-        on_load();
+        on_load(active_perks.cilia);
+        on_load(active_perks.goldbeak);
+        
+        on_load_tech(active_techs_col1);
     }
 }

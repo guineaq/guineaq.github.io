@@ -46,7 +46,7 @@ const hero_cost = {
     goldbeak_perk4: 2500,
 }
 
-var heroes = {
+const heroes = {
     cilia: {
         on_hire: function(btn_id) {
             if(influence.cur >= hero_cost.cilia_on_hire) {
@@ -155,21 +155,13 @@ var heroes = {
     }
 }
 
-function on_load() {
-    let perks_cilia = Object.keys(active_perks.cilia);
-    let perks_goldbeak = Object.keys(active_perks.goldbeak);
-    console.log(perks_cilia);
-    perks_cilia.forEach(key => {
+function on_load(active_perks_key_list) {
+    let perks_ = Object.keys(active_perks_key_list);
+    console.log(perks_);
+    perks_.forEach(key => {
         if(key.indexOf('apply_') === -1) {
-            if(active_perks.cilia[key].active && active_perks.cilia[key].btn_id != null) {
-                deactivate_button(active_perks.cilia[key].btn_id);
-            }
-        }
-    });
-    perks_goldbeak.forEach(key => {
-        if(key.indexOf('apply_') === -1) {
-            if(active_perks.goldbeak[key].active && active_perks.goldbeak[key].btn_id != null) {
-                deactivate_button(active_perks.goldbeak[key].btn_id);
+            if(active_perks_key_list[key].active && active_perks_key_list[key].btn_id != null) {
+                deactivate_button(active_perks_key_list[key].btn_id);
             }
         }
     });

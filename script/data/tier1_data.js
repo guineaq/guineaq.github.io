@@ -49,8 +49,8 @@ var res_all = {
 }
 
 // Pop Related
-function res_arr(berry = 0, log = 0, ilarun = 0, influence = 0) {
-    return {berry: berry, log: log, ilarun: ilarun, influence: influence};
+function res_arr({berry = 0, log = 0, ilarun = 0, influence = 0} = {}) {
+    return {berry, log, ilarun, influence};
 }
 
 function init_pop(name, count, upkeep, cost, income) {
@@ -63,6 +63,7 @@ function init_pop(name, count, upkeep, cost, income) {
             upkeep: res_arr(),
             cost: res_arr(),
             income: res_arr(),
+            size: res_arr(),
         }
     };
 }
@@ -87,11 +88,11 @@ var baroness_ratio_bonus = fetch("baroness_ratio_bonus") || 0;
 
 var squire_max = 0;
 
-var idle = init_pop("idle", 0, res_arr(0.1, 0, 0, 0), res_arr(100, 0, 0, 0), res_arr(0, 0, 0.01, 0));
-var forager = init_pop("forager", 0, res_arr(0.25, 0, 0, 0), res_arr(100, 0, 0, 0), res_arr(1, 0, 0, 0));
-var logger = init_pop("logger", 0, res_arr(0.25, 0, 0, 0), res_arr(0, 100, 0, 0), res_arr(0, 1, 0, 0));
-var baroness = init_pop("baroness", 0, res_arr(1, 0, 0, 0), res_arr(250, 100, 0, 0), res_arr(0, 0, 0, 0.1));
-var squire = init_pop("squire", 0, res_arr(0, 0, 0, 0.1), res_arr(0, 0, 0, 10), res_arr(0, 0, 0, 0))
+var idle = init_pop("idle", 0, res_arr({berry: 0.1}), res_arr({berry: 100}), res_arr({ilarun: 0.01}));
+var forager = init_pop("forager", 0, res_arr({berry: 0.25}), res_arr({berry: 100}), res_arr({berry: 1}));
+var logger = init_pop("logger", 0, res_arr({berry: 0.25}), res_arr({log: 100}), res_arr({log: 1}));
+var baroness = init_pop("baroness", 0, res_arr({berry: 1}), res_arr({berry: 250, log: 100}), res_arr({influence: 0.1}));
+var squire = init_pop("squire", 0, res_arr({influence: 0.1}), res_arr({influence: 10}), res_arr())
 
 var pop_all = {
     idle: idle,
@@ -103,7 +104,7 @@ var pop_all = {
 
 // Building Related
 const BUILDING_COST_MOD = 1.1;
-function init_building(name, count, cost, size) {
+function init_building(name, count, cost, size, income, upkeep) {
     return {
         count: fetch(name+".count") || count,
         cost: fetch(name+".cost", true) || cost,
@@ -111,7 +112,9 @@ function init_building(name, count, cost, size) {
         bonuses: fetch(name+".bonuses", true) || {
             cost: res_arr(),
             size: res_arr(),
-        }
+        },
+        income: fetch(name+".income", true) || income,
+        upkeep: fetch(name+".upkeep", true) || upkeep,
     }
 }
 
@@ -120,14 +123,16 @@ function save_building(name, b) {
     store(name+".cost", b.cost, true);
     store(name+".size", b.size, true);
     store(name+".bonuses", b.bonuses, true);
+    store(name+".income", b.income, true);
+    store(name+".upkeep", b.upkeep, true);
 }
 
-var berry_basket = init_building("berry_basket", 0, res_arr(0, 10, 0, 0), res_arr(15, 0, 0, 0));
-var log_stack = init_building("log_stack", 0, res_arr(10, 0, 0, 0), res_arr(0, 15, 0, 0));
-var warren = init_building("warren", 0, res_arr(0, 50, 0, 0), res_arr(0, 0, 5, 0));
-var granary = init_building("granary", 0, res_arr(0, 75, 0, 0), res_arr(100, 0, 0, 0));
-var lumber_yard = init_building("lumber_yard", 0, res_arr(75, 0, 0, 0), res_arr(0, 100, 0, 0));
-var hamlet = init_building("hamlet", 0, res_arr(125, 125, 0, 0), res_arr(0, 0, 25, 0));
+var berry_basket = init_building("berry_basket", 0, res_arr({log: 10}), res_arr({berry: 15}), res_arr(), res_arr());
+var log_stack = init_building("log_stack", 0, res_arr({berry: 10}), res_arr({log: 15}), res_arr(), res_arr());
+var warren = init_building("warren", 0, res_arr({log: 50}), res_arr({ilarun: 5}), res_arr(), res_arr());
+var granary = init_building("granary", 0, res_arr({log: 75}), res_arr({berry: 100}), res_arr(), res_arr());
+var lumber_yard = init_building("lumber_yard", 0, res_arr({berry: 75}), res_arr({log: 100}), res_arr(), res_arr());
+var hamlet = init_building("hamlet", 0, res_arr({berry: 125, log: 125}), res_arr({ilarun: 25}), res_arr(), res_arr());
 
 var buildings_all = {
     berry_basket: berry_basket,
@@ -143,12 +148,13 @@ var ui_update_flag = true;
 
 var unlockable_el = {
     berry_harvest: [document.getElementById("berry_add"), document.getElementById("berry_res_display")],
-    log_harvest: [document.getElementById("log_harvest"), document.getElementById("log_add"), document.getElementById("log_res_display"), document.getElementById("berry_storage_add"), document.getElementById("log_storage_add")],
+    log_harvest: [document.getElementById("building_action_bar"), document.getElementById("log_harvest"), document.getElementById("log_add"), document.getElementById("log_res_display"), document.getElementById("berry_storage_add"), document.getElementById("log_storage_add"), document.getElementById("berry_sub2")],
     tier1_2_storage: [document.getElementById("log_storage_2_add"), document.getElementById("berry_storage_2_add"), document.getElementById("tier1_2_storage"), document.getElementById("berry_sub2_1"), document.getElementById("log_sub2_1")],
     ilarun_recruit: [document.getElementById("ilarun_add"), document.getElementById("ilarun_storage_add"), document.getElementById("ilarun_recruit"), document.getElementById("berry_worker_add"), document.getElementById("log_worker_add"), document.getElementById("berry_worker_remove"), document.getElementById("log_worker_remove"), document.getElementById("ilarun_action_bar"), document.getElementById("ilarun_res_display")],
     baroness_tech: [document.getElementById("baroness_tech"), document.getElementById("baroness_add"), document.getElementById("influence_res_display"), document.getElementById("heroTab")],
     hamlet: [document.getElementById("ilarun_storage_2_add"), document.getElementById("ilarun_sub4_1")],
     conquest: [document.getElementById("conquestTab"), document.getElementById("military_res_display")],
+    techtree: [document.getElementById("techTreeTab")]
 }
 var unlocks = fetch("unlocks", true) || {
     berry_harvest: true,
@@ -158,6 +164,7 @@ var unlocks = fetch("unlocks", true) || {
     baroness_tech: false,
     hamlet: false,
     conquest: false,
+    techtree: false,
 }
 
 function update_save() {
@@ -186,6 +193,7 @@ function update_save() {
 
     update_save_heroes();
     update_save_military();
+    update_save_tech();
 }
 
 function update_unlocks_data() {
