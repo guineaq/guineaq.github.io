@@ -1,4 +1,9 @@
 // HTML elements for resource display on icon bar
+/**
+ * 
+ * @param {String} res_name - name of the resource in which the resource icon is generated
+ * @param {ResourceIconSubDisplay} sub_displays - sub_displays of the corresponding resource icon 
+ */
 function ResourceIcon(res_name, sub_displays) {
     this.div = document.getElementById(res_name+"_res_display");
     this.sub_displays = sub_displays;
@@ -32,7 +37,7 @@ function gen_color_coded_span_for_rate(rate) {
     return span_;
 }
 
-var berry_display = new ResourceIcon("berry", [
+const berry_display = new ResourceIcon("berry", [
     new ResourceIconSubDisplay("berry_sub1", function() {
         return Math.floor(berry.cur) + "/" + berry.max;
     }),
@@ -50,7 +55,7 @@ var berry_display = new ResourceIcon("berry", [
     }),
 ]);
 
-var log_display = new ResourceIcon("log", [
+const log_display = new ResourceIcon("log", [
     new ResourceIconSubDisplay("log_sub1", function() {
         return Math.floor(log.cur) + "/" + log.max;
     }),
@@ -68,7 +73,7 @@ var log_display = new ResourceIcon("log", [
     }),
 ]);
 
-var ilarun_display = new ResourceIcon("ilarun", [
+const ilarun_display = new ResourceIcon("ilarun", [
     new ResourceIconSubDisplay("ilarun_sub1", function() {
         return Math.floor(ilarun.cur) + "/" + ilarun.max + "(I:" + idle.count + ")";
     }),
@@ -92,7 +97,7 @@ var ilarun_display = new ResourceIcon("ilarun", [
     }),
 ]);
 
-var influence_display = new ResourceIcon("influence", [
+const influence_display = new ResourceIcon("influence", [
     new ResourceIconSubDisplay("influence_sub1", function() {
         return Math.floor(influence.cur);
     }),
@@ -104,7 +109,7 @@ var influence_display = new ResourceIcon("influence", [
     }),
 ]);
 
-var military_display = new ResourceIcon("military", [
+const military_display = new ResourceIcon("military", [
     new ResourceIconSubDisplay("military_sub1", function() {
         let span_begin = "<span>";
         let span_end = "</span>"
@@ -124,37 +129,37 @@ function BuyButton(el, update_function) {
     }
 }
 
-var berry_basket_button = new BuyButton(
+const berry_basket_button = new BuyButton(
     "berry_storage_add", function() {
         return "Make Berry Basket (T1/Cost:" + berry_basket.cost.log + " Logs)";
     }
 );
 
-var log_stack_button = new BuyButton(
+const log_stack_button = new BuyButton(
     "log_storage_add", function() {
         return "Set Log Stack (T1/Cost:" + log_stack.cost.berry + " Berries)";
     }
 );
 
-var warren_button = new BuyButton(
+const warren_button = new BuyButton(
     "ilarun_storage_add", function() {
         return "Dig Ilarun Warren (T1/Cost:" + warren.cost.log + " Logs)";
     }
 );
 
-var granary_button = new BuyButton(
+const granary_button = new BuyButton(
     "berry_storage_2_add", function() {
         return "Build Granary (T1.5/Cost:" + granary.cost.log + " Logs)";
     }
 );
 
-var lumber_yard_button = new BuyButton(
+const lumber_yard_button = new BuyButton(
     "log_storage_2_add", function() {
         return "Build Lumber Yard (T1.5/Cost:" + lumber_yard.cost.berry + " Berries)";
     }
 );
 
-var hamlet_button = new BuyButton(
+const hamlet_button = new BuyButton(
     "ilarun_storage_2_add", function() {
         return "Establish Hamlet (T1.5/Cost:" + hamlet.cost.log + " Berries & Logs)";
     }

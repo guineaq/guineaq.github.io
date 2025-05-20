@@ -3,14 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idle Prototype 0.2.3</title>
+    <title>Idle Prototype 0.3.0</title>
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/tier1.css">
-    <link rel="stylesheet" href="./css/hero.css">
-    <link rel="stylesheet" href="./css/conquest.css">
 </head>
 <body>
-    <!--TODO componentify/factory-fy buttons and UI elements-->
     <div class="icon-bar">
         <div id="berry_res_display" style="display: none;">
             <img src="./res/food_tier_1.png" alt="">
@@ -62,51 +58,62 @@
             <button class="tablinks" onclick="openTab(event, 'Tier_1')" id="defaultTab">Tier 1</button>
             <button class="tablinks" onclick="openTab(event, 'Heroes')" id="heroTab" style="display: none;">Heroes</button>
             <button class="tablinks" onclick="openTab(event, 'Conquest')" id="conquestTab" style="display: none;">Conquest</button>
+            <button class="tablinks" onclick="openTab(event, 'TechTree')" id="techTreeTab" style="display: none;">Tech Tree</button>
         </div>
 
         <div id="Tier_1" class="tabcontent">
             <h3>World Tree - Vicinity</h3>
             <p>Humble Beginnings... You awake in front of a budding tree. (You can click and then hold down enter key for rapid resource collection)</p>
-            <div class="unlockable" id="berry_harvest" style="display: none;">
-                <p>Some berry shrubs are visible, let's get some.</p>
-                <button class="berryButton" id="berry_add" onclick="gain_resource('berry', berry.act_rate + berry.bonuses.act_rate)">Pick 1 Berries</button>
+            <p>Some berry shrubs are visible, let's get some.</p>
+            <div class="tier-action-bar-list">
+            <div class="action-bar">
+                <h3>Manual Collection</h3>
+                <button class="berryButton unlockable" id="berry_add" onclick="gain_resource('berry', berry.act_rate + berry.bonuses.act_rate)" style="display: none;">Pick 1 Berries</button>
+                <button class="logButton unlockable" id="log_add" onclick="gain_resource('log', log.act_rate + log.bonuses.act_rate)" style="display: none;">Pick 1 Twig(s)</button>
+                <button class="berryButton unlockable" id="ilarun_add" onclick="buy_pop('ilarun', 1)" style="display: none;">Host 1 Ilarun(s)</button>
+            </div>
+            <div class="action-bar">
+                <h3>Buildings</h3>
+                <button class="berryButton unlockable" id="berry_storage_add" style="display: none;" onclick="buy_building('berry_basket', 1)">Make Berry Basket (T1/Cost:10 Logs)</button>
+                <button class="berryButton unlockable" id="berry_storage_2_add" style="display: none;" onclick="buy_building('granary', 1)">Build Granary (T1.5/Cost:75 Logs)</button>
+                <button class="logButton unlockable" id="log_storage_add" style="display: none;" onclick="buy_building('log_stack', 1)">Set Log Stack (T1/Cost:10 Berries)</button>
+                <button class="logButton unlockable" id="log_storage_2_add" style="display: none;" onclick="buy_building('lumber_yard', 1)">Build Lumber Yard (T1.5/Cost:75 Berries)</button>
+                <button class="logButton" id="ilarun_storage_add" onclick="buy_building('warren', 1)">Dig Ilarun Warren (T1/Cost:100 Logs)</button>
+                <button class="berryLogButton unlockable" id="ilarun_storage_2_add" style="display: none;" onclick="buy_building('hamlet', 1)" style="display: none;">Establish Hamlet (T1.5/Cost:125 Berries & Logs)</button>
+            </div>
+            <div class="action-bar unlockable" style="display: none;" id="ilarun_action_bar">
+                <h3>Ilaruns</h3>
+                <button class="ilarunButton unlockable" id="berry_worker_add" style="display: none;" onclick="buy_pop('forager', 1)">Train Forager (T1/Cost:100 Berries / 1 Ilarun)</button>
+                <button class="ilarunButton unlockable" id="log_worker_add" style="display: none;" onclick="buy_pop('logger', 1)">Train Logger (T1/Cost:100 Logs / 1 Ilarun)</button>
+                <button class="ilarunButton unlockable" id="berry_worker_remove" style="display: none;" onclick="sell_pop('forager', 1)">Dismiss Forager (No Refund!)</button>
+                <button class="ilarunButton unlockable" id="log_worker_remove" style="display: none;" onclick="sell_pop('logger', 1)">Dismiss Logger (No Refund!)</button>
+                <button class="influenceButton unlockable" id="baroness_add" style="display: none;" onclick="buy_pop('baroness', 1)">Elect Baroness (T1/Cost:250 Berries & 100 Logs)</button>
+            </div>
             </div>
             <div class="unlockable" id="log_harvest" style="display: none;">
+                <h3>Of Baskets and Stacks</h3>
                 <p>Your hands are full of berries... we need to make some permanent storages.</p>
-                <button class="logButton" id="log_add" onclick="gain_resource('log', log.act_rate + log.bonuses.act_rate)">Pick 1 Twig(s)</button>
-                <button class="logButton" id="berry_storage_add" onclick="buy_building('berry_basket', 1)">Make Berry Basket (T1/Cost:10 Logs)</button>
-                <button class="berryButton" id="log_storage_add" onclick="buy_building('log_stack', 1)">Set Log Stack (T1/Cost:10 Berries)</button>
-            </div>
-            <div class="unlockable" id="ilarun_recruit" style="display: none;">
-                <p>You find short bunny people sniffing about your storages... perhaps they want to help?</p>
-                <h3>Ilaruns</h3>
-                <p>Ilaruns require more management and depth.</p>
-                <p><span class="ilaruns">40</span>% of the Ilarun's total population can work. You can maintain <span class="ilaruns">1</span> Ilarun Baroness per <span class="ilaruns">10</span> workers cap (Without modifiers).</p>
-                <p>Each idle Ilarun consumes <span class="berry">0.1 Berries per second</span>, each worker Ilarun consumes <span class="berry">0.25 Berries per second</span>. Each idle Ilarun produces 0.01 Ilarun per second.</p>
-                <button class="berryButton" id="ilarun_add" onclick="buy_pop('ilarun', 1)">Host 1 Ilarun(s)</button>
-                <button class="logButton" id="ilarun_storage_add" onclick="buy_building('warren', 1)">Dig Ilarun Warren (T1/Cost:100 Logs)</button>
-                <button class="ilarunButton" id="berry_worker_add" onclick="buy_pop('forager', 1)">Train Forager (T1/Cost:100 Berries / 1 Ilarun)</button>
-                <button class="ilarunButton" id="log_worker_add" onclick="buy_pop('logger', 1)">Train Logger (T1/Cost:100 Logs / 1 Ilarun)</button>
-                <button class="ilarunButton" id="berry_worker_remove" onclick="sell_pop('forager', 1)">Dismiss Forager (No Refund!)</button>
-                <button class="ilarunButton" id="log_worker_remove" onclick="sell_pop('logger', 1)">Dismiss Logger (No Refund!)</button>
             </div>
             <div class="unlockable" id="tier1_2_storage" style="display: none;">
+                <h3>Not enough mine- I mean storage space</h3>
                 <p>We can't hold all our resources with just baskets and stacks, we need a proper space!</p>
-                <button class="berryButton" id="log_storage_2_add" onclick="buy_building('lumber_yard', 1)">Build Lumber Yard (T1.5/Cost:75 Berries)</button>
-                <button class="logButton" id="berry_storage_2_add" onclick="buy_building('granary', 1)">Build Granary (T1.5/Cost:75 Logs)</button>
+            </div>
+            <div class="unlockable" id="ilarun_recruit" style="display: none;">
+                <h3>Ilaruns</h3>
+                <p><span class="ilaruns">40</span>% of the Ilarun's total population can work. You can maintain <span class="ilaruns">1</span> Ilarun Baroness per <span class="ilaruns">10</span> workers cap (Without modifiers).</p>
+                <p>Each idle Ilarun consumes <span class="berry">0.1 Berries per second</span>, each worker Ilarun consumes <span class="berry">0.25 Berries per second</span>. Each idle Ilarun produces 0.01 Ilarun per second.</p> 
             </div>
             <div class="unlockable" id="baroness_tech" style="display: none;">
+                <h3>A matter of prestige</h3>
                 <p>With a small community forming, the Ilaruns elected their own subleader of sorts. They also start to expand the community on their own as well!</p>
                 <p><span class="influence">Influence</span> is used to unlock more complex features and upgrade existing ones. One of the features currently available to you is hiring heroes.</p>
-                <button class="ilarunButton" id="baroness_add" onclick="buy_pop('baroness', 1)">Elect Baroness (T1/Cost:250 Berries & 100 Logs)</button>
-                <button class="logButton" id="ilarun_storage_2_add" onclick="buy_building('hamlet', 1)" style="display: none;">Establish Hamlet (T1.5/Cost:125 Berries & Logs)</button>
             </div>
         </div>
 
         <div id="Heroes" class="tabcontent">
             <h2>Retinue Management</h2>
             <p>In here, you may hire, train or level up your heroes. Heroes usually require influence or some kind of threshold to advance/hire.
-                One of the first heroes you can hire is Cilia Aurarius, the Bunny Knight. Each hero also has "color affinity". Heroes with allied
+                One of the first heroes you can hire is Cilia, the Bunny Knight. Each hero also has "color affinity". Heroes with allied
                 color affinity will unlock synergy bonuses and such! Doesn't mean you can't just go on and unlock everything still. However heroes
                 require hefty influence investment, so make them count.
             </p>
@@ -114,9 +121,9 @@
             <div class="hero_tab white_black" id="cilia_tab">
                 <div class="hero_tab_internal">
                     <div class="hero_tab_internal_desc">
-                        <h3>Cilia Aurarius, the Bunny Knight</h3>
+                        <h3>Cilia, the Bunny Knight</h3>
                         <h4>Type - Ilarun Noble Knight</h4>
-                        <h4>Color Identity: <span style="color: #afafaf">Virtue 1</span> / <span style="color: #2a2a2a">Nobility 1</span></h4>
+                        <h4>Color Identity: <span class="virtue">Virtue 1</span> / <span class="nobility">Nobility 1</span></h4>
                         <i>Does she have any clue what she's doing?</i>
                         <p>-Perks-</p>
                         <p><span class="perk">On Hire</span>: Generates <span class="influence">0.5</span> influence by base. Also <span class="positive_bonus">+1</span> to number of Ilaruns per Warren.</p>
@@ -127,7 +134,7 @@
                         <p><span class="perk">Serfdom</span>: Upkeep of each Idle/Worker Ilaruns are decreased by <span class="berry">0.05</span>.</p>
                         <p><span class="perk">Kingdom</span>: 1.) Unlocks the construction of <span class="feature_unlock">Hamlets</span>, Tier 1.5 Ilarun Pop Building.</p>
                         <p>2.) Number of Worker Max required for each Baroness is decreased by <span class="positive_bonus">-1</span>.</p>
-                        <p><span style="color: #afafaf">(2) requires Virtue 2 Affinity.</span></p>
+                        <p><span class="virtue">(2) requires Virtue 2 Affinity.</span></p>
                     </div>
                     <!----><button class="hero_button" id="cilia_perk4" onclick="purchase_perk('cilia', 'perk4', 'cilia_perk4')">Unlock <br>"Hamlets" for 500 Influence</button>
                     <!----><button class="hero_button" id="cilia_perk3" onclick="purchase_perk('cilia', 'perk3', 'cilia_perk3')">Unlock <br>"Serfdom" for 200 Influence</button>
@@ -141,7 +148,7 @@
                     <div class="hero_tab_internal_desc">
                         <h3>Goldbeak, the Griffin Prince</h3>
                         <h4>Type - Griffin Noble Heir</h4>
-                        <h4>Color Identity: <span style="color: #afafaf">Virtue 1</span> / <span style="color: #2a2a2a">Nobility 1</span></h4>
+                        <h4>Color Identity: <span class="virtue">Virtue 1</span> / <span class="nobility">Nobility 1</span></h4>
                         <i>He's fat?</i>
                         <p>-Perks-</p>
                         <p><span class="perk">On Hire</span>: Generates <span class="power">+10</span> military power by base.</p>
@@ -186,6 +193,10 @@
                     <button class="militaryButton" id="target_t0" onclick="set_conquest_target('target_t0', 'morhaven')">Conquer Morhaven</button>
                 </div>
             </div>
+        </div>
+
+        <div id="TechTree" class="tabcontent">
+            <h3>Tech Tree</h3>
         </div>
     </div>
     

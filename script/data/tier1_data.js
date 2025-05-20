@@ -142,11 +142,11 @@ var buildings_all = {
 var ui_update_flag = true;
 
 var unlockable_el = {
-    berry_harvest: [document.getElementById("berry_harvest"), document.getElementById("berry_res_display")],
-    log_harvest: [document.getElementById("log_harvest"), document.getElementById("log_res_display")],
-    tier1_2_storage: [document.getElementById("tier1_2_storage"), document.getElementById("berry_sub2_1"), document.getElementById("log_sub2_1")],
-    ilarun_recruit: [document.getElementById("ilarun_recruit"), document.getElementById("ilarun_res_display")],
-    baroness_tech: [document.getElementById("baroness_tech"), document.getElementById("influence_res_display"), document.getElementById("heroTab")],
+    berry_harvest: [document.getElementById("berry_add"), document.getElementById("berry_res_display")],
+    log_harvest: [document.getElementById("log_harvest"), document.getElementById("log_add"), document.getElementById("log_res_display"), document.getElementById("berry_storage_add"), document.getElementById("log_storage_add")],
+    tier1_2_storage: [document.getElementById("log_storage_2_add"), document.getElementById("berry_storage_2_add"), document.getElementById("tier1_2_storage"), document.getElementById("berry_sub2_1"), document.getElementById("log_sub2_1")],
+    ilarun_recruit: [document.getElementById("ilarun_add"), document.getElementById("ilarun_storage_add"), document.getElementById("ilarun_recruit"), document.getElementById("berry_worker_add"), document.getElementById("log_worker_add"), document.getElementById("berry_worker_remove"), document.getElementById("log_worker_remove"), document.getElementById("ilarun_action_bar"), document.getElementById("ilarun_res_display")],
+    baroness_tech: [document.getElementById("baroness_tech"), document.getElementById("baroness_add"), document.getElementById("influence_res_display"), document.getElementById("heroTab")],
     hamlet: [document.getElementById("ilarun_storage_2_add"), document.getElementById("ilarun_sub4_1")],
     conquest: [document.getElementById("conquestTab"), document.getElementById("military_res_display")],
 }
