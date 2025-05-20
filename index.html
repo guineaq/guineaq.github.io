@@ -70,7 +70,7 @@
                 <h3>Manual Collection</h3>
                 <button class="berryButton unlockable" id="berry_add" onclick="gain_resource('berry', berry.act_rate + berry.bonuses.act_rate)" style="display: none;">Pick 1 Berries</button>
                 <button class="logButton unlockable" id="log_add" onclick="gain_resource('log', log.act_rate + log.bonuses.act_rate)" style="display: none;">Pick 1 Twig(s)</button>
-                <button class="berryButton unlockable" id="ilarun_add" onclick="buy_pop('ilarun', 1)" style="display: none;">Host 1 Ilarun(s)</button>
+                <button class="ilarunButton unlockable" id="ilarun_add" onclick="buy_pop('ilarun', 1)" style="display: none;">Host 1 Ilarun(s)<br>(Cost: 100 Berries)</button>
             </div>
             <div class="action-bar unlockable" style="display: none;" id="building_action_bar">
                 <h3>Buildings</h3>
@@ -83,8 +83,8 @@
             </div>
             <div class="action-bar unlockable" style="display: none;" id="ilarun_action_bar">
                 <h3>Ilaruns</h3>
-                <button class="ilarunButton unlockable" id="berry_worker_add" style="display: none;" onclick="buy_pop('forager', 1)">Train Forager (T1/Cost:100 Berries / 1 Ilarun)</button>
-                <button class="ilarunButton unlockable" id="log_worker_add" style="display: none;" onclick="buy_pop('logger', 1)">Train Logger (T1/Cost:100 Logs / 1 Ilarun)</button>
+                <button class="berryButton unlockable" id="berry_worker_add" style="display: none;" onclick="buy_pop('forager', 1)">Train Forager (T1/Cost:100 Berries / 1 Ilarun)</button>
+                <button class="logButton unlockable" id="log_worker_add" style="display: none;" onclick="buy_pop('logger', 1)">Train Logger (T1/Cost:100 Logs / 1 Ilarun)</button>
                 <button class="ilarunButton unlockable" id="berry_worker_remove" style="display: none;" onclick="sell_pop('forager', 1)">Dismiss Forager (No Refund!)</button>
                 <button class="ilarunButton unlockable" id="log_worker_remove" style="display: none;" onclick="sell_pop('logger', 1)">Dismiss Logger (No Refund!)</button>
                 <button class="influenceButton unlockable" id="baroness_add" style="display: none;" onclick="buy_pop('baroness', 1)">Elect Baroness (T1/Cost:250 Berries & 100 Logs)</button>

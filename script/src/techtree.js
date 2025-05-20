@@ -33,8 +33,8 @@ const techs = {
     // Wintermark Efficiency
     tech21: function(btn_id) {
         if(ilarun.cur >= tech_cost_col1.tech21.ilarun) {
-            logger.bonuses.size[log] += 10;
-            forager.bonuses.size[berry] += 10;
+            logger.bonuses.size.log += 10;
+            forager.bonuses.size.berry += 10;
             active_techs_col1.tech21.active = true;
             active_techs_col1.tech21.btn_id = btn_id;
             deactivate_button_tech(btn_id);

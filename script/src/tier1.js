@@ -113,6 +113,8 @@ function buy_pop(name, amount) {
                 if(spend_resources(pop_all[name].cost)) {
                     if(name == 'forager') forager.count += amount;
                     if(name == 'logger') logger.count += amount;
+                    
+                    update_tier1_res_max();
                 }
             }
         } // Workers
