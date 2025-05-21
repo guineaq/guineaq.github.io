@@ -97,5 +97,6 @@ function update_save_military() {
     let i = 0;
     t.forEach(territory => {
         store("t"+i+".progress", territories[territory].progress);
+        i++;
     });
 }

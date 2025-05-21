@@ -177,6 +177,8 @@ function buy_pop(name, amount) {
 function sell_pop(name, amount) {
     if(name == 'forager' && (forager.count - amount >= 0)) forager.count -= amount;
     if(name == 'logger'&& (logger.count - amount >= 0)) logger.count -= amount;
+    if(name == 'ashcrafter' && (ashcrafter.count - amount >= 0)) ashcrafter.count -= amount;
+    if(name == 'berrybrewer'&& (berrybrewer.count - amount >= 0)) berrybrewer.count -= amount;
     if(name == 'squire' && (squire.count - amount >= 0)) squire.count -= amount;
 
     update_ilarun_pop_demographic();
