@@ -73,6 +73,36 @@ const log_display = new ResourceIcon("log", [
     }),
 ]);
 
+const ash_pottery_display = new ResourceIcon("ash_pottery", [
+    new ResourceIconSubDisplay("ash_pottery_sub1", function() {
+        return Math.floor(ash_pottery.cur) + "/" + ash_pottery.max;
+    }),
+    new ResourceIconSubDisplay("ash_pottery_sub2", function() {
+        return "Ash Market (" + (ash_market.size.ash_pottery + ash_market.bonuses.size.ash_pottery) + "): " + ash_market.count;
+    }),
+    new ResourceIconSubDisplay("ash_pottery_sub3", function() {
+        let span_begin = "<span>";
+        let span_end = "</span>"
+        span_begin = gen_color_coded_span_for_rate(ash_pottery.pas_rate);
+        return span_begin + parseFloat(ash_pottery.pas_rate).toPrecision(3) + span_end;
+    }),
+]);
+
+const berry_cider_display = new ResourceIcon("berry_cider", [
+    new ResourceIconSubDisplay("berry_cider_sub1", function() {
+        return Math.floor(berry_cider.cur) + "/" + berry_cider.max;
+    }),
+    new ResourceIconSubDisplay("berry_cider_sub2", function() {
+        return "Cellar (" + (cellar.size.berry_cider + cellar.bonuses.size.berry_cider) + "): " + cellar.count;
+    }),
+    new ResourceIconSubDisplay("berry_cider_sub3", function() {
+        let span_begin = "<span>";
+        let span_end = "</span>"
+        span_begin = gen_color_coded_span_for_rate(berry_cider.pas_rate);
+        return span_begin + parseFloat(berry_cider.pas_rate).toPrecision(3) + span_end;
+    }),
+]);
+
 const ilarun_display = new ResourceIcon("ilarun", [
     new ResourceIconSubDisplay("ilarun_sub1", function() {
         return Math.floor(ilarun.cur) + "/" + ilarun.max + "(I:" + idle.count + ")";
@@ -94,6 +124,27 @@ const ilarun_display = new ResourceIcon("ilarun", [
         let span_end = "</span>"
         span_begin = gen_color_coded_span_for_rate(ilarun.pas_rate);
         return span_begin + parseFloat(ilarun.pas_rate).toPrecision(3) + span_end;
+    }),
+]);
+
+const ash_elf_display = new ResourceIcon("ash_elf", [
+    new ResourceIconSubDisplay("ash_elf_sub1", function() {
+        return Math.floor(ash_elf.cur) + "/" + ash_elf.max + "(I:" + elf_idle.count + ")";
+    }),
+    new ResourceIconSubDisplay("ash_elf_sub2", function() {
+        return (berrybrewer.count + ashcrafter.count) + "/" + elf_worker_max + "(B:" + berrybrewer.count + " A:" + ashcrafter.count + ")";
+    }),
+    new ResourceIconSubDisplay("ash_elf_sub3", function() {
+        return ashen_maiden.count + "/" + ashen_maiden_max;
+    }),
+    new ResourceIconSubDisplay("ash_elf_sub4", function() {
+        return "Ashen Abode (" + (ashen_abode.size.ash_elf + ashen_abode.bonuses.size.ash_elf) + "): " + ashen_abode.count;
+    }),
+    new ResourceIconSubDisplay("ash_elf_sub5", function() {
+        let span_begin = "<span>";
+        let span_end = "</span>"
+        span_begin = gen_color_coded_span_for_rate(ash_elf.pas_rate);
+        return span_begin + parseFloat(ash_elf.pas_rate).toPrecision(3) + span_end;
     }),
 ]);
 
@@ -177,6 +228,24 @@ const hamlet_button = new BuyButton(
     }
 );
 
+const ashen_abode_button = new BuyButton(
+    "ash_elf_storage_add", function() {
+        return "Build Ashen Abode (T1/Cost:" + ashen_abode.cost.log + " Logs & " + ashen_abode.cost.ash_pottery + " Ash Pottery)";
+    }
+);
+
+const ash_market_button = new BuyButton(
+    "ash_pottery_storage_add", function() {
+        return "Establish Ash Market (T1/Cost:" + ash_market.cost.berry_cider + " Berry Cider)";
+    }
+);
+
+const cellar_button = new BuyButton(
+    "berry_cider_storage_add", function() {
+        return "Dig Cellar (T1/Cost:" + cellar.cost.ash_pottery + " Ash Pottery)";
+    }
+);
+
 // Display & GUI
 function update_display() {
     berry_display.update();
@@ -184,6 +253,9 @@ function update_display() {
     ilarun_display.update();
     influence_display.update();
     military_display.update();
+    berry_cider_display.update();
+    ash_pottery_display.update();
+    ash_elf_display.update();
 }
 
 function update_buttons() {
@@ -195,6 +267,9 @@ function update_buttons() {
     granary_button.update();
     lumber_yard_button.update();
     hamlet_button.update();
+    ashen_abode_button.update();
+    ash_market_button.update();
+    cellar_button.update();
 }
 
 function update_ui() {

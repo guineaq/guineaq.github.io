@@ -1,14 +1,14 @@
 var active_techs_col1 = {
-    tech11: fetch("tech11", true) || {active: false, btn_id: null},
-    tech21: fetch("tech21", true) || {active: false, btn_id: null},
-    tech31: fetch("tech31", true) || {active: false, btn_id: null},
-    tech51: fetch("tech51", true) || {active: false, btn_id: null},
-    tech61: fetch("tech61", true) || {active: false, btn_id: null},
-    tech71: fetch("tech71", true) || {active: false, btn_id: null},
-    tech41: fetch("tech41", true) || {active: false, btn_id: null},
-    tech81: fetch("tech81", true) || {active: false, btn_id: null},
-    tech91: fetch("tech91", true) || {active: false, btn_id: null},
-    tech01: fetch("tech01", true) || {active: false, btn_id: null},
+    tech11: fetch("tech11", true) || {active: false, btn_id: null, exclusive: false},
+    tech21: fetch("tech21", true) || {active: false, btn_id: null, exclusive: false},
+    tech31: fetch("tech31", true) || {active: false, btn_id: null, exclusive: false},
+    tech51: fetch("tech51", true) || {active: false, btn_id: null, exclusive: false},
+    tech61: fetch("tech61", true) || {active: false, btn_id: null, exclusive: false},
+    tech71: fetch("tech71", true) || {active: false, btn_id: null, exclusive: false},
+    tech41: fetch("tech41", true) || {active: false, btn_id: null, exclusive: false},
+    tech81: fetch("tech81", true) || {active: false, btn_id: null, exclusive: false},
+    tech91: fetch("tech91", true) || {active: false, btn_id: null, exclusive: false},
+    tech01: fetch("tech01", true) || {active: false, btn_id: null, exclusive: false},
 }
 
 const tech_cost_col1 = {
@@ -61,11 +61,17 @@ function purchase_tech(tech_code, id) {
     update_tier1_res_rate();
 }
 
-function deactivate_button_tech(btn_id) {
+function deactivate_button_tech(btn_id, exclusive=false) {
     if(document.getElementById(btn_id).disabled == false) {
         document.getElementById(btn_id).disabled = true;
-        document.getElementById(btn_id).innerHTML += "<br>(Purchased)";
-        document.getElementById(btn_id).className = "tech_button_disabled";
+        if(exclusive) {
+            document.getElementById(btn_id).innerHTML += "<br>(Locked Out)";
+            document.getElementById(btn_id).className = "tech_button_locked";
+        }
+        else {
+            document.getElementById(btn_id).innerHTML += "<br>(Purchased)";
+            document.getElementById(btn_id).className = "tech_button_disabled";
+        }
     }
 }
 

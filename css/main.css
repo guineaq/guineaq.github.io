@@ -51,14 +51,6 @@ body {
     padding: 12px;
 }
 
-.icon-bar img {
-    display: block;
-    width: 64px;
-    height: 64px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .icon-bar p {
     display: block;
     text-align: center;
@@ -84,7 +76,10 @@ span,
 
 span.log { color: #159f12; }
 span.berry { color: #c94e4e; }
+span.ashpottery { color: #ddffdd; }
+span.berrycider { color: #a93e3e; }
 span.ilaruns { color: #206a9b; }
+span.ashelf { color: #c3bfbf; }
 span.ilarun_worker { color: #dee04b; }
 span.influence { color: #c570ec; }
 span.power { color: #000; }
@@ -135,6 +130,9 @@ button.ilarunButton,
 button.influenceButton,
 button.militaryButton,
 button.berryLogButton,
+button.ashPotteryButton,
+button.berryCiderButton,
+button.ashElfButton,
 button.flButton {
     color: #f0e7d5;
     border: none;
@@ -159,6 +157,10 @@ button.ilarunButton { background-color: #206a9b; }
 button.ilarunButton:hover { background-color: #304f63; }
 button.ilarunButton:active { background-color: #255677; }
 
+button.ashElfButton { background-color: #c3bfbf; }
+button.ashElfButton:hover { background-color: #a8a6a6; }
+button.ashElfButton:active { background-color: #888282; }
+
 button.influenceButton { background-color: #82209b; }
 button.influenceButton:hover { background-color: #573063; }
 button.influenceButton:active { background-color: #702577; }
@@ -166,6 +168,14 @@ button.influenceButton:active { background-color: #702577; }
 button.militaryButton { background-color: #3d3d3d; }
 button.militaryButton:hover { background-color: #1a1a1a; }
 button.militaryButton:active { background-color: #272727; }
+
+button.ashPotteryButton { background-color: #afafaf; }
+button.ashPotteryButton:hover { background-color: #919191; }
+button.ashPotteryButton:active { background-color: #757575; }
+
+button.berryCiderButton { background-color: #ac4848; }
+button.berryCiderButton:hover { background-color: #863333; }
+button.berryCiderButton:active { background-color: #7e4242; }
 
 /* Berry & Log Hybrid Gradient Button */
 button.berryLogButton {
@@ -279,6 +289,12 @@ button.berryLogButton:active {
 
 .tech_button_disabled {
     background-color: #265676;
+    color: #272727;
+    cursor: default;
+}
+
+.tech_button_locked {
+    background-color: #565626;
     color: #272727;
     cursor: default;
 }

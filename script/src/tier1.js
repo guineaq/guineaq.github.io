@@ -12,6 +12,17 @@ function update_ilarun_pop_demographic() {
     idle.count = Math.floor(ilarun.cur) - worker_total - baroness.count - squire.count;
 }
 
+function update_ash_elf_pop_demographic() {
+    elf_worker_max = 0;
+    elf_worker_max = Math.floor((BASE_ELF_WORKER_PERC + elf_worker_perc_bonus) * Math.floor(ash_elf.cur));
+
+    ashen_maiden_max = 0;
+    ashen_maiden_max = Math.floor(elf_worker_max / (BASE_ASHEN_MAIDEN_RATIO + ashen_maiden_ratio_bonus));
+
+    let worker_total = ashcrafter.count + berrybrewer.count;
+    elf_idle.count = Math.floor(ash_elf.cur) - worker_total - ashen_maiden.count;
+}
+
 function update_res(res) {
     let gain = (res.pas_rate + res.bonuses.pas_rate) / (1000 / TICK);
     if(res.cur + gain < res.max + res.bonuses.max || res.max == -1) {
@@ -45,6 +56,9 @@ function update_tier1_res_max() {
     berry.max = 10 + berry.bonuses.max;
     log.max = 10 + log.bonuses.max;
     ilarun.max = 0 + ilarun.bonuses.max;
+    ash_elf.max = 0 + ash_elf.bonuses.max;
+    ash_pottery.max = 10 + ash_pottery.bonuses.max;
+    berry_cider.max = 10 + berry_cider.bonuses.max;
 
     let buildings = Object.keys(buildings_all);
     buildings.forEach(key => {
@@ -97,15 +111,18 @@ function check_pop_availability(amount) {
 }
 
 function buy_pop(name, amount) {
-    if(name == "ilarun") {
-        if(ilarun.cur + amount < (ilarun.max + ilarun.bonuses.max)) {
-            if(spend_resources(idle.cost))
-                ilarun.cur += amount;
+    if(name == "ilarun" | name == "ash_elf") {
+        pop_cost = 0;
+        if(name == "ilarun") pop_cost = idle.cost;
+        if(name == "ash_elf") pop_cost = elf_idle.cost;
+        if(res_all[name].cur + amount < (res_all[name].max + res_all[name].bonuses.max)) {
+            if(spend_resources(pop_cost))
+                res_all[name].cur += amount;
         } else {
-            if(ilarun.cur >= (ilarun.max + ilarun.bonuses.max))
+            if(res_all[name].cur >= (res_all[name].max + res_all[name].bonuses.max))
                 return;
-            if(spend_resources(idle.cost))
-                ilarun.cur = ilarun.max + ilarun.bonuses.max;
+            if(spend_resources(pop_cost))
+                res_all[name].cur = res_all[name].max + res_all[name].bonuses.max;
         }
     } else {
         if(name == "forager" | name == "logger") {
@@ -113,11 +130,18 @@ function buy_pop(name, amount) {
                 if(spend_resources(pop_all[name].cost)) {
                     if(name == 'forager') forager.count += amount;
                     if(name == 'logger') logger.count += amount;
-                    
-                    update_tier1_res_max();
                 }
             }
         } // Workers
+
+        if(name == "ashcrafter" | name == "berrybrewer") {
+            if((ashcrafter.count + berrybrewer.count + amount) <= elf_worker_max) {
+                if(spend_resources(pop_all[name].cost)) {
+                    if(name == 'ashcrafter') ashcrafter.count += amount;
+                    if(name == 'berrybrewer') berrybrewer.count += amount;
+                }
+            }
+        } // Elf Workers
 
         if(name == "baroness") {
             if(baroness.count + amount <= baroness_max) {
@@ -126,6 +150,14 @@ function buy_pop(name, amount) {
                 }
             }
         } // Baroness
+
+        if(name == "ashen_maiden") {
+            if(ashen_maiden.count + amount <= ashen_maiden_max) {
+                if(spend_resources(pop_all[name].cost)) {
+                    ashen_maiden.count += amount;
+                }
+            }
+        } // Ashen Maiden
 
         if(name == "squire") {
             if(squire.count + amount <= squire_max) {
@@ -137,7 +169,9 @@ function buy_pop(name, amount) {
     }
 
     update_ilarun_pop_demographic();
+    update_ash_elf_pop_demographic();
     update_tier1_res_rate();
+    update_tier1_res_max();
 }
 
 function sell_pop(name, amount) {
@@ -146,7 +180,9 @@ function sell_pop(name, amount) {
     if(name == 'squire' && (squire.count - amount >= 0)) squire.count -= amount;
 
     update_ilarun_pop_demographic();
+    update_ash_elf_pop_demographic();
     update_tier1_res_rate();
+    update_tier1_res_max();
 }
 
 // Buildings Related
@@ -163,7 +199,7 @@ function add_building(name, amount) {
             key = k;
         }
     });
-    if(key == "ilarun") {
+    if(key == "ilarun" | key == "ash_elf") {
         size *= 10;
         size += Math.log(b.count * BUILDING_COST_MOD) / Math.log(2);
     } else {
@@ -228,6 +264,13 @@ function update_unlocks() {
         ui_update_flag = true;
         return;
     }
+
+    if(territories.leyliasion.progress == territories.leyliasion.required &&!unlocks.ash_elf) {
+        console.log("Ash Elves Join")
+        unlocks.ash_elf = true;
+        ui_update_flag = true;
+        return;
+    }
 }
 
 console.log(res_all);
@@ -240,6 +283,7 @@ function update_tier1() {
     
     update_display();
     update_ilarun_pop_demographic();
+    update_ash_elf_pop_demographic();
     update_tier1_res_rate();
     update_military();
     update_unlocks();

@@ -18,7 +18,18 @@ var territories = {
             territory_count += 1;
             update_tier1_res_max();
         }
-    }
+    },
+    leyliasion: {
+        el: document.getElementById("t1_progress"),
+        button_el: document.getElementById("target_t1"),
+        progress: fetch("t1.progress") || 0,
+        required: 250000,
+        on_conquer: function() {
+            unlocks.ash_elf = true;
+            territory_count += 1;
+            update_unlocks();
+        }
+    },
 }
 var conquest_target = null;
 

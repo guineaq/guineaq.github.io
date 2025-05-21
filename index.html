@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idle Prototype 0.3.0</title>
+    <title>Idle Prototype 0.3.1</title>
     <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
     <div class="icon-bar">
+        <!--Berries-->
         <div id="berry_res_display" style="display: none;">
-            <img src="./res/food_tier_1.png" alt="">
             <p><span class="berry">Berries:</span>
                 <br><span id="berry_sub1">0/0</span>
                 <br><span id="berry_sub2" style="display: none;">Baskets (15): 0</span>
@@ -17,8 +17,8 @@
                 <span id="berry_sub3">0.0</span>
             </p>
         </div>
+        <!--Logs-->
         <div id="log_res_display" style="display: none;">
-            <img src="./res/log.png" alt="">
             <p><span class="log">Wood:</span>
                 <br><span id="log_sub1">0/0</span>
                 <br><span id="log_sub2">Stacks (15): 0</span>
@@ -26,8 +26,23 @@
                 <span id="log_sub3">0.0</span>
             </p>
         </div>
+        <!--Berry Cider-->
+        <div id="berry_cider_res_display" style="display: none;">
+            <p><span class="berrycider">Berry Cider:</span>
+                <br><span id="berry_cider_sub1">0/10</span>
+                <br><span id="berry_cider_sub2">Cellar (20): 0</span>
+                <span id="berry_cider_sub3">0.0</span>
+            </p>
+        </div>
+        <!--Ash Pottery-->
+        <div id="ash_pottery_res_display" style="display: none;">
+            <p><span class="ashpottery">Ash Pottery:</span>
+                <br><span id="ash_pottery_sub1">0/10</span>
+                <br><span id="ash_pottery_sub2">Ash Market (20): 0</span>
+                <span id="ash_pottery_sub3">0.0</span>
+            </p>
+        </div>
         <div id="ilarun_res_display" style="display: none;">    
-            <img src="./res/ilarun.png" alt="">
             <p><span class="ilaruns">Ilaruns:</span>
                 <br><span id="ilarun_sub1">0/0</span>
                 <br><span id="ilarun_sub2" class="ilarun_worker">0/0</span>
@@ -37,15 +52,22 @@
                 <span id="ilarun_sub5">0.0</span>
             </p>
         </div>
+        <div id="ash_elf_res_display" style="display: none;">    
+            <p><span class="ashelf">Ash Elves:</span>
+                <br><span id="ash_elf_sub1">0/0</span>
+                <br><span id="ash_elf_sub2" class="ash_elf">0/0</span>
+                <br><span id="ash_elf_sub3" class="influence">0/0</span>
+                <br><span id="ash_elf_sub4">Ashen Abode (4): 0</span>
+                <span id="ash_elf_sub5">0.0</span>
+            </p>
+        </div>
         <div id="influence_res_display" style="display: none;">
-            <img src="./res/influence.png" alt="">
             <p><span class="influence">Influence:</span>
                 <br><span id="influence_sub1">0</span>
                 <br><span id="influence_sub2">0.0</span>
             </p>
         </div>
         <div id="military_res_display" style="display: none;">
-            <img src="./res/influence.png" alt="">
             <p><span class="power">Power:</span>
                 <br><span id="military_sub1">0.0</span>
                 <br><span id="military_sub2">Squires(s): 0/0</span>
@@ -71,6 +93,7 @@
                 <button class="berryButton unlockable" id="berry_add" onclick="gain_resource('berry', berry.act_rate + berry.bonuses.act_rate)" style="display: none;">Pick 1 Berries</button>
                 <button class="logButton unlockable" id="log_add" onclick="gain_resource('log', log.act_rate + log.bonuses.act_rate)" style="display: none;">Pick 1 Twig(s)</button>
                 <button class="ilarunButton unlockable" id="ilarun_add" onclick="buy_pop('ilarun', 1)" style="display: none;">Host 1 Ilarun(s)<br>(Cost: 100 Berries)</button>
+                <button class="ashElfButton unlockable" id="ash_elf_add" onclick="buy_pop('ash_elf', 1)" style="display: none;">Host 1 Ash Elf<br>(Cost: 100 Berries & Logs)</button>
             </div>
             <div class="action-bar unlockable" style="display: none;" id="building_action_bar">
                 <h3>Buildings</h3>
@@ -78,8 +101,11 @@
                 <button class="berryButton unlockable" id="berry_storage_2_add" style="display: none;" onclick="buy_building('granary', 1)">Build Granary (T1.5/Cost:75 Logs)</button>
                 <button class="logButton unlockable" id="log_storage_add" style="display: none;" onclick="buy_building('log_stack', 1)">Set Log Stack (T1/Cost:10 Berries)</button>
                 <button class="logButton unlockable" id="log_storage_2_add" style="display: none;" onclick="buy_building('lumber_yard', 1)">Build Lumber Yard (T1.5/Cost:75 Berries)</button>
-                <button class="logButton unlockable" id="ilarun_storage_add" style="display: none;" onclick="buy_building('warren', 1)">Dig Ilarun Warren (T1/Cost:100 Logs)</button>
-                <button class="berryLogButton unlockable" id="ilarun_storage_2_add" style="display: none;" onclick="buy_building('hamlet', 1)" style="display: none;">Establish Hamlet (T1.5/Cost:125 Berries & Logs)</button>
+                <button class="ilarunButton unlockable" id="ilarun_storage_add" style="display: none;" onclick="buy_building('warren', 1)">Dig Ilarun Warren (T1/Cost:100 Logs)</button>
+                <button class="ilarunButton unlockable" id="ilarun_storage_2_add" style="display: none;" onclick="buy_building('hamlet', 1)" style="display: none;">Establish Hamlet (T1.5/Cost:125 Berries & Logs)</button>
+                <button class="ashElfButton unlockable" id="ash_elf_storage_add" style="display: none;" onclick="buy_building('ashen_abode', 1)" style="display: none;">Build Ashen Abode (T1/Cost:25 Logs & 5 Ash Pottery)</button>
+                <button class="ashPotteryButton unlockable" id="ash_pottery_storage_add" style="display: none;" onclick="buy_building('ash_market', 1)" style="display: none;">Establish Ash Market (T1/Cost:10 Berry Cider)</button>
+                <button class="berryCiderButton unlockable" id="berry_cider_storage_add" style="display: none;" onclick="buy_building('cellar', 1)" style="display: none;">Dig Cellar (T1/Cost:10 Ash Pottery)</button>
             </div>
             <div class="action-bar unlockable" style="display: none;" id="ilarun_action_bar">
                 <h3>Ilaruns</h3>
@@ -88,6 +114,14 @@
                 <button class="ilarunButton unlockable" id="berry_worker_remove" style="display: none;" onclick="sell_pop('forager', 1)">Dismiss Forager (No Refund!)</button>
                 <button class="ilarunButton unlockable" id="log_worker_remove" style="display: none;" onclick="sell_pop('logger', 1)">Dismiss Logger (No Refund!)</button>
                 <button class="influenceButton unlockable" id="baroness_add" style="display: none;" onclick="buy_pop('baroness', 1)">Elect Baroness (T1/Cost:250 Berries & 100 Logs)</button>
+            </div>
+            <div class="action-bar unlockable" style="display: none;" id="ash_elf_action_bar">
+                <h3>Ash Elves</h3>
+                <button class="berryCiderButton" id="berry_cider_worker_add" style="display: block;" onclick="buy_pop('berrybrewer', 1)">Train Berry Brewer (T1/Cost:200 Berries / 1 Ash Elf)</button>
+                <button class="ashPotteryButton" id="ash_pottery_worker_add" style="display: block;" onclick="buy_pop('ashcrafter', 1)">Train Ash Crafter (T1/Cost:200 Logs / 1 Ash Elf)</button>
+                <button class="ashElfButton" id="berry_cider_worker_remove" style="display: block;" onclick="sell_pop('berrybrewer', 1)">Dismiss Berry Brewer (No Refund!)</button>
+                <button class="ashElfButton" id="ash_pottery_worker_remove" style="display: block;" onclick="sell_pop('ashcrafter', 1)">Dismiss Ash Crafter (No Refund!)</button>
+                <button class="influenceButton" id="ashen_maiden_add" style="display: block;" onclick="buy_pop('ashen_maiden', 1)">Elect Ashen Maiden (T1/Cost:100 Berries, 250 Logs, 10 Berry Cider, 10 Ash Pottery)</button>
             </div>
             </div>
             <div class="unlockable" id="log_harvest" style="display: none;">
@@ -107,6 +141,14 @@
                 <h3>A matter of prestige</h3>
                 <p>With a small community forming, the Ilaruns elected their own subleader of sorts. They also start to expand the community on their own as well!</p>
                 <p><span class="influence">Influence</span> is used to unlock more complex features and upgrade existing ones. One of the features currently available to you is hiring heroes.</p>
+            </div>
+            <div class="unlockable" id="ash_elf" style="display: none;">
+                <h3>Ash Elves Join</h3>
+                <p>With Leyliasion reclaimed, a group of pale ash skinned elves join your growing settlement.</p>
+                <p><span class="ashelf">50</span>% of the Ash Elf's total population can work. You can maintain <span class="ashelf">1</span> Ash Elf Maiden per <span class="ashelf">12</span> workers cap (Without modifiers).</p>
+                <p>Each idle Ash Elf consumes <span class="berry">0.2 Berries</span> and <span class="log">0.1 Logs</span> per second.</p>
+                <p>Upkeep for each worker type is as follows:</p>
+                <p></p> 
             </div>
         </div>
 
@@ -188,9 +230,15 @@
                     <h4>A vacant plain next to the World Tree</h4>
                     <p>Morhaven, when conquered, <span class="positive_bonus">doubles</span> the storage of <span class="berry">berry basket</span>, <span class="log">berry basket</span>, and income by <span class="ilaruns">foragers & loggers</span>.</p>
                     <p>This bonus is applied to base values, does not multiply value granted by other bonuses.</p>
-                    <img src="./res/territory1.jpg" alt="">
                     <div id="t0_progress_bar" class="progress_bar"><div id="t0_progress" class="progress">0/100000</div></div>
                     <button class="militaryButton" id="target_t0" onclick="set_conquest_target('target_t0', 'morhaven')">Conquer Morhaven</button>
+                </div>
+                <div id="territory2" class="territory">
+                    <h2>Leyliasion</h2>
+                    <h4>An remnant of where Ash Elves lived</h4>
+                    <p>Leyliasion, when conquered, <span class="positive_bonus">unlocks</span> the Ash Elf population, related techs and additional heroes.</p>
+                    <div id="t1_progress_bar" class="progress_bar"><div id="t1_progress" class="progress">0/250000</div></div>
+                    <button class="militaryButton" id="target_t1" onclick="set_conquest_target('target_t1', 'leyliasion')">Conquer Leyliasion</button>
                 </div>
             </div>
         </div>
