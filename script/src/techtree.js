@@ -1,64 +1,55 @@
-var active_techs_col1 = {
-    tech11: fetch("tech11", true) || {active: false, btn_id: null, exclusive: false},
-    tech21: fetch("tech21", true) || {active: false, btn_id: null, exclusive: false},
-    tech31: fetch("tech31", true) || {active: false, btn_id: null, exclusive: false},
-    tech51: fetch("tech51", true) || {active: false, btn_id: null, exclusive: false},
-    tech61: fetch("tech61", true) || {active: false, btn_id: null, exclusive: false},
-    tech71: fetch("tech71", true) || {active: false, btn_id: null, exclusive: false},
-    tech41: fetch("tech41", true) || {active: false, btn_id: null, exclusive: false},
-    tech81: fetch("tech81", true) || {active: false, btn_id: null, exclusive: false},
-    tech91: fetch("tech91", true) || {active: false, btn_id: null, exclusive: false},
-    tech01: fetch("tech01", true) || {active: false, btn_id: null, exclusive: false},
+const tech_definitions = {
+    col1: [
+        { code: "tech11", cost: {berry: 50, log: 50}, effect: function() {
+            berry.cur -= 50; log.cur -= 50;
+            berry.bonuses.act_rate += 1; log.bonuses.act_rate += 1;
+        }},
+        { code: "tech21", cost: {ilarun: 100}, effect: function() {
+            logger.bonuses.size.log += 10; forager.bonuses.size.berry += 10;
+        }},
+        { code: "tech31", cost: {berry: 300, log: 300}, effect: function() {
+            berry.cur -= 300; log.cur -= 300;
+            berry_basket.income.berry += 0.1; log_stack.income.log += 0.1;
+        }},
+        { code: "tech41", cost: {berry: 1000, log: 1000}, effect: function() {
+            berry.cur -= 1000; log.cur -= 1000;
+            granary.income.berry += 0.5; lumber_yard.income.log =+ 0.5;
+        }},
+        // ... add other techs for col1 here
+    ],
+    // col2: [...], // Add more columns as needed
+};
+
+function init_active_techs(tech_definitions) {
+    const active_techs = {};
+    Object.values(tech_definitions).forEach(col => {
+        col.forEach(tech => {
+            active_techs[tech.code] = fetch(tech.code, true) || {active: false, btn_id: null, exclusive: false};
+        });
+    });
+    return active_techs;
 }
 
-const tech_cost_col1 = {
-    tech11: {berry: 50, log: 50},
-    tech21: {ilarun: 100},
-    tech31: {berry: 300, log: 300},
+const active_techs_col1 = init_active_techs({col1: tech_definitions.col1}); // For column 1
+// const active_techs_col2 = init_active_techs({col2: tech_definitions.col2}); // For column 2, etc.
+
+function get_tech_cost(tech_code) {
+    for (const col in tech_definitions) {
+        const found = tech_definitions[col].find(t => t.code === tech_code);
+        if (found) return found.cost;
+    }
+    return null;
 }
 
-const techs = {
-    // Improved Collection
-    tech11: function(btn_id) {
-        if(berry.cur >= tech_cost_col1.tech11.berry && log.cur >= tech_cost_col1.tech11.log) {
-            berry.cur -= tech_cost_col1.tech11.berry;
-            log.cur -= tech_cost_col1.tech11.log;
-            berry.bonuses.act_rate += 1;
-            log.bonuses.act_rate += 1;
-            active_techs_col1.tech11.active = true;
-            active_techs_col1.tech11.btn_id = btn_id;
-            deactivate_button_tech(btn_id);
+function run_tech_effect(tech_code) {
+    for (const col in tech_definitions) {
+        const found = tech_definitions[col].find(t => t.code === tech_code);
+        if (found) {
+            found.effect();
+            return true;
         }
-    },
-    // Wintermark Efficiency
-    tech21: function(btn_id) {
-        if(ilarun.cur >= tech_cost_col1.tech21.ilarun) {
-            logger.bonuses.size.log += 10;
-            forager.bonuses.size.berry += 10;
-            active_techs_col1.tech21.active = true;
-            active_techs_col1.tech21.btn_id = btn_id;
-            deactivate_button_tech(btn_id);
-        }
-    },
-    // Extra Bits
-    tech31: function(btn_id) {
-        if(berry.cur >= tech_cost_col1.tech31.berry && log.cur >= tech_cost_col1.tech31.log) {
-            berry.cur -= tech_cost_col1.tech31.berry;
-            log.cur -= tech_cost_col1.tech31.log;
-            berry_basket.income.berry += 0.1;
-            log_stack.income.log += 0.1;
-            active_techs_col1.tech31.active = true;
-            active_techs_col1.tech31.btn_id = btn_id;
-            deactivate_button_tech(btn_id);
-        }
-    },
-}
-
-function purchase_tech(tech_code, id) {
-    techs[tech_code](id);
-    update_buttons();
-    update_tier1_res_max();
-    update_tier1_res_rate();
+    }
+    return false;
 }
 
 function deactivate_button_tech(btn_id, exclusive=false) {
@@ -75,27 +66,39 @@ function deactivate_button_tech(btn_id, exclusive=false) {
     }
 }
 
+function purchase_tech(tech_code, btn_id) {
+    const cost = get_tech_cost(tech_code);
+    if (!cost) return;
+
+    // Check if player can afford
+    let can_afford = Object.keys(cost).every(res => (window[res]?.cur ?? 0) >= cost[res]);
+    if (!can_afford) return;
+
+    // Apply effect
+    if (run_tech_effect(tech_code)) {
+        // Mark as active
+        active_techs_col1[tech_code].active = true;
+        active_techs_col1[tech_code].btn_id = btn_id;
+        deactivate_button_tech(btn_id);
+        update_buttons();
+        update_tier1_res_max();
+        update_tier1_res_rate();
+    }
+}
+
+function update_save_tech() {
+    Object.keys(active_techs_col1).forEach(code => {
+        store(code, active_techs_col1[code], true);
+    });
+    // Repeat for other columns if needed
+}
+
 function on_load_tech(active_techs_key_list) {
-    let techs_ = Object.keys(active_techs_key_list);
-    console.log(techs_);
-    techs_.forEach(key => {
-        if(key.indexOf('apply_') === -1) {
-            if(active_techs_key_list[key].active && active_techs_key_list[key].btn_id != null) {
+    Object.keys(active_techs_key_list).forEach(key => {
+        if (!key.startsWith('apply_')) {
+            if (active_techs_key_list[key].active && active_techs_key_list[key].btn_id != null) {
                 deactivate_button_tech(active_techs_key_list[key].btn_id);
             }
         }
     });
-}
-
-function update_save_tech() {
-    store("tech11", active_techs_col1.tech11, true);
-    store("tech21", active_techs_col1.tech21, true);
-    store("tech31", active_techs_col1.tech31, true);
-    store("tech41", active_techs_col1.tech41, true);
-    store("tech51", active_techs_col1.tech51, true);
-    store("tech61", active_techs_col1.tech61, true);
-    store("tech71", active_techs_col1.tech71, true);
-    store("tech81", active_techs_col1.tech81, true);
-    store("tech91", active_techs_col1.tech91, true);
-    store("tech01", active_techs_col1.tech01, true);
 }

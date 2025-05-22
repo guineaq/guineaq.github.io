@@ -42,25 +42,44 @@ function wipe_save() {
 }
 
 function export_save() {
-    // Export all localStorage as a JSON string
     const saveData = {};
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         saveData[key] = localStorage.getItem(key);
     }
-    const saveString = btoa(unescape(encodeURIComponent(JSON.stringify(saveData))));
-    // Show in prompt for easy copy
-    prompt("Copy your save string below:", saveString);
+    const jsonString = JSON.stringify(saveData);
+
+    const saveString = btoa(encodeURIComponent(jsonString).replace(/%([0-9A-F]{2})/g,
+        (match, p1) => String.fromCharCode('0x' + p1)));
+
+    // Create a Blob and trigger download
+    const blob = new Blob([saveString], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    // Create a temporary link and click it
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "save.txt";
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 0);
 }
 
 function import_save() {
-    const saveString = prompt("Paste your save string here:");
+    let saveString = prompt("Paste your save string here:");
     if (!saveString) return;
+    // Remove all whitespace and line breaks
+    saveString = saveString.replace(/\s/g, '');
     try {
-        const saveData = JSON.parse(decodeURIComponent(escape(atob(saveString))));
-        // Clear current save
+        const jsonString = decodeURIComponent(Array.prototype.map.call(atob(saveString), 
+            c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')).join(''));
+        const saveData = JSON.parse(jsonString);
         localStorage.clear();
-        // Restore each key
         for (const key in saveData) {
             localStorage.setItem(key, saveData[key]);
         }
