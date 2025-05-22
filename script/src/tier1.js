@@ -62,7 +62,8 @@ function update_tier1_res_max() {
         ilarun: 0,
         ash_elf: 0,
         ash_pottery: 10,
-        berry_cider: 10
+        berry_cider: 10,
+        influence: -1
     };
 
     // Set the base + bonuses for each resource
