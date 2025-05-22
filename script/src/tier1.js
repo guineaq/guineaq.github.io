@@ -24,11 +24,13 @@ function update_ash_elf_pop_demographic() {
 }
 
 function update_res(res) {
-    let gain = (res.pas_rate + res.bonuses.pas_rate) / (1000 / TICK);
-    if(res.cur + gain < res.max + res.bonuses.max || res.max == -1) {
+    const gain = (res.pas_rate + res.bonuses.pas_rate) / (1000 / TICK);
+    const max = res.max + res.bonuses.max;
+
+    if (max === -1) {
         res.cur += gain;
     } else {
-        res.cur = res.max + res.bonuses.max;
+        res.cur = Math.max(0, Math.min(res.cur + gain, max));
     }
 }
 
