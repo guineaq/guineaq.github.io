@@ -16,7 +16,7 @@ var territories = {
             berry_basket.bonuses.size.berry += 15;
             log_stack.bonuses.size.log += 15;
             territory_count += 1;
-            update_tier1_res_max();
+            update_tier1();
         }
     },
     leyliasion: {
@@ -27,7 +27,7 @@ var territories = {
         on_conquer: function() {
             unlocks.ash_elf = true;
             territory_count += 1;
-            update_unlocks();
+            update_tier1();
         }
     },
 }
