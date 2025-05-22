@@ -20,17 +20,30 @@ function openTab(ev, tabName) {
     ev.currentTarget.className += " active";
 }
 
-function showNotification(message, duration = 2000) {
+function showNotification(message, duration = 10000) {
     const n = document.getElementById('notification');
-    n.textContent = message;
+    const msg = document.getElementById('notification-message');
+    const closeBtn = document.getElementById('notification-close');
+
+    msg.textContent = message;
     n.style.display = 'block';
     n.style.opacity = '1';
 
+    // Remove any previous click listeners to avoid stacking
+    closeBtn.onclick = () => {
+        hideNotification();
+        clearTimeout(n._timeout); // Prevent auto-hide if closed manually
+    };
+
     // Hide after duration
-    setTimeout(() => {
+    n._timeout = setTimeout(() => {
+        hideNotification();
+    }, duration);
+
+    function hideNotification() {
         n.style.opacity = '0';
         setTimeout(() => n.style.display = 'none', 300);
-    }, duration);
+    }
 }
 
 function wipe_save() {

@@ -20,7 +20,10 @@
     font-size:1.1em;
     z-index:1000;
     box-shadow:0 2px 8px rgba(0,0,0,0.2);
-    transition:opacity 0.3s;"></div>
+    transition:opacity 0.3s;">
+        <span id="notification-message"></span>
+        <button id="notification-close" style="margin-left:10px;">&times;</button>
+    </div>
     <div class="icon-bar">
         <!--Berries-->
         <div id="berry_res_display" style="display: none;">
@@ -209,6 +212,28 @@
                         <h4>Type - Griffin Noble Heir</h4>
                         <h4>Color Identity: <span class="virtue">Virtue 1</span> / <span class="nobility">Nobility 1</span></h4>
                         <i>He's fat?</i>
+                        <p>-Perks-</p>
+                        <p><span class="perk">On Hire</span>: Generates <span class="power">+10</span> military power by base.</p>
+                        <p><span class="perk">Aviary</span>: Grants <span class="power">+1</span> military power gain per Squire.</p>
+                        <p><span class="perk">Enlist Pigeons</span>: Improves all Forager income by <span class="berry">+1</span>.</p>
+                        <p><span class="perk">Prince of Talons</span>: Improves Cilia's On Hire perk by additional <span class="influence">+1.5</span> and <span class="ilaruns">+1</span> respectively.</p>
+                        <p><span class="perk">Combined Arms</span>: For every perk unlocked from Cilia and Goldbeak combined,</p>
+                        <p>Goldbeak generates additional <span class="power">+5</span> military power.</p>
+                    </div>
+                    <!----><button class="hero_button" id="goldbeak_perk4" onclick="purchase_perk('goldbeak', 'perk4', 'goldbeak_perk4')">Unlock <br>"Combined Arms" for 2500 Influence<br>(Req: 1 Territory)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk3" onclick="purchase_perk('goldbeak', 'perk3', 'goldbeak_perk3')">Unlock <br>"Prince of Talons" for 1000 Influence<br>(Req: Cilia Hired)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk2" onclick="purchase_perk('goldbeak', 'perk2', 'goldbeak_perk2')">Unlock <br>"Enlist Pigeons" for 500 Influence<br>(Req: Aviary)</button>
+                    <!----><button class="hero_button" id="goldbeak_perk1" onclick="purchase_perk('goldbeak', 'perk1', 'goldbeak_perk1')">Unlock <br>"Aviary" for 500 Influence</button>
+                    <!----><button class="hero_button" id="hire_goldbeak" onclick="purchase_perk('goldbeak', 'on_hire', 'hire_goldbeak')">Hire Goldbeak for 200 Influence<br>(Req: Squire Cohort)</button>
+                </div>
+            </div>
+            <div class="hero_tab black_green" id="goldbeak_tab">
+                <div class="hero_tab_internal">
+                    <div class="hero_tab_internal_desc">
+                        <h3>Oak-Oak, the Entling Brave</h3>
+                        <h4>Type - Entling Adventurer</h4>
+                        <h4>Color Identity: <span class="nature">Nature 1</span></h4>
+                        <i>He's a chopping block with limbs</i>
                         <p>-Perks-</p>
                         <p><span class="perk">On Hire</span>: Generates <span class="power">+10</span> military power by base.</p>
                         <p><span class="perk">Aviary</span>: Grants <span class="power">+1</span> military power gain per Squire.</p>

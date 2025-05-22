@@ -192,6 +192,10 @@ button.berryLogButton:active {
     background: linear-gradient(90deg, rgba(255,255,255,1) 27%, rgba(0,0,0,1) 83%);
 }
 
+.black_green {
+    background: linear-gradient(90deg, rgba(0,0,0,1) 83%, rgb(55, 214, 40) 27%);
+}
+
 /* Hero Tab */
 .hero_tab {
     border-radius: 5px;
