@@ -55,6 +55,7 @@ function wipe_save() {
 }
 
 function export_save() {
+    update_save();
     const saveData = {};
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);

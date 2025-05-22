@@ -86,6 +86,7 @@ span.power { color: #000; }
 span.perk { color: rgb(237,255,72); }
 span.virtue { color: #afafaf; }
 span.nobility { color: #2a2a2a; }
+span.nature { color: #7ac538}
 span.positive_bonus { color: #64dcec; }
 span.feature_unlock { color: #59ff75; }
 
@@ -193,7 +194,11 @@ button.berryLogButton:active {
 }
 
 .black_green {
-    background: linear-gradient(90deg, rgba(0,0,0,1) 83%, rgb(55, 214, 40) 27%);
+    background: linear-gradient(90deg, rgba(0,0,0,1) 27%, rgb(55, 214, 40) 83%);
+}
+
+.green {
+    background: rgba(56,176,28,1);
 }
 
 /* Hero Tab */

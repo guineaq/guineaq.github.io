@@ -43,6 +43,11 @@ const hero_cost = {
     goldbeak_perk2: 500,
     goldbeak_perk3: 1000,
     goldbeak_perk4: 2500,
+    oak_oak_on_hire: 200,
+    oak_oak_perk1: 500,
+    oak_oak_perk2: 500,
+    oak_oak_perk3: 1000,
+    oak_oak_perk4: 2500,
 }
 
 const heroes = {
@@ -106,6 +111,57 @@ const heroes = {
         on_hire: function(btn_id) {
             if(influence.cur >= hero_cost.goldbeak_on_hire && active_perks.cilia.perk2.active) {
                 influence.cur -= hero_cost.goldbeak_on_hire;
+                military.bonuses.pas_rate += 10;
+                active_perks.goldbeak.hired.active = true;
+                active_perks.goldbeak.hired.btn_id = btn_id;
+                deactivate_button(btn_id);
+                affinities.virtue += 1;
+                affinities.nobility += 1;
+            }
+        },
+        perk1: function(btn_id) {
+            if(influence.cur >= hero_cost.goldbeak_perk1) {
+                influence.cur -= hero_cost.goldbeak_perk1;
+                military_income_bonuses.squire += 1;
+                active_perks.goldbeak.perk1.active = true;
+                active_perks.goldbeak.perk1.btn_id = btn_id;
+                deactivate_button(btn_id);
+            }
+        },
+        perk2: function(btn_id) {
+            if(influence.cur >= hero_cost.goldbeak_perk2 && active_perks.goldbeak.perk1.active) {
+                influence.cur -= hero_cost.goldbeak_perk2;
+                forager.bonuses.income.berry += 1;
+                active_perks.goldbeak.perk2.active = true;
+                active_perks.goldbeak.perk2.btn_id = btn_id;
+                deactivate_button(btn_id);
+            }
+        },
+        perk3: function(btn_id) {
+            if(influence.cur >= hero_cost.goldbeak_perk3 && active_perks.cilia.hired.active) {
+                influence.cur -= hero_cost.goldbeak_perk3;
+                warren.bonuses.size.ilarun += 1;
+                influence.bonuses.pas_rate += 1.5;
+                active_perks.goldbeak.perk3.active = true;
+                active_perks.goldbeak.perk3.btn_id = btn_id;
+                deactivate_button(btn_id);
+            }
+        },
+        perk4: function(btn_id) {
+            if(influence.cur >= hero_cost.goldbeak_perk4 && territory_count >= 1) {
+                influence.cur -= hero_cost.goldbeak_perk4;
+                active_perks.goldbeak.apply_perk4();
+                active_perks.goldbeak.perk4.active = true;
+                active_perks.goldbeak.perk4.btn_id = btn_id;
+                deactivate_button(btn_id);
+            }
+        }
+    },
+
+    oak_oak: {
+        on_hire: function(btn_id) {
+            if(influence.cur >= hero_cost.oak_oak_on_hire && active_perks.cilia.perk2.active) {
+                influence.cur -= hero_cost.oak_oak_on_hire;
                 military.bonuses.pas_rate += 10;
                 active_perks.goldbeak.hired.active = true;
                 active_perks.goldbeak.hired.btn_id = btn_id;
