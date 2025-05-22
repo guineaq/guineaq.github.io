@@ -44,7 +44,7 @@ body {
     top: 0;
     left: 0;
     overflow-x: hidden;
-    background-color: #555;
+    background-color: #333;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -78,8 +78,8 @@ span.log { color: #159f12; }
 span.berry { color: #c94e4e; }
 span.ashpottery { color: #ddffdd; }
 span.berrycider { color: #a93e3e; }
-span.ilaruns { color: #206a9b; }
-span.ashelf { color: #c3bfbf; }
+span.ilaruns { color: #2b90d3; }
+span.ashelf { color: #948a8a; }
 span.ilarun_worker { color: #dee04b; }
 span.influence { color: #c570ec; }
 span.power { color: #000; }
@@ -157,9 +157,9 @@ button.ilarunButton { background-color: #206a9b; }
 button.ilarunButton:hover { background-color: #304f63; }
 button.ilarunButton:active { background-color: #255677; }
 
-button.ashElfButton { background-color: #c3bfbf; }
+button.ashElfButton { background-color: #6e6a6a; }
 button.ashElfButton:hover { background-color: #a8a6a6; }
-button.ashElfButton:active { background-color: #888282; }
+button.ashElfButton:active { background-color: #5e5a5a; }
 
 button.influenceButton { background-color: #82209b; }
 button.influenceButton:hover { background-color: #573063; }
@@ -169,9 +169,9 @@ button.militaryButton { background-color: #3d3d3d; }
 button.militaryButton:hover { background-color: #1a1a1a; }
 button.militaryButton:active { background-color: #272727; }
 
-button.ashPotteryButton { background-color: #afafaf; }
-button.ashPotteryButton:hover { background-color: #919191; }
-button.ashPotteryButton:active { background-color: #757575; }
+button.ashPotteryButton { background-color: #9ea088; }
+button.ashPotteryButton:hover { background-color: #73776a; }
+button.ashPotteryButton:active { background-color: #4f574e; }
 
 button.berryCiderButton { background-color: #ac4848; }
 button.berryCiderButton:hover { background-color: #863333; }
