@@ -208,27 +208,53 @@ function sell_pop(name, amount) {
 
 // Buildings Related
 function add_building(name, amount) {
-    let b = buildings_all[name]
-    buildings_all[name].count += amount;
-    let sizes = b.size;
-    let size = 0;
-    let key = "";
-    let s = Object.keys(sizes);
-    s.forEach(k => {
-        if(size < sizes[k]) {
-            size = sizes[k];
-            key = k;
+    let building = buildings_all[name];
+    building.count += amount;
+
+    // Find the largest size value and its corresponding key
+    let largestSize = 0;
+    let largestSizeKey = "";
+    let sizeKeys = Object.keys(building.size);
+
+    sizeKeys.forEach(sizeKey => {
+        if (largestSize < building.size[sizeKey]) {
+            largestSize = building.size[sizeKey];
+            largestSizeKey = sizeKey;
         }
     });
-    if(key == "ilarun" | key == "ash_elf") {
-        size *= 10;
-        size += Math.log(b.count * BUILDING_COST_MOD) / Math.log(2);
+
+    // Calculate the effective size for cost scaling
+    let effectiveSize = largestSize;
+    if (largestSizeKey === "ilarun" || largestSizeKey === "ash_elf") {
+        effectiveSize *= 10;
+        effectiveSize += Math.log(building.count * BUILDING_COST_MOD) / Math.log(2);
     } else {
-        size += Math.log(b.count * BUILDING_COST_MOD) / Math.log(2);
+        effectiveSize += Math.log(building.count * BUILDING_COST_MOD) / Math.log(2);
     }
-    let res_key = Object.keys(res_all);
-    res_key.forEach(key => {
-        buildings_all[name].cost[key] = Math.min(Math.floor(BUILDING_COST_MOD * b.cost[key]), Math.floor(b.count * size));
+
+    // Find the base cost definition for this building
+    let baseCostDef = building_base_cost_defs.find(def => def.name === name);
+    if (!baseCostDef) {
+        console.error(`No base cost definition found for building: ${name}`);
+        return;
+    }
+
+    // Update the cost for each resource, using the base cost and dynamic formula
+    let resourceKeys = Object.keys(res_all);
+    resourceKeys.forEach(resourceKey => {
+        // Use base cost if defined, otherwise default to 0
+        let baseCost = baseCostDef.cost[resourceKey] || 0;
+
+        let currentCost = building.cost[resourceKey] || 0;
+
+        // let costModifier = getCostModifierForBuilding(name, resourceKey); // Implement as needed
+        // let scaledCost = Math.floor(baseCost * costModifier * ...);
+
+        let scaledCost = Math.min(
+            Math.floor(BUILDING_COST_MOD * currentCost),
+            Math.floor(building.count * effectiveSize)
+        );
+        building.cost[resourceKey] = scaledCost;
     });
 }
 

@@ -167,6 +167,18 @@ const building_defs = [
     {name: "ashen_abode", count: 1, cost: {log: 25, ash_pottery: 5}, size: {ash_elf: 4}},
 ];
 
+const building_base_cost_defs = [
+    {name: "berry_basket", cost: {log: 10}},
+    {name: "log_stack", cost: {berry: 10}},
+    {name: "warren", cost: {log: 50}},
+    {name: "granary", cost: {log: 75}},
+    {name: "lumber_yard", cost: {berry: 75}},
+    {name: "hamlet", cost: {berry: 125, log: 125}},
+    {name: "cellar", cost: {ash_pottery: 10}},
+    {name: "ash_market", cost: {berry_cider: 10}},
+    {name: "ashen_abode", cost: {log: 25, ash_pottery: 5}},
+];
+
 var buildings_all = {};
 building_defs.forEach(def => {
     window[def.name] = init_building(
