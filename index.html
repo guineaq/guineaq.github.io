@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
+    <div id="notification" style="
+    display:none;
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#222;
+    color:#fff;
+    padding:10px 24px;
+    border-radius:6px;
+    font-size:1.1em;
+    z-index:1000;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+    transition:opacity 0.3s;"></div>
     <div class="icon-bar">
         <!--Berries-->
         <div id="berry_res_display" style="display: none;">
@@ -81,6 +95,9 @@
             <button class="tablinks" onclick="openTab(event, 'Heroes')" id="heroTab" style="display: none;">Heroes</button>
             <button class="tablinks" onclick="openTab(event, 'Conquest')" id="conquestTab" style="display: none;">Conquest</button>
             <button class="tablinks" onclick="openTab(event, 'TechTree')" id="techTreeTab" style="display: none;">Tech Tree</button>
+            <button id="export_save_btn" onclick="export_save()" style="float:right; background:rgb(79, 51, 204); color:#fff; margin-left:8px;">Export Save</button>
+            <button id="import_save_btn" onclick="import_save()" style="float:right; background:rgb(94, 138, 66); color:#fff; margin-left:8px;">Import Save</button>
+            <button id="wipe_save_btn" onclick="wipe_save()" style="float:right; background:#c33; color:#fff;">Wipe Save</button>
         </div>
 
         <div id="Tier_1" class="tabcontent">

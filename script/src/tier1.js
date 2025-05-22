@@ -241,20 +241,19 @@ function buy_building(building, amount) {
 
 // Core - Tier 1
 ui_update_flag = true;
-ui_update_flag = true;
 
 const unlockConditions = [
     {
         condition: () => berry.cur === berry.max && !unlocks.log_harvest,
         actions: () => {
-            console.log("Log Harvest Unlocked");
+            showNotification("Log Harvest Unlocked");
             unlocks.log_harvest = true;
         }
     },
     {
         condition: () => berry_basket.count >= 10 && log_stack.count >= 10 && !unlocks.ilarun_recruit && !unlocks.techtree,
         actions: () => {
-            console.log("Ilarun Recruit & Tech Tree Unlocked");
+            showNotification("Ilarun Recruit & Tech Tree Unlocked");
             unlocks.ilarun_recruit = true;
             unlocks.techtree = true;
         }
@@ -262,35 +261,35 @@ const unlockConditions = [
     {
         condition: () => berry_basket.count >= 25 && log_stack.count >= 25 && !unlocks.tier1_2_storage,
         actions: () => {
-            console.log("Tier 1.5 Storage unlocked");
+            showNotification("Tier 1.5 Storage unlocked");
             unlocks.tier1_2_storage = true;
         }
     },
     {
         condition: () => baroness_max >= 1 && !unlocks.baroness_tech,
         actions: () => {
-            console.log("Heroes & Baroness Tech Unlocked");
+            showNotification("Heroes & Baroness Tech Unlocked");
             unlocks.baroness_tech = true;
         }
     },
     {
         condition: () => active_perks.cilia.perk2.active && !unlocks.conquest,
         actions: () => {
-            console.log("Conquest Unlocked");
+            showNotification("Conquest Unlocked");
             unlocks.conquest = true;
         }
     },
     {
         condition: () => active_perks.cilia.perk4.active && !unlocks.hamlet,
         actions: () => {
-            console.log("Hamlets Unlocked");
+            showNotification("Hamlets Unlocked");
             unlocks.hamlet = true;
         }
     },
     {
         condition: () => territories.leyliasion.progress === territories.leyliasion.required && !unlocks.ash_elf,
         actions: () => {
-            console.log("Ash Elves Join");
+            showNotification("Ash Elves Join");
             unlocks.ash_elf = true;
         }
     }
