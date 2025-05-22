@@ -36,23 +36,21 @@ function save_resource(name, res) {
     store(name+".bonuses", res.bonuses, true);
 }
 
-var berry = init_resource('berry', 0, 10, 1, 0);
-var log = init_resource('log', 0, 10, 1, 0);
-var ilarun = init_resource('ilarun', 0, 0, 1, 0);
-var influence = init_resource('influence', 0, -1, 0, 0);
-var ash_pottery = init_resource('ash_pottery', 0, 10, 0, 0);
-var berry_cider = init_resource('berry_cider', 0, 10, 0, 0);
-var ash_elf = init_resource('ash_elf', 0, 0, 0, 0);
+const resource_defs = [
+    {name: 'berry', cur: 0, max: 10, act_rate: 1, pas_rate: 0},
+    {name: 'log', cur: 0, max: 10, act_rate: 1, pas_rate: 0},
+    {name: 'ilarun', cur: 0, max: 0, act_rate: 1, pas_rate: 0},
+    {name: 'influence', cur: 0, max: -1, act_rate: 0, pas_rate: 0},
+    {name: 'ash_pottery', cur: 0, max: 10, act_rate: 0, pas_rate: 0},
+    {name: 'berry_cider', cur: 0, max: 10, act_rate: 0, pas_rate: 0},
+    {name: 'ash_elf', cur: 0, max: 0, act_rate: 0, pas_rate: 0},
+];
 
-var res_all = {
-    berry: berry,
-    log: log,
-    ilarun: ilarun,
-    influence: influence,
-    ash_pottery: ash_pottery,
-    berry_cider: berry_cider,
-    ash_elf: ash_elf,
-}
+var res_all = {};
+resource_defs.forEach(def => {
+    window[def.name] = init_resource(def.name, def.cur, def.max, def.act_rate, def.pas_rate);
+    res_all[def.name] = window[def.name];
+});
 
 // Pop Related
 function res_arr({berry = 0, log = 0, ilarun = 0, influence = 0, ash_pottery = 0, berry_cider = 0, ash_elf = 0} = {}) {
@@ -107,28 +105,30 @@ var ashen_maiden_ratio_bonus = fetch("ashen_maiden_ratio_bonus") || 0;
 
 var squire_max = 0;
 
-var idle = init_pop("idle", 0, res_arr({berry: 0.1}), res_arr({berry: 100}), res_arr({ilarun: 0.01}));
-var elf_idle = init_pop("elf_idle", 0, res_arr({berry: 0.2, log: 0.1}), res_arr({berry: 100, log: 100}), res_arr({ash_elf: 0.002}));
-var forager = init_pop("forager", 0, res_arr({berry: 0.25}), res_arr({berry: 100}), res_arr({berry: 1}));
-var logger = init_pop("logger", 0, res_arr({berry: 0.25}), res_arr({log: 100}), res_arr({log: 1}));
-var ashcrafter = init_pop("ashcrafter", 0, res_arr({berry: 0.4, log: 0.2}), res_arr({log: 200}), res_arr({ash_pottery: 0.5}));
-var berrybrewer = init_pop("berrybrewer", 0, res_arr({berry: 0.6}), res_arr({berry: 200}), res_arr({berry_cider: 0.5}));
-var baroness = init_pop("baroness", 0, res_arr({berry: 1}), res_arr({berry: 250, log: 100}), res_arr({influence: 0.1}));
-var lady_of_fief = init_pop("lady_of_fief", 0, res_arr({berry: 5, log: 2.5, berry_cider: 1, ash_pottery: 1}), res_arr({berry: 1000, log: 500, berry_cider: 50, ash_pottery: 50}), res_arr({influence: 2}));
-var ashen_maiden = init_pop("ashen_maiden", 0, res_arr({berry: 1, log: 1, berry_cider: 0.2, ash_pottery: 0.2}), res_arr({berry: 100, log: 250, berry_cider: 10, ash_pottery: 10}), res_arr({influence: 0.4}))
-var squire = init_pop("squire", 0, res_arr({influence: 0.1}), res_arr({influence: 10}), res_arr());
+const pop_defs = [
+    {name: "idle", count: 0, upkeep: {berry: 0.1}, cost: {berry: 100}, income: {ilarun: 0.01}},
+    {name: "elf_idle", count: 0, upkeep: {berry: 0.2, log: 0.1}, cost: {berry: 100, log: 100}, income: {ash_elf: 0.002}},
+    {name: "forager", count: 0, upkeep: {berry: 0.25}, cost: {berry: 100}, income: {berry: 1}},
+    {name: "logger", count: 0, upkeep: {berry: 0.25}, cost: {log: 100}, income: {log: 1}},
+    {name: "ashcrafter", count: 0, upkeep: {berry: 0.4, log: 0.2}, cost: {log: 200}, income: {ash_pottery: 0.5}},
+    {name: "berrybrewer", count: 0, upkeep: {berry: 0.6}, cost: {berry: 200}, income: {berry_cider: 0.5}},
+    {name: "baroness", count: 0, upkeep: {berry: 1}, cost: {berry: 250, log: 100}, income: {influence: 0.1}},
+    {name: "lady_of_fief", count: 0, upkeep: {berry: 5, log: 2.5, berry_cider: 1, ash_pottery: 1}, cost: {berry: 1000, log: 500, berry_cider: 50, ash_pottery: 50}, income: {influence: 2}},
+    {name: "ashen_maiden", count: 0, upkeep: {berry: 1, log: 1, berry_cider: 0.2, ash_pottery: 0.2}, cost: {berry: 100, log: 250, berry_cider: 10, ash_pottery: 10}, income:  {influence: 0.4}},
+    {name: "squire", count: 0, upkeep: {influence: 0.1}, cost: {influence: 10}, income: {}},
+];
 
-var pop_all = {
-    idle: idle,
-    elf_idle: elf_idle,
-    forager: forager,
-    logger: logger,
-    baroness: baroness,
-    squire: squire,
-    ashcrafter: ashcrafter,
-    berrybrewer: berrybrewer,
-    ashen_maiden: ashen_maiden,
-}
+var pop_all = {};
+pop_defs.forEach(def => {
+    window[def.name] = init_pop(
+        def.name,
+        def.count,
+        res_arr(def.upkeep),
+        res_arr(def.cost),
+        res_arr(def.income)
+    );
+    pop_all[def.name] = window[def.name];
+});
 
 // Building Related
 const BUILDING_COST_MOD = 1.1;
@@ -155,27 +155,31 @@ function save_building(name, b) {
     store(name+".upkeep", b.upkeep, true);
 }
 
-var berry_basket = init_building("berry_basket", 0, res_arr({log: 10}), res_arr({berry: 15}), res_arr(), res_arr());
-var log_stack = init_building("log_stack", 0, res_arr({berry: 10}), res_arr({log: 15}), res_arr(), res_arr());
-var warren = init_building("warren", 0, res_arr({log: 50}), res_arr({ilarun: 5}), res_arr(), res_arr());
-var granary = init_building("granary", 0, res_arr({log: 75}), res_arr({berry: 100}), res_arr(), res_arr());
-var lumber_yard = init_building("lumber_yard", 0, res_arr({berry: 75}), res_arr({log: 100}), res_arr(), res_arr());
-var hamlet = init_building("hamlet", 0, res_arr({berry: 125, log: 125}), res_arr({ilarun: 25}), res_arr(), res_arr());
-var cellar = init_building("cellar", 0, res_arr({ash_pottery: 10}), res_arr({berry_cider: 20}), res_arr(), res_arr());
-var ash_market = init_building("ash_market", 0, res_arr({berry_cider: 10}), res_arr({ash_pottery: 20}), res_arr(), res_arr());
-var ashen_abode = init_building("ashen_abode", 1, res_arr({log: 25, ash_pottery: 5}), res_arr({ash_elf: 4}), res_arr(), res_arr());
+const building_defs = [
+    {name: "berry_basket", count: 0, cost: {log: 10}, size: {berry: 15}},
+    {name: "log_stack", count: 0, cost: {berry: 10}, size: {log: 15}},
+    {name: "warren", count: 0, cost: {log: 50}, size: {ilarun: 5}},
+    {name: "granary", count: 0, cost: {log: 75}, size: {berry: 100}},
+    {name: "lumber_yard", count: 0, cost: {berry: 75}, size: {log: 100}},
+    {name: "hamlet", count: 0, cost: {berry: 125, log: 125}, size: {ilarun: 25}},
+    {name: "cellar", count: 0, cost: {ash_pottery: 10}, size: {berry_cider: 20}},
+    {name: "ash_market", count: 0, cost: {berry_cider: 10}, size: {ash_pottery: 20}},
+    {name: "ashen_abode", count: 1, cost: {log: 25, ash_pottery: 5}, size: {ash_elf: 4}},
+];
 
-var buildings_all = {
-    berry_basket: berry_basket,
-    log_stack: log_stack,
-    warren: warren,
-    granary: granary,
-    lumber_yard: lumber_yard,
-    hamlet: hamlet,
-    cellar: cellar,
-    ash_market: ash_market,
-    ashen_abode: ashen_abode,
-}
+var buildings_all = {};
+building_defs.forEach(def => {
+    window[def.name] = init_building(
+        def.name,
+        def.count,
+        res_arr(def.cost),
+        res_arr(def.size),
+        res_arr(def.income || {}),
+        res_arr(def.upkeep || {})
+    );
+    buildings_all[def.name] = window[def.name];
+});
+
 
 // Unlocks
 var ui_update_flag = true;
@@ -205,44 +209,33 @@ var unlocks = fetch("unlocks", true) || {
 
 function update_save() {
     console.log("Game Saved");
-    save_resource("berry", berry);
-    save_resource("log", log);
-    save_resource("ilarun", ilarun);
-    save_resource("influence", influence);
-    save_resource("ash_pottery", ash_pottery);
-    save_resource("berry_cider", berry_cider);
-    save_resource("ash_elf", ash_elf);
 
-    save_pop("idle", idle);
-    save_pop("forager", forager);
-    save_pop("logger", logger);
-    save_pop("baroness", baroness);
-    save_pop("squire", squire);
-    save_pop("lady_of_fief", lady_of_fief);
+    // Save all resources
+    for (const [name, res] of Object.entries(res_all)) {
+        save_resource(name, res);
+    }
 
-    save_pop("elf_idle", elf_idle);
-    save_pop("ashcrafter", ashcrafter);
-    save_pop("berrybrewer", berrybrewer);
-    save_pop("ashen_maiden", ashen_maiden);
-    
+    // Save all populations
+    for (const [name, pop] of Object.entries(pop_all)) {
+        save_pop(name, pop);
+    }
+
+    // Save all buildings
+    for (const [name, building] of Object.entries(buildings_all)) {
+        save_building(name, building);
+    }
+
+    // Save scalar variables
     store("worker_perc_bonus", worker_perc_bonus);
     store("baroness_ratio_bonus", baroness_ratio_bonus);
     store("elf_worker_perc_bonus", elf_worker_perc_bonus);
     store("ashen_maiden_ratio_bonus", ashen_maiden_ratio_bonus);
     store("lady_of_fief_ratio_bonus", lady_of_fief_ratio_bonus);
 
-    save_building("berry_basket", berry_basket);
-    save_building("log_stack", log_stack);
-    save_building("warren", warren);
-    save_building("granary", granary);
-    save_building("lumber_yard", lumber_yard);
-    save_building("hamlet", hamlet);
-    save_building("cellar", cellar);
-    save_building("ash_market", ash_market);
-    save_building("ashen_abode", ashen_abode);
-
+    // Save unlocks
     store("unlocks", unlocks, true);
 
+    // Save other systems
     update_save_heroes();
     update_save_military();
     update_save_tech();

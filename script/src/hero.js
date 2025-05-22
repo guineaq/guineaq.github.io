@@ -3,24 +3,23 @@ var affinities = fetch("affinities", true) || {
     nobility: 0,
 }
 
+function init_perks(hero, perks) {
+    const obj = {};
+    perks.forEach(perk => {
+        obj[perk] = fetch(`${hero}.${perk}`, true) || {active: false, btn_id: null};
+    });
+    return obj;
+}
+
 var active_perks = {
     cilia: {
-        hired: fetch("cilia.hired", true) || {active: false, btn_id: null},
-        perk1: fetch("cilia.perk1", true) || {active: false, btn_id: null},
-        perk2: fetch("cilia.perk2", true) || {active: false, btn_id: null},
-        perk3: fetch("cilia.perk3", true) || {active: false, btn_id: null},
-        perk4: fetch("cilia.perk4", true) || {active: false, btn_id: null},
-        perk4_1: fetch("cilia.perk4_1", true) || {active: false, btn_id: null},
+        ...init_perks("cilia", ["hired", "perk1", "perk2", "perk3", "perk4", "perk4_1"]),
         apply_perk4_1: function() {
             baroness_ratio_bonus -= 1;
         }
     },
     goldbeak: {
-        hired: fetch("goldbeak.hired", true) || {active: false, btn_id: null},
-        perk1: fetch("goldbeak.perk1", true) || {active: false, btn_id: null},
-        perk2: fetch("goldbeak.perk2", true) || {active: false, btn_id: null},
-        perk3: fetch("goldbeak.perk3", true) || {active: false, btn_id: null},
-        perk4: fetch("goldbeak.perk4", true) || {active: false, btn_id: null},
+        ...init_perks("goldbeak", ["hired", "perk1", "perk2", "perk3", "perk4"]),
         apply_perk4: function() {
             let total_active_perks = 0;
             let keys = ["hired", "perk1", "perk2", "perk3", "perk4"];
@@ -31,7 +30,7 @@ var active_perks = {
             goldbeak_perk4_bonus = 5 * total_active_perks;
         }
     }
-}
+};
 
 const hero_cost = {
     cilia_on_hire: 50,
@@ -202,16 +201,14 @@ function deactivate_button(btn_id) {
 function update_save_heroes() {
     store("affinities", affinities, true);
 
-    store("cilia.hired", active_perks.cilia.hired, true);
-    store("cilia.perk1", active_perks.cilia.perk1, true);
-    store("cilia.perk2", active_perks.cilia.perk2, true);
-    store("cilia.perk3", active_perks.cilia.perk3, true);
-    store("cilia.perk4", active_perks.cilia.perk4, true);
-    store("cilia.perk4_1", active_perks.cilia.perk4_1, true);
+    const hero_perks = {
+        cilia: ["hired", "perk1", "perk2", "perk3", "perk4", "perk4_1"],
+        goldbeak: ["hired", "perk1", "perk2", "perk3", "perk4"]
+    };
 
-    store("goldbeak.hired", active_perks.goldbeak.hired, true);
-    store("goldbeak.perk1", active_perks.goldbeak.perk1, true);
-    store("goldbeak.perk2", active_perks.goldbeak.perk2, true);
-    store("goldbeak.perk3", active_perks.goldbeak.perk3, true);
-    store("goldbeak.perk4", active_perks.goldbeak.perk4, true);
+    for (const hero in hero_perks) {
+        hero_perks[hero].forEach(perk => {
+            store(`${hero}.${perk}`, active_perks[hero][perk], true);
+        });
+    }
 }

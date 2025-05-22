@@ -53,29 +53,47 @@ function update_tier1_res_rate() {
 }
 
 function update_tier1_res_max() {
-    berry.max = 10 + berry.bonuses.max;
-    log.max = 10 + log.bonuses.max;
-    ilarun.max = 0 + ilarun.bonuses.max;
-    ash_elf.max = 0 + ash_elf.bonuses.max;
-    ash_pottery.max = 10 + ash_pottery.bonuses.max;
-    berry_cider.max = 10 + berry_cider.bonuses.max;
+    // 1. Reset all resource max values to their base + bonuses
+    const baseMax = {
+        berry: 10,
+        log: 10,
+        ilarun: 0,
+        ash_elf: 0,
+        ash_pottery: 10,
+        berry_cider: 10
+    };
 
-    let buildings = Object.keys(buildings_all);
-    buildings.forEach(key => {
-        let res_key = Object.keys(res_all)
-        res_key.forEach(rk => {
-            res_all[rk].max += (buildings_all[key].size[rk] + buildings_all[key].bonuses.size[rk]) * buildings_all[key].count;
+    // Set the base + bonuses for each resource
+    Object.keys(res_all).forEach(key => {
+        if (baseMax.hasOwnProperty(key)) {
+            res_all[key].max = baseMax[key] + (res_all[key].bonuses?.max || 0);
+        } else {
+            // If a new resource is added, just use bonuses
+            res_all[key].max = (res_all[key].bonuses?.max || 0);
+        }
+    });
+
+    // 2. Add max from buildings
+    Object.values(buildings_all).forEach(building => {
+        Object.keys(building.size).forEach(rk => {
+            if (res_all[rk]) {
+                res_all[rk].max += ((building.size[rk] || 0) + (building.bonuses?.size?.[rk] || 0)) * building.count;
+            }
         });
     });
 
-    let pop = Object.keys(pop_all);
-    pop.forEach(key => {
-        let res_key = Object.keys(res_all)
-        res_key.forEach(rk => {
-            res_all[rk].max += (pop_all[key].bonuses.size[rk]) * pop_all[key].count;
-        });
+    // 3. Add max from population bonuses
+    Object.values(pop_all).forEach(pop => {
+        if (pop.bonuses && pop.bonuses.size) {
+            Object.keys(pop.bonuses.size).forEach(rk => {
+                if (res_all[rk]) {
+                    res_all[rk].max += (pop.bonuses.size[rk] || 0) * pop.count;
+                }
+            });
+        }
     });
 }
+
 
 // General Resource
 function gain_resource(res, amount) {
@@ -111,61 +129,18 @@ function check_pop_availability(amount) {
 }
 
 function buy_pop(name, amount) {
-    if(name == "ilarun" | name == "ash_elf") {
-        pop_cost = 0;
-        if(name == "ilarun") pop_cost = idle.cost;
-        if(name == "ash_elf") pop_cost = elf_idle.cost;
-        if(res_all[name].cur + amount < (res_all[name].max + res_all[name].bonuses.max)) {
-            if(spend_resources(pop_cost))
-                res_all[name].cur += amount;
-        } else {
-            if(res_all[name].cur >= (res_all[name].max + res_all[name].bonuses.max))
-                return;
-            if(spend_resources(pop_cost))
-                res_all[name].cur = res_all[name].max + res_all[name].bonuses.max;
-        }
-    } else {
-        if(name == "forager" | name == "logger") {
-            if((forager.count + logger.count + amount) <= worker_max) {
-                if(spend_resources(pop_all[name].cost)) {
-                    if(name == 'forager') forager.count += amount;
-                    if(name == 'logger') logger.count += amount;
-                }
-            }
-        } // Workers
-
-        if(name == "ashcrafter" | name == "berrybrewer") {
-            if((ashcrafter.count + berrybrewer.count + amount) <= elf_worker_max) {
-                if(spend_resources(pop_all[name].cost)) {
-                    if(name == 'ashcrafter') ashcrafter.count += amount;
-                    if(name == 'berrybrewer') berrybrewer.count += amount;
-                }
-            }
-        } // Elf Workers
-
-        if(name == "baroness") {
-            if(baroness.count + amount <= baroness_max) {
-                if(spend_resources(pop_all[name].cost)) {
-                    baroness.count += amount;
-                }
-            }
-        } // Baroness
-
-        if(name == "ashen_maiden") {
-            if(ashen_maiden.count + amount <= ashen_maiden_max) {
-                if(spend_resources(pop_all[name].cost)) {
-                    ashen_maiden.count += amount;
-                }
-            }
-        } // Ashen Maiden
-
-        if(name == "squire") {
-            if(squire.count + amount <= squire_max) {
-                if(spend_resources(pop_all[name].cost)) {
-                    squire.count += amount;
-                }
-            }
-        } // Military
+    if (name === "ilarun" || name === "ash_elf") {
+        handle_resource_pop(name, amount);
+    } else if (["forager", "logger"].includes(name)) {
+        handle_worker_pop(name, amount, ["forager", "logger"], worker_max);
+    } else if (["ashcrafter", "berrybrewer"].includes(name)) {
+        handle_worker_pop(name, amount, ["ashcrafter", "berrybrewer"], elf_worker_max);
+    } else if (name === "baroness") {
+        handle_single_pop(name, amount, baroness_max);
+    } else if (name === "ashen_maiden") {
+        handle_single_pop(name, amount, ashen_maiden_max);
+    } else if (name === "squire") {
+        handle_single_pop(name, amount, squire_max);
     }
 
     update_ilarun_pop_demographic();
@@ -174,12 +149,53 @@ function buy_pop(name, amount) {
     update_tier1_res_max();
 }
 
+// --- Helper Functions ---
+// Map resource-type pop names to their cost-determining pop object
+const resourcePopCostMap = {
+    ilarun: idle,
+    ash_elf: elf_idle,
+    // Add more resource-type pops here as needed
+};
+
+function handle_resource_pop(name, amount) {
+    const pop_cost_obj = resourcePopCostMap[name];
+    if (!pop_cost_obj) return; // Unknown resource pop, do nothing
+
+    const pop_cost = pop_cost_obj.cost;
+    const res = res_all[name];
+    const max = res.max + res.bonuses.max;
+
+    if (res.cur + amount < max) {
+        if (spend_resources(pop_cost)) res.cur += amount;
+    } else {
+        if (res.cur >= max) return;
+        if (spend_resources(pop_cost)) res.cur = max;
+    }
+}
+
+function handle_worker_pop(name, amount, group, max_total) {
+    // group: array of pop names that share the max
+    let total = group.reduce((sum, n) => sum + pop_all[n].count, 0);
+    if (total + amount <= max_total) {
+        if (spend_resources(pop_all[name].cost)) {
+            pop_all[name].count += amount;
+        }
+    }
+}
+
+function handle_single_pop(name, amount, max_count) {
+    if (pop_all[name].count + amount <= max_count) {
+        if (spend_resources(pop_all[name].cost)) {
+            pop_all[name].count += amount;
+        }
+    }
+}
+
 function sell_pop(name, amount) {
-    if(name == 'forager' && (forager.count - amount >= 0)) forager.count -= amount;
-    if(name == 'logger'&& (logger.count - amount >= 0)) logger.count -= amount;
-    if(name == 'ashcrafter' && (ashcrafter.count - amount >= 0)) ashcrafter.count -= amount;
-    if(name == 'berrybrewer'&& (berrybrewer.count - amount >= 0)) berrybrewer.count -= amount;
-    if(name == 'squire' && (squire.count - amount >= 0)) squire.count -= amount;
+    const pop = pop_all[name];
+    if (pop && (pop.count - amount >= 0)) {
+        pop.count -= amount;
+    }
 
     update_ilarun_pop_demographic();
     update_ash_elf_pop_demographic();
@@ -223,57 +239,71 @@ function buy_building(building, amount) {
 
 // Core - Tier 1
 ui_update_flag = true;
+ui_update_flag = true;
+
+const unlockConditions = [
+    {
+        condition: () => berry.cur === berry.max && !unlocks.log_harvest,
+        actions: () => {
+            console.log("Log Harvest Unlocked");
+            unlocks.log_harvest = true;
+        }
+    },
+    {
+        condition: () => berry_basket.count >= 10 && log_stack.count >= 10 && !unlocks.ilarun_recruit && !unlocks.techtree,
+        actions: () => {
+            console.log("Ilarun Recruit & Tech Tree Unlocked");
+            unlocks.ilarun_recruit = true;
+            unlocks.techtree = true;
+        }
+    },
+    {
+        condition: () => berry_basket.count >= 25 && log_stack.count >= 25 && !unlocks.tier1_2_storage,
+        actions: () => {
+            console.log("Tier 1.5 Storage unlocked");
+            unlocks.tier1_2_storage = true;
+        }
+    },
+    {
+        condition: () => baroness_max >= 1 && !unlocks.baroness_tech,
+        actions: () => {
+            console.log("Heroes & Baroness Tech Unlocked");
+            unlocks.baroness_tech = true;
+        }
+    },
+    {
+        condition: () => active_perks.cilia.perk2.active && !unlocks.conquest,
+        actions: () => {
+            console.log("Conquest Unlocked");
+            unlocks.conquest = true;
+        }
+    },
+    {
+        condition: () => active_perks.cilia.perk4.active && !unlocks.hamlet,
+        actions: () => {
+            console.log("Hamlets Unlocked");
+            unlocks.hamlet = true;
+        }
+    },
+    {
+        condition: () => territories.leyliasion.progress === territories.leyliasion.required && !unlocks.ash_elf,
+        actions: () => {
+            console.log("Ash Elves Join");
+            unlocks.ash_elf = true;
+        }
+    }
+];
+
 function update_unlocks() {
-    if(berry.cur == berry.max && !unlocks.log_harvest) {
-        console.log("Log Harvest Unlocked")
-        unlocks.log_harvest = true;
-        ui_update_flag = true;
-        return;
-    }
-
-    if(berry_basket.count >= 10 && log_stack.count >= 10 && !unlocks.ilarun_recruit && !unlocks.techtree) {
-        console.log("Ilarun Recruit & Tech Tree Unlocked")
-        unlocks.ilarun_recruit = true;
-        unlocks.techtree = true;
-        ui_update_flag = true;
-        return;
-    }
-
-    if(berry_basket.count >= 25 && log_stack.count >= 25 && !unlocks.tier1_2_storage) {
-        console.log("Tier 1.5 Storage unlocked")
-        unlocks.tier1_2_storage = true;
-        ui_update_flag = true;
-        return;
-    }
-
-    if(baroness_max >= 1 && !unlocks.baroness_tech) {
-        console.log("Heroes & Baroness Tech Unlocked")
-        unlocks.baroness_tech = true;
-        ui_update_flag = true;
-        return;
-    }
-
-    if(active_perks.cilia.perk2.active && !unlocks.conquest) {
-        console.log("Conquest Unlocked")
-        unlocks.conquest = true;
-        ui_update_flag = true;
-        return;
-    }
-
-    if(active_perks.cilia.perk4.active && !unlocks.hamlet) {
-        console.log("Hamlets Unlocked")
-        unlocks.hamlet = true;
-        ui_update_flag = true;
-        return;
-    }
-
-    if(territories.leyliasion.progress == territories.leyliasion.required &&!unlocks.ash_elf) {
-        console.log("Ash Elves Join")
-        unlocks.ash_elf = true;
-        ui_update_flag = true;
-        return;
+    for (const unlock of unlockConditions) {
+        if (unlock.condition()) {
+            unlock.actions();
+            ui_update_flag = true;
+            return; // Only one unlock per call, as in your original code
+        }
     }
 }
+
 
 console.log(res_all);
 console.log(buildings_all);
@@ -292,8 +322,9 @@ function update_tier1() {
 
     if(ui_update_flag) {
         update_ui();
-        on_load(active_perks.cilia);
-        on_load(active_perks.goldbeak);
+        for (const hero in active_perks) {
+            on_load(active_perks[hero])
+        }
         
         on_load_tech(active_techs_col1);
     }
