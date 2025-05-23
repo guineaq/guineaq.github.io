@@ -327,7 +327,7 @@ function update_unlocks() {
         if (unlock.condition()) {
             unlock.actions();
             ui_update_flag = true;
-            return; // Only one unlock per call, as in your original code
+            return; // Only one unlock per call
         }
     }
 }
