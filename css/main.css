@@ -45,8 +45,7 @@ body {
     left: 0;
     overflow-x: hidden;
     background-color: #333;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: block;
     gap: 12px;
     padding: 12px;
 }
@@ -74,21 +73,53 @@ span,
     font-weight: bold;
 }
 
-span.log { color: #159f12; }
-span.berry { color: #c94e4e; }
-span.ashpottery { color: #ddffdd; }
-span.berrycider { color: #a93e3e; }
-span.ilaruns { color: #2b90d3; }
-span.ashelf { color: #948a8a; }
-span.ilarun_worker { color: #dee04b; }
-span.influence { color: #c570ec; }
-span.power { color: #000; }
-span.perk { color: rgb(237,255,72); }
-span.virtue { color: #afafaf; }
-span.nobility { color: #2a2a2a; }
-span.nature { color: #7ac538}
-span.positive_bonus { color: #64dcec; }
-span.feature_unlock { color: #59ff75; }
+.log { color: #159f12; }
+.berry { color: #c94e4e; }
+.ashpottery { color: #ddffdd; }
+.berrycider { color: #a93e3e; }
+.ilaruns { color: #2b90d3; }
+.ashelf { color: #948a8a; }
+.ilarun_worker { color: #dee04b; }
+.influence { color: #874ca3; }
+.power { color: #000; }
+.perk { color: rgb(237,255,72); }
+.virtue { color: #afafaf; }
+.nobility { color: #2a2a2a; }
+.nature { color: #7ac538}
+.positive_bonus { color: #64dcec; }
+.feature_unlock { color: #59ff75; }
+
+.log_bar { background: #159f12; }
+.berry_bar { background: #c94e4e; }
+.ashpottery_bar { background: #ddffdd; }
+.berrycider_bar { background: #a93e3e; }
+.ilarun_bar { background: #2b90d3; }
+.ashelf_bar { background: #948a8a; }
+.influence_bar { background: #874ca3; }
+.power_bar { background: #000; }
+
+div.res_progress {
+    height: 100%;
+    width: 0%;
+    text-align: center;
+}
+
+div.res_progress_bar { width: 70%; border: 2px solid #fff; }
+
+.res_progress_text {
+  position: relative;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  pointer-events: none; /* clicks pass through */
+  z-index: 1;
+}
 
 /** Custom Scrollbar **/
 ::-webkit-scrollbar { width: 10px; }

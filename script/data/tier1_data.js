@@ -131,11 +131,11 @@ pop_defs.forEach(def => {
 });
 
 // Building Related
-const BUILDING_COST_MOD = 1.1;
-function init_building(name, count, cost, size, income, upkeep) {
+function init_building(name, count, cost, cost_coefficient, size, income, upkeep) {
     return {
         count: fetch(name+".count") || count,
         cost: fetch(name+".cost", true) || cost,
+        cost_coefficient: fetch(name+".cost_coefficient", true) || cost_coefficient,
         size: fetch(name+".size", true) || size,
         bonuses: fetch(name+".bonuses", true) || {
             cost: res_arr(),
@@ -149,6 +149,7 @@ function init_building(name, count, cost, size, income, upkeep) {
 function save_building(name, b) {
     store(name+".count", b.count);
     store(name+".cost", b.cost, true);
+    store(name+".cost_coefficient", b.cost_coefficient, true);
     store(name+".size", b.size, true);
     store(name+".bonuses", b.bonuses, true);
     store(name+".income", b.income, true);
@@ -156,15 +157,15 @@ function save_building(name, b) {
 }
 
 const building_defs = [
-    {name: "berry_basket", count: 0, cost: {log: 10}, size: {berry: 15}},
-    {name: "log_stack", count: 0, cost: {berry: 10}, size: {log: 15}},
-    {name: "warren", count: 0, cost: {log: 50}, size: {ilarun: 5}},
-    {name: "granary", count: 0, cost: {log: 75}, size: {berry: 100}},
-    {name: "lumber_yard", count: 0, cost: {berry: 75}, size: {log: 100}},
-    {name: "hamlet", count: 0, cost: {berry: 125, log: 125}, size: {ilarun: 25}},
-    {name: "cellar", count: 0, cost: {ash_pottery: 10}, size: {berry_cider: 20}},
-    {name: "ash_market", count: 0, cost: {berry_cider: 10}, size: {ash_pottery: 20}},
-    {name: "ashen_abode", count: 1, cost: {log: 25, ash_pottery: 5}, size: {ash_elf: 4}},
+    {name: "berry_basket", count: 0, cost: {log: 10}, cost_coefficient: {log: 1.05}, size: {berry: 15}},
+    {name: "log_stack", count: 0, cost: {berry: 10}, cost_coefficient: {berry: 1.05}, size: {log: 15}},
+    {name: "warren", count: 0, cost: {log: 50}, cost_coefficient: {log: 1.07}, size: {ilarun: 5}},
+    {name: "granary", count: 0, cost: {log: 75}, cost_coefficient: {log: 1.07}, size: {berry: 100}},
+    {name: "lumber_yard", count: 0, cost: {berry: 75}, cost_coefficient: {berry: 1.07}, size: {log: 100}},
+    {name: "hamlet", count: 0, cost: {berry: 125, log: 125}, cost_coefficient: {berry: 1.05, log: 1.05}, size: {ilarun: 25}},
+    {name: "cellar", count: 0, cost: {ash_pottery: 10}, cost_coefficient: {ash_pottery: 1.07}, size: {berry_cider: 20}},
+    {name: "ash_market", count: 0, cost: {berry_cider: 10}, cost_coefficient: {berry_cider: 1.07}, size: {ash_pottery: 20}},
+    {name: "ashen_abode", count: 1, cost: {log: 25, ash_pottery: 5}, cost_coefficient: {log: 1.05, ash_pottery: 1.05}, size: {ash_elf: 4}},
 ];
 
 const building_base_cost_defs = [
@@ -197,16 +198,17 @@ building_defs.forEach(def => {
 var ui_update_flag = true;
 
 var unlockable_el = {
-    berry_harvest: [document.getElementById("berry_add"), document.getElementById("berry_res_display")],
-    log_harvest: [document.getElementById("building_action_bar"), document.getElementById("log_harvest"), document.getElementById("log_add"), document.getElementById("log_res_display"), document.getElementById("berry_storage_add"), document.getElementById("log_storage_add"), document.getElementById("berry_sub2")],
-    tier1_2_storage: [document.getElementById("log_storage_2_add"), document.getElementById("berry_storage_2_add"), document.getElementById("tier1_2_storage"), document.getElementById("berry_sub2_1"), document.getElementById("log_sub2_1")],
-    ilarun_recruit: [document.getElementById("ilarun_add"), document.getElementById("ilarun_storage_add"), document.getElementById("ilarun_recruit"), document.getElementById("berry_worker_add"), document.getElementById("log_worker_add"), document.getElementById("berry_worker_remove"), document.getElementById("log_worker_remove"), document.getElementById("ilarun_action_bar"), document.getElementById("ilarun_res_display")],
-    baroness_tech: [document.getElementById("baroness_tech"), document.getElementById("baroness_add"), document.getElementById("influence_res_display"), document.getElementById("heroTab")],
-    hamlet: [document.getElementById("ilarun_storage_2_add"), document.getElementById("ilarun_sub4_1")],
-    conquest: [document.getElementById("conquestTab"), document.getElementById("military_res_display")],
+    berry_harvest: [document.getElementById("berry_add")],
+    log_harvest: [document.getElementById("building_action_bar"), document.getElementById("log_harvest"), document.getElementById("log_add"), document.getElementById("berry_storage_add"), document.getElementById("log_storage_add")],
+    tier1_2_storage: [document.getElementById("log_storage_2_add"), document.getElementById("berry_storage_2_add"), document.getElementById("tier1_2_storage")],
+    ilarun_recruit: [document.getElementById("ilarun_add"), document.getElementById("ilarun_storage_add"), document.getElementById("ilarun_recruit"), document.getElementById("berry_worker_add"), document.getElementById("log_worker_add"), document.getElementById("berry_worker_remove"), document.getElementById("log_worker_remove"), document.getElementById("ilarun_action_bar")],
+    baroness_tech: [document.getElementById("baroness_tech"), document.getElementById("baroness_add"), document.getElementById("heroTab")],
+    hamlet: [document.getElementById("ilarun_storage_2_add")],
+    conquest: [],
     techtree: [document.getElementById("techTreeTab")],
-    ash_elf: [document.getElementById("ash_elf"), document.getElementById("ash_elf_res_display"), document.getElementById("berry_cider_res_display"), document.getElementById("ash_pottery_res_display"), document.getElementById("ash_elf_storage_add"), document.getElementById("berry_cider_storage_add"), document.getElementById("ash_pottery_storage_add"), document.getElementById("ash_elf_add"), document.getElementById("ash_elf_action_bar")],
+    ash_elf: [document.getElementById("ash_elf"), document.getElementById("ash_elf_storage_add"), document.getElementById("berry_cider_storage_add"), document.getElementById("ash_pottery_storage_add"), document.getElementById("ash_elf_add"), document.getElementById("ash_elf_action_bar")],
 }
+
 var unlocks = fetch("unlocks", true) || {
     berry_harvest: true,
     log_harvest: false,
@@ -246,6 +248,7 @@ function update_save() {
 
     // Save unlocks
     store("unlocks", unlocks, true);
+    store("bar_unlocked", bar_unlocked, true);
 
     // Save other systems
     update_save_heroes();

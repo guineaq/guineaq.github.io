@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idle Prototype 0.3.1</title>
+    <title>Idle Prototype 0.4.0</title>
     <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
@@ -24,79 +24,15 @@
         <span id="notification-message"></span>
         <button id="notification-close" style="margin-left:10px;">&times;</button>
     </div>
-    <div class="icon-bar">
-        <!--Berries-->
-        <div id="berry_res_display" style="display: none;">
-            <p><span class="berry">Berries:</span>
-                <br><span id="berry_sub1">0/0</span>
-                <br><span id="berry_sub2" style="display: none;">Baskets (15): 0</span>
-                <span id="berry_sub2_1" style="display: none;">Granary (100): 0</span>
-                <span id="berry_sub3">0.0</span>
-            </p>
-        </div>
-        <!--Logs-->
-        <div id="log_res_display" style="display: none;">
-            <p><span class="log">Wood:</span>
-                <br><span id="log_sub1">0/0</span>
-                <br><span id="log_sub2">Stacks (15): 0</span>
-                <span id="log_sub2_1" style="display: none;">L.Yard (100): 0</span>
-                <span id="log_sub3">0.0</span>
-            </p>
-        </div>
-        <!--Berry Cider-->
-        <div id="berry_cider_res_display" style="display: none;">
-            <p><span class="berrycider">Berry Cider:</span>
-                <br><span id="berry_cider_sub1">0/10</span>
-                <br><span id="berry_cider_sub2">Cellar (20): 0</span>
-                <span id="berry_cider_sub3">0.0</span>
-            </p>
-        </div>
-        <!--Ash Pottery-->
-        <div id="ash_pottery_res_display" style="display: none;">
-            <p><span class="ashpottery">Ash Pottery:</span>
-                <br><span id="ash_pottery_sub1">0/10</span>
-                <br><span id="ash_pottery_sub2">Ash Market (20): 0</span>
-                <span id="ash_pottery_sub3">0.0</span>
-            </p>
-        </div>
-        <div id="ilarun_res_display" style="display: none;">    
-            <p><span class="ilaruns">Ilaruns:</span>
-                <br><span id="ilarun_sub1">0/0</span>
-                <br><span id="ilarun_sub2" class="ilarun_worker">0/0</span>
-                <br><span id="ilarun_sub3" class="influence">0/0</span>
-                <br><span id="ilarun_sub4">Warren (5): 0</span>
-                <span id="ilarun_sub4_1" style="display: none;">Hamlet (25): 0</span>
-                <span id="ilarun_sub5">0.0</span>
-            </p>
-        </div>
-        <div id="ash_elf_res_display" style="display: none;">    
-            <p><span class="ashelf">Ash Elves:</span>
-                <br><span id="ash_elf_sub1">0/0</span>
-                <br><span id="ash_elf_sub2" class="ash_elf">0/0</span>
-                <br><span id="ash_elf_sub3" class="influence">0/0</span>
-                <br><span id="ash_elf_sub4">Ashen Abode (4): 0</span>
-                <span id="ash_elf_sub5">0.0</span>
-            </p>
-        </div>
-        <div id="influence_res_display" style="display: none;">
-            <p><span class="influence">Influence:</span>
-                <br><span id="influence_sub1">0</span>
-                <br><span id="influence_sub2">0.0</span>
-            </p>
-        </div>
-        <div id="military_res_display" style="display: none;">
-            <p><span class="power">Power:</span>
-                <br><span id="military_sub1">0.0</span>
-                <br><span id="military_sub2">Squires(s): 0/0</span>
-            </p>
-        </div>
+    <div class="icon-bar" id="res_bar">
+        
     </div>
 
     <div class="main">
         <div class="tab">
             <button class="tablinks" onclick="openTab(event, 'Tier_1')" id="defaultTab">Tier 1</button>
             <button class="tablinks" onclick="openTab(event, 'Heroes')" id="heroTab" style="display: none;">Heroes</button>
-            <button class="tablinks" onclick="openTab(event, 'Conquest')" id="conquestTab" style="display: none;">Conquest</button>
+            <button class="tablinks" onclick="openTab(event, 'Conquest')" style="display: none;">Conquest</button>
             <button class="tablinks" onclick="openTab(event, 'TechTree')" id="techTreeTab" style="display: none;">Tech Tree</button>
             <button id="export_save_btn" onclick="export_save()" style="float:right; background:rgb(79, 51, 204); color:#fff; margin-left:8px;">Export Save</button>
             <button id="import_save_btn" onclick="import_save()" style="float:right; background:rgb(94, 138, 66); color:#fff; margin-left:8px;">Import Save</button>
