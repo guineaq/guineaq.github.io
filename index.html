@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Mordium 0.0.1a</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <div id="notification" class="notification_top">
+        <span id="notification_message"></span>
+        <button id="notification_close" style="margin-left:10px;">&times;</button>
+    </div>
+    <div id="combat_notification" class="notification_bottom">
+        <span id="combat_notification_message"></span>
+        <button id="combat_notification_close" style="margin-left:10px;">&times;</button>
+    </div>
+    <div class="icon-bar" id="res_bar">
+        
+    </div>
+
+    <div class="main">
+        <div class="tab">
+            <button id="tier1Tab" class="tablinks" onclick="openTab(event, 'tier1')" id="defaultTab">Tier 1</button>
+            <button id="changeLanguageBtn" onclick="changeLanguage()" style="float:right; background:rgb(204, 143, 51); color:#fff; margin-left:8px;">Change Language</button>
+            <button id="exportSaveBtn" onclick="exportSave()" style="float:right; background:rgb(79, 51, 204); color:#fff; margin-left:8px;">Export Save</button>
+            <button id="importSaveBtn" onclick="importSave()" style="float:right; background:rgb(94, 138, 66); color:#fff; margin-left:8px;">Import Save</button>
+            <button id="wipeSaveBtn" onclick="wipeSave()" style="float:right; background:#c33; color:#fff;">Wipe Save</button>
+        </div>
+
+        <div id="tier1" class="tabcontent">
+        </div>
+    </div>
+    
+    <script>const TICK = 100;</script>
+    <!--<script>window.localStorage.clear();</script>-->
+    <script src="./script/src/util.js"></script>
+    <script src="./script/data/lang.js"></script>
+    <script src="./script/data/stage1_data.js"></script>
+    <script src="./script/src/core.js"></script>
+    <script>
+        document.getElementById("defaultTab").click();
+    </script>
+</body>
+</html>

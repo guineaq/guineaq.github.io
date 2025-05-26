@@ -1,0 +1,375 @@
+body {
+    font: 14px/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #f0e7d5;
+    background-color: #252525;
+}
+
+.main {
+    margin-left: 24%;
+}
+
+/* Core Tabs and Styling */
+.tab {
+    overflow: hidden;
+    border: 1px solid #5d910b;
+    background-color: #93bd20;
+}
+
+.tab button {
+    background-color: inherit;
+    color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+.tab button:hover { background-color: #739d00; }
+.tab button:active { background-color: #83ad10; }
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #d7cfbe;
+    border-top: none;
+}
+
+.notification_top {
+    display:none;
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#222;
+    color:#fff;
+    padding:10px 24px;
+    border-radius:6px;
+    font-size:1.1em;
+    z-index:1000;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+    transition:opacity 0.3s;
+}
+
+.notification_bottom {
+    display:none;
+    position:fixed;
+    bottom: 20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#222;
+    color:#fff;
+    padding:10px 24px;
+    border-radius:6px;
+    font-size:1.1em;
+    z-index:1000;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+    transition:opacity 0.3s;
+}
+
+/* Resource Bar */
+.icon-bar {
+    height: 100%;
+    width: 22%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    background-color: #333;
+    display: block;
+    gap: 12px;
+    padding: 12px;
+}
+
+.icon-bar p {
+    display: block;
+    text-align: center;
+}
+
+/** Tiers and Action Bars **/
+
+.tier-action-bar-list {
+    display: flex;
+    gap: 10px;
+}
+
+.action-bar {
+    border: 2px, solid, #fff;
+    text-align: center;
+}
+
+/** Text Coloring **/
+span,
+.icon-bar p span {
+    font-weight: bold;
+}
+
+div.res-progress {
+    height: 100%;
+    width: 0%;
+    text-align: center;
+}
+
+div.progress-bar { width: 60%; border: 2px solid #fff; }
+
+.res-text {
+  position: relative;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  pointer-events: none; /* clicks pass through */
+  z-index: 1;
+}
+
+/** Custom Scrollbar **/
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #555; }
+::-webkit-scrollbar-thumb { background: #f0e7d5; }
+::-webkit-scrollbar-thumb:hover { background: #bebebe; }
+
+/* Conquest */
+div.progress {
+    background-color: #000;
+    width: 0%;
+    text-align: center;
+}
+
+div.progress_bar { width: 560px; }
+
+.disabled_conquer_button {
+    background-color: #292929;
+    color: #c4beb3;
+    border: none;
+    outline: none;
+    cursor: default;
+    height: 60px;
+    padding: 14px 16px;
+}
+
+.unlockable {
+    padding: 0;
+    margin: 0;
+}
+
+.unlockable button {
+    display: inline-block;
+}
+
+/* Unified button base styles */
+button.berryButton,
+button.logButton,
+button.ilarunButton,
+button.woodenWeaponryButton,
+button.influenceButton,
+button.militaryButton,
+button.berryLogButton,
+button.ashPotteryButton,
+button.berryCiderButton,
+button.ashElfButton,
+button.flButton {
+    color: #f0e7d5;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    height: 80px;
+    padding: 16px 16px;
+    transition: 0.3s;
+    width: 200px;
+}
+
+/* Individual button colors */
+button.berryButton { background-color: #d83e3e; }
+button.berryButton:hover { background-color: #972b2b; }
+button.berryButton:active { background-color: #af5656; }
+
+button.logButton { background-color: #339e2f; }
+button.logButton:hover { background-color: #276e25; }
+button.logButton:active { background-color: #4d7e4b; }
+
+button.woodenWeaponryButton { background-color: #318160; }
+button.woodenWeaponryButton:hover { background-color: #2d685b; }
+button.woodenWeaponryButton:active { background-color: #254937; }
+
+button.ilarunButton { background-color: #206a9b; }
+button.ilarunButton:hover { background-color: #304f63; }
+button.ilarunButton:active { background-color: #255677; }
+
+button.ashElfButton { background-color: #6e6a6a; }
+button.ashElfButton:hover { background-color: #a8a6a6; }
+button.ashElfButton:active { background-color: #5e5a5a; }
+
+button.influenceButton { background-color: #82209b; }
+button.influenceButton:hover { background-color: #573063; }
+button.influenceButton:active { background-color: #702577; }
+
+button.militaryButton { background-color: #3d3d3d; }
+button.militaryButton:hover { background-color: #1a1a1a; }
+button.militaryButton:active { background-color: #272727; }
+
+button.ashPotteryButton { background-color: #9ea088; }
+button.ashPotteryButton:hover { background-color: #73776a; }
+button.ashPotteryButton:active { background-color: #4f574e; }
+
+button.berryCiderButton { background-color: #ac4848; }
+button.berryCiderButton:hover { background-color: #863333; }
+button.berryCiderButton:active { background-color: #7e4242; }
+
+/* Berry & Log Hybrid Gradient Button */
+button.berryLogButton {
+    background: linear-gradient(90deg, rgba(56,176,28,1) 0%, rgba(241,54,54,1) 100%);
+}
+button.berryLogButton:hover {
+    background: linear-gradient(90deg, rgba(47,133,27,1) 0%, rgba(182,41,41,1) 100%);
+}
+button.berryLogButton:active {
+    background: linear-gradient(90deg, rgba(93,195,69,1) 0%, rgba(214,91,91,1) 100%);
+}
+
+.white_black {
+    background: linear-gradient(90deg, rgba(255,255,255,1) 27%, rgba(0,0,0,1) 83%);
+}
+
+.black_green {
+    background: linear-gradient(90deg, rgba(0,0,0,1) 27%, rgb(55, 214, 40) 83%);
+}
+
+.green {
+    background: rgba(56,176,28,1);
+}
+
+/* Hero Tab */
+.hero_tab {
+    border-radius: 5px;
+    border-width: 2px;
+    height: 320px;
+    margin: 5px 0;
+}
+
+.hero_tab * { display: inline-block; }
+
+.hero_tab_internal {
+    background: #555;
+    vertical-align: top;
+    margin: 5px;
+    border-radius: 5px;
+    border-width: 2px;
+    width: 99%;
+    height: 310px;
+}
+.hero_tab_internal button { display: inline-block; }
+
+.hero_tab_internal_desc * span {
+    display: inline;
+    margin: 0;
+}
+.hero_tab_internal_desc * {
+    display: block;
+    margin: 0 5px;
+}
+
+.hero_button,
+.hero_button_disabled {
+    border: 1px solid;
+    border-radius: 5px;
+    outline: none;
+    height: 100%;
+    width: 130px;
+    padding: 14px 4px;
+    float: right;
+}
+
+.hero_button {
+    background-color: #fff;
+    color: #3b3b3b;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.hero_button:hover { background-color: #efefef; }
+.hero_button:active { background-color: #cfcfcf; }
+
+.hero_button_disabled {
+    background-color: #969696;
+    color: #272727;
+    cursor: default;
+}
+
+/** Tech Tree **/
+.techTree {
+    display: grid;
+    grid-template-rows: repeat(10, 120px);   /* 3 rows, each 120px tall */
+    grid-template-columns: repeat(10, 120px);/* 3 columns, each 120px wide */
+    gap: 16px;                             /* space between icons */
+    padding: 10px;
+    width: max-content;
+}
+
+.tech {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+}
+
+.tech_button,
+.tech_button_disabled {
+    border: 1px solid;
+    border-radius: 5px;
+    outline: none;
+    height: 100%;
+    width: 130px;
+    padding: 14px 4px;
+    float: right;
+}
+
+.tech_button {
+    background-color: #7fafcf;
+    color: #3b3b3b;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.tech_button:hover { background-color: #6f9fbf; }
+.tech_button:active { background-color: #3f6f9f; }
+
+.tech_button_disabled {
+    background-color: #265676;
+    color: #272727;
+    cursor: default;
+}
+
+.tech_button_locked {
+    background-color: #565626;
+    color: #272727;
+    cursor: default;
+}
+
+.tech .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    width: 160px;
+    background: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.tech:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
