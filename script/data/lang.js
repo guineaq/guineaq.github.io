@@ -1,4 +1,4 @@
-var languageCode = fetch("languageCode")
+var languageCode = fetch("languageCode") || 1
 
 function changeLanguage() {
     // Future
