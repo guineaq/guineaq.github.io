@@ -24,7 +24,7 @@ function updateStaticHTMLLangAssets() {
     document.getElementById("importSaveBtn").innerHTML = langObj['ETC_00000002']
     document.getElementById("exportSaveBtn").innerHTML = langObj['ETC_00000003']
     document.getElementById("wipeSaveBtn").innerHTML = langObj['ETC_00000004']
-    document.getElementById("tier1Tab").innerHTML = langObj['TAB_00000001']
+    document.getElementById("defaultTab").innerHTML = langObj['TAB_00000001']
 }
 
 const EN_US = {
