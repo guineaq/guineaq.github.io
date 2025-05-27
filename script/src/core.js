@@ -55,6 +55,7 @@ function wipeSave() {
 }
 
 function exportSave() {
+    save()
     const saveData = {}
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i)
@@ -103,4 +104,22 @@ function importSave() {
     }
 }
 
+function init() {
+    TAB_ALL.tierOneTab.createSubElementActionBar("manual", "")
+}
+
+function update() {
+    updateTier1()
+}
+
+function render() {
+    renderTier1()
+}
+
+function save() {
+    saveTier1()
+}
+
 // Ticks
+window.setInterval(render, TICK);
+window.setInterval(update, TICK);

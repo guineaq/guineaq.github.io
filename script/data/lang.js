@@ -51,7 +51,9 @@ const EN_US = {
     ETC_00000006: "Save imported! Reloading...",
     ETC_00000007: "Invalid save string.",
     ETC_00000008: "Are you sure you want to wipe your save? This cannot be undone.",
-    TAB_00000001: "Tier 1"
+    TAB_00000001: "Tier 1",
+    TAB_00000002: "Manual Actions",
+    TAB_00000001_DESC: "You find yourself awake in some kind of dark corner, with a section of the place overflowing with unknown green goo of sorts.",
 }
 
 const KO_KR = {
@@ -79,6 +81,8 @@ const KO_KR = {
     ETC_00000007: "올바르지 않은 세이브 파일입니다.",
     ETC_00000008: "세이브 파일을 초기화 하시겠습니까? 삭제 시 복구가 불가능합니다.",
     TAB_00000001: "1티어",
+    TAB_00000002: "수동 채취",
+    TAB_00000001_DESC: "정신을 차려보니 어떤 한 어두운 구석에서 자신을 발견한 당신, 근처에 무언가 끈적한 녹색 고체가 흘러 나오는 구간이 있는 것 같습니다.",
 }
 
 var langObj

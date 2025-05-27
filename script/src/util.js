@@ -1,7 +1,10 @@
 // LocalStorage function
-function fetch(key, isJSON = false) {
+function fetch(key, isJSON = false, isString = false) {
     if(!isJSON)
-        return Number(window.localStorage.getItem(key));
+        if(isString)
+            return window.localStorage.getItem(key);
+        else
+            return Number(window.localStorage.getItem(key));
     else
         return JSON.parse(window.localStorage.getItem(key));
 }
