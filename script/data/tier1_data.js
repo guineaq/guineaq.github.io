@@ -422,5 +422,5 @@ TIER1_RES_KEYS.forEach(resourceKey => {
     TIER1_RES_ALL[resourceKey] = new Resource(TIER1_RESOURCE_TYPE[resourceKey], htmlElement, new ResourceData(TIER1_RESOURCE_DATA[resourceKey]))
 })
 TIER1_BUILDING_KEYS.forEach(buildingKey => {
-    TIER1_BUILDING_ALL[buildingKey] = new Building
+    TIER1_BUILDING_ALL[buildingKey] = new Building()
 })

@@ -144,6 +144,10 @@ class ResourceData {
     }
 }
 
+class Building {
+    
+}
+
 class BuildingData {
 
 }
