@@ -29,6 +29,9 @@ class Tab {
                 b.forEach(btnKey => {
                     actionBar.buttons[btnKey].update()
                 })
+                b.forEach(btnKey => {
+                    actionBar.buttons[btnKey].updateAfter()
+                })
             } catch (e) { }
         })
     }
@@ -41,6 +44,8 @@ class ResourceButton {
     #parentId
     #isUnlocked
     #onClick
+    
+    #colorAlreadyBound
 
     constructor(parentId, res, langObjId, hasLangVars, isUnlocked, onClick) {
         this.#parentId = parentId
@@ -49,10 +54,13 @@ class ResourceButton {
         this.#hasLangVars = hasLangVars
         this.#isUnlocked = isUnlocked
         this.#onClick = onClick
+        this.#colorAlreadyBound = false
     }
 
     update() {
-        if(!this.#isUnlocked && this.#res.getUnlocked()) this.#isUnlocked = true
+        if(!this.#isUnlocked && this.#res.getUnlocked()) {
+            this.#isUnlocked = true
+        }
         let e = document.getElementById(this.#parentId)
         let unlocked = this.#isUnlocked ? `display: block;` : `display: none;`
         let baseColor = this.#res.getResArr().color
@@ -60,11 +68,6 @@ class ResourceButton {
         e.innerHTML += `<button id="${this.#langObjId}_btn" style="${unlocked}; background-color: ${baseColor};" class="flButton"></button>`
 
         let btn = document.getElementById(`${this.#langObjId}_btn`)
-
-        let hoverColor = subtractColors(baseColor, "#111111")
-        let activeColor = subtractColors(baseColor, "#202020")
-
-        addHoverAndActiveColor(btn, baseColor, hoverColor, activeColor)
 
         let btnString = ""
         if (this.#hasLangVars) {
@@ -79,6 +82,17 @@ class ResourceButton {
         }
         btn.innerHTML = `<span>${btnString}</span>`
         btn.setAttribute("onclick", this.#onClick)
+    }
+
+    updateAfter() {
+        let baseColor = this.#res.getResArr().color
+        let hoverColor = subtractColors(baseColor, "#111111")
+        let activeColor = subtractColors(baseColor, "#202020")
+
+        let btn = document.getElementById(`${this.#langObjId}_btn`)
+
+        removeHoverAndActiveColor(btn)
+        addHoverAndActiveColor(btn, baseColor, hoverColor, activeColor)
     }
 
     #evaluateLangVarKey(key) {

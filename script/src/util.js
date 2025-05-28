@@ -65,6 +65,14 @@ function addHoverAndActiveColor(button, base, hover, active) {
     });
 }
 
+function removeHoverAndActiveColor(button) {
+    if (!button._onMouseOver) return;
+    button.removeEventListener('mouseover', button._onMouseOver);
+    button.removeEventListener('mouseout', button._onMouseOut);
+    button.removeEventListener('mousedown', button._onMouseDown);
+    button.removeEventListener('mouseup', button._onMouseUp);
+}
+
 function evaluateResDataSum(resData) {
     if (typeof resData === 'object' && resData !== null && Object.keys(resData).length === 0) {
         return 0; // normalization in case empty to avoid error
