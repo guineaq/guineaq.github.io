@@ -162,8 +162,8 @@ const TIER1_RESOURCE_DATA = {
         type: "raw",
         cur: 0,
         max: { base: 10 },
-        passiveRate: { base: 0.1 },
-        activeRate: {},
+        passiveRate: { },
+        activeRate: { base: 1 },
         bonuses: {
             max: {},
             passiveRate: {},
@@ -203,9 +203,9 @@ const TIER1_RESOURCE_DATA = {
         name: "Scrap",
         type: "raw",
         cur: 0,
-        max: {},
+        max: { base: 10 },
         passiveRate: {},
-        activeRate: {},
+        activeRate: { base: 1},
         bonuses: {
             max: {},
             passiveRate: {},
@@ -353,12 +353,64 @@ const TIER1_RESOURCE_DATA = {
     }
 };
 
+const TIER1_BUILDING_DATA = {
+    /* ClassID
+    * 5rrtt000 ~
+    */
+    barrel: {
+        classID: 50101001,
+        name: "Biomass Barrel",
+        type: "storage",
+        count: 0,
+        baseCost: {
+            scrap: 10
+        },
+        costCoefficient: {
+            scrap: 1.05
+        },
+        bonuses: {
+            biomass: {
+                max: 10,
+                passiveRate: 0,
+                activeRate: 0,
+            }
+        },
+        special: {
+
+        }
+    },
+    scrapStack: {
+        classID: 50101002,
+        name: "Stack of Scraps",
+        type: "storage",
+        count: 0,
+        baseCost: {
+            biomass: 10
+        },
+        costCoefficient: {
+            biomass: 1.05
+        },
+        bonuses: {
+            scrap: {
+                max: 10,
+                passiveRate: 0,
+                activeRate: 0,
+            }
+        },
+        special: {
+
+        }
+    },
+}
+
 
 // ---- Global Constant ----
 
 const TIER1_RES_KEYS = Object.keys(TIER1_RESOURCE_TYPE)
+const TIER1_BUILDING_KEYS = Object.keys(TIER1_BUILDING_DATA)
 
 const TIER1_RES_ALL = {}
+const TIER1_BUILDING_ALL = {}
 
 // -------------------------
 
@@ -368,4 +420,7 @@ const TIER1_RES_ALL = {}
 let htmlElement = document.getElementById("res_bar")
 TIER1_RES_KEYS.forEach(resourceKey => {
     TIER1_RES_ALL[resourceKey] = new Resource(TIER1_RESOURCE_TYPE[resourceKey], htmlElement, new ResourceData(TIER1_RESOURCE_DATA[resourceKey]))
+})
+TIER1_BUILDING_KEYS.forEach(buildingKey => {
+    TIER1_BUILDING_ALL[buildingKey] = new Building
 })

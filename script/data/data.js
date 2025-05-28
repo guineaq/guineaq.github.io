@@ -1,6 +1,7 @@
 class Resource {
     #resArr
     #resData
+    #buildingData
     #htmlElement
     #displayObj = {}
 
@@ -11,7 +12,7 @@ class Resource {
      * @param {HTMLElement} htmlElement HTMLElement which displays this resource
      * @param {ResourceData} resData ResourceData object
      */
-    constructor(resArr, htmlElement, resData) {
+    constructor(resArr, htmlElement, resData, buildingData) {
         this.#resArr = resArr
         this.#resData = resData
         this.#htmlElement = htmlElement
@@ -37,10 +38,6 @@ class Resource {
         this.#displayObj.barText = `${this.#resArr.classID}_text`
     }
 
-    generateResourceButtonHTML(style, onlick, className, langId) {
-        return new HTMLElementButton()
-    }
-
     // --------- Render Category ---------
     render() {
         let current = this.#resData.cur
@@ -56,10 +53,18 @@ class Resource {
         const max = this.calculate("max")
 
         if (max === -1) {
-            if(gain > 0) console.log(`performing add ${gain} to ${this.#resData.cur}`)
             this.#resData.cur += gain
         } else {
             this.#resData.cur = Math.max(0, Math.min(this.#resData.cur + gain, max))
+        }
+    }
+
+    updateResData(key) {
+        if(key === "active1") {
+            // add one unit of active rate income to current
+            let gain = (evaluateResDataSum(this.#resData.activeRate) + evaluateResDataSum(this.#resData.bonuses.activeRate))
+            let max = (evaluateResDataSum(this.#resData.max) + evaluateResDataSum(this.#resData.bonuses.max))
+            this.#resData.cur = Math.min(this.#resData.cur + gain, max)
         }
     }
 
@@ -71,6 +76,14 @@ class Resource {
 
     getUnlocked() {
         return this.#unlocked
+    }
+
+    getResData() {
+        return this.#resData
+    }
+
+    getResArr() {
+        return this.#resArr
     }
 
     changeLanguage() {
@@ -129,6 +142,10 @@ class ResourceData {
         })
         return bonuses
     }
+}
+
+class BuildingData {
+
 }
 
 const RESOURCE_BONUSES_KEYS = ["max", "passiveRate", "activeRate"]

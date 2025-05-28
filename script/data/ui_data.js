@@ -1,126 +1,118 @@
 class Tab {
-    #subHTMLElements
-    /*
-    * SubElements
-    * {
-    *   story:
-    *   actions:
-    *   
-    * }
-    */
+    #parentId
+    #storyId
+    #actionBarId
+    #actionBars
 
-    /*
-    * SubElement
-    * {
-    *   id: 
-    *   langId: "TAB_00000001_DESC"
-    *   render: function
-    *   hidden: true
-    * }
-    */
-    #id
-    #actionIdList
+    constructor(parentId, storyId, actionBarId, actionBars) {
+        this.#parentId = parentId
+        this.#storyId = storyId
+        this.#actionBarId = actionBarId
+        this.#actionBars = actionBars
 
-    constructor(parentId, id) {
-        this.#id = id
-        this.#subHTMLElements = {
-            story: [],
-        }
-        this.#actionIdList = [];
+        this.update()
     }
 
-    addSubElementStory(HTMLElement) {
-        this.#subHTMLElements.story.push(HTMLElement)
-        document.getElementById(this.#id).innerHTML += HTMLElement
-    }
-
-    createSubElementActionBar(id, langId) {
-        this.#subHTMLElements[id] = [];
-        this.#subHTMLElements[`${id}_text`] = langObj[langId]
-        this.#actionIdList.push(id)
-
-        document.getElementById(this.#id).innerHTML += new HTMLElementActionBar()
-    }
-
-    addSubElementActionBar(id, HTMLElement) {
-        this.#subHTMLElements[id].push(HTMLElement)
-    }
-
-    render() {
-        let keys = Object.keys(this.#subHTMLElements)
-        keys.forEach(key => {
-            this.#subHTMLElements[key].forEach(el => {
-                el.render()
-            })
-        }) 
-    }
-
-    changeLanguage() {
-
-    }
-}
-
-class ActionBar {
-    #subHTMLElements
-    #id
-
-    constructor(id) {
-        this.#id
-    }
-
-    addSubElement(HTMLElement) {
-
-    }
-}
-
-class HTMLElementButton {
-    #id
-    /* 
-    * {
-    *   style: []
-    *   onclick: function
-    *   className: ""
-    *   langId: ""
-    * }
-    */
-    #renderData
-    #htmlString
-
-    constructor(id, renderData, htmlString) {
-        this.#id = id
-        this.#renderData = renderData
-        this.#htmlString = htmlString
-
-        let el = document.getElementById(this.#id)
-        el.addEventListener("click", (event) => this.#renderData.onlick(event))
-        el.className = this.#renderData.className
-    }
-
-    init() {
-
+    addButton(actionBarId, button) {
+        this.#actionBars[actionBarId].buttons[button.id] = button
     }
 
     update() {
-        
-    }
+        let actionBarKeys = Object.keys(this.#actionBars)
+        actionBarKeys.forEach(key => {
+            let actionBar = this.#actionBars[key]
+            let el = document.getElementById(actionBar.id)
 
-    render() {
-        let el = document.getElementById(this.#id)
-        el.innerHTML = this.#htmlString
-
-        this.#renderData.style.forEach(s => {
-            Object.assign(el.style, s)
+            el.innerHTML = langObj[actionBar.langObjId]
+            try {
+                let b = Object.keys(actionBar.buttons)
+                b.forEach(btnKey => {
+                    actionBar.buttons[btnKey].update()
+                })
+            } catch (e) { }
         })
     }
 }
 
-class HTMLElementActionBar {
-    constructor(parentId, id, langId) {
-        let el = document.getElementById(parentId)
-        el.innerHTML += langObj[langId]
+class ResourceButton {
+    #res
+    #langObjId
+    #hasLangVars
+    #parentId
+    #isUnlocked
+    #onClick
+
+    constructor(parentId, res, langObjId, hasLangVars, isUnlocked, onClick) {
+        this.#parentId = parentId
+        this.#res = res
+        this.#langObjId = langObjId
+        this.#hasLangVars = hasLangVars
+        this.#isUnlocked = isUnlocked
+        this.#onClick = onClick
+    }
+
+    update() {
+        if(!this.#isUnlocked && this.#res.getUnlocked()) this.#isUnlocked = true
+        let e = document.getElementById(this.#parentId)
+        let unlocked = this.#isUnlocked ? `display: block;` : `display: none;`
+        let baseColor = this.#res.getResArr().color
+
+        e.innerHTML += `<button id="${this.#langObjId}_btn" style="${unlocked}; background-color: ${baseColor};" class="flButton"></button>`
+
+        let btn = document.getElementById(`${this.#langObjId}_btn`)
+
+        let hoverColor = subtractColors(baseColor, "#111111")
+        let activeColor = subtractColors(baseColor, "#202020")
+
+        addHoverAndActiveColor(btn, baseColor, hoverColor, activeColor)
+
+        let btnString = ""
+        if (this.#hasLangVars) {
+            let langKeys = Object.keys(LANG_VARS[this.#langObjId])
+            btnString = langObj[this.#langObjId]
+
+            langKeys.forEach(key => {
+                btnString = btnString.replace(LANG_VARS[this.#langObjId][key], this.#evaluateLangVarKey(key))
+            })
+        } else {
+            btnString = langObj[this.#langObjId]
+        }
+        btn.innerHTML = `<span>${btnString}</span>`
+        btn.setAttribute("onclick", this.#onClick)
+    }
+
+    #evaluateLangVarKey(key) {
+        if (key === "qty") {
+            let resData = this.#res.getResData()
+            return Math.floor(evaluateResDataSum(resData.activeRate) + evaluateResDataSum(resData.bonuses["activeRate"]))
+        }
     }
 }
 
-const TAB_ALL = {
-    tierOneTab: new Tab("defaultTab"),
+class BuildingButton {
+
 }
+
+class PopulationButton {
+
+}
+
+const TIER1_TAB = new Tab("tier1", "t1story", "t1actions", {
+    manual: {
+        id: "t1manual", langObjId: "TAB_00000002", buttons: {
+            buyBiomass: new ResourceButton("t1manual", TIER1_RES_ALL["biomass"], "RES_10101001_BUY", true, true, `TIER1_RES_ALL["biomass"].updateResData("active1")`),
+            buyScrap: new ResourceButton("t1manual", TIER1_RES_ALL["scrap"], "RES_20101003_BUY", true, false, `TIER1_RES_ALL["scrap"].updateResData("active1")`),
+        }
+    },
+    producer: {
+        id: "t1producer", langObjId: "TAB_00000003", buttons: {
+
+        }
+    },
+    storage: {
+        id: "t1storage", langObjId: "TAB_00000004", button: {
+            buyBarrel: new BuildingButton(),
+            buyScrapStack: new BuildingButton(),
+        }
+    }
+})

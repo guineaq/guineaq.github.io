@@ -29,17 +29,27 @@
         </div>
 
         <div id="tier1" class="tabcontent">
+                <div id="t1story">
+                </div>
+                <div id="t1actions" class="tier-action-bar-list">
+                    <div id="t1manual" class="action-bar"></div>
+                    <div id="t1producer" class="action-bar"></div>
+                    <div id="t1storage" class="action-bar"></div>
+                </div>
         </div>
     </div>
     
     <script>const TICK = 100;</script>
-    <!--<script>window.localStorage.clear();</script>-->
+    <!--<script>window.localStorage.clear();</script>--> <!--Order-->
     <script src="./script/src/util.js"></script>
-    <script src="./script/data/data.js"></script>
+    <script src="./script/data/lang.js"></script> 
+
+    <script src="./script/data/data.js"></script> 
+    <script src="./script/data/tier1_data.js"></script>
+
     <script src="./script/data/ui_data.js"></script>
-    <script src="./script/data/lang.js"></script>
-    <script src="./script/data/stage1_data.js"></script>
-    <script src="./script/src/stage1.js"></script>
+
+    <script src="./script/src/tier1.js"></script>
     <script src="./script/src/core.js"></script>
     <script>
         document.getElementById("defaultTab").click();

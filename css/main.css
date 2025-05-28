@@ -99,7 +99,6 @@ body {
     text-align: center;
 }
 
-/** Text Coloring **/
 span,
 .icon-bar p span {
     font-weight: bold;
@@ -158,21 +157,7 @@ div.progress_bar { width: 560px; }
     margin: 0;
 }
 
-.unlockable button {
-    display: inline-block;
-}
-
 /* Unified button base styles */
-button.berryButton,
-button.logButton,
-button.ilarunButton,
-button.woodenWeaponryButton,
-button.influenceButton,
-button.militaryButton,
-button.berryLogButton,
-button.ashPotteryButton,
-button.berryCiderButton,
-button.ashElfButton,
 button.flButton {
     color: #f0e7d5;
     border: none;
@@ -220,29 +205,6 @@ button.ashPotteryButton:active { background-color: #4f574e; }
 button.berryCiderButton { background-color: #ac4848; }
 button.berryCiderButton:hover { background-color: #863333; }
 button.berryCiderButton:active { background-color: #7e4242; }
-
-/* Berry & Log Hybrid Gradient Button */
-button.berryLogButton {
-    background: linear-gradient(90deg, rgba(56,176,28,1) 0%, rgba(241,54,54,1) 100%);
-}
-button.berryLogButton:hover {
-    background: linear-gradient(90deg, rgba(47,133,27,1) 0%, rgba(182,41,41,1) 100%);
-}
-button.berryLogButton:active {
-    background: linear-gradient(90deg, rgba(93,195,69,1) 0%, rgba(214,91,91,1) 100%);
-}
-
-.white_black {
-    background: linear-gradient(90deg, rgba(255,255,255,1) 27%, rgba(0,0,0,1) 83%);
-}
-
-.black_green {
-    background: linear-gradient(90deg, rgba(0,0,0,1) 27%, rgb(55, 214, 40) 83%);
-}
-
-.green {
-    background: rgba(56,176,28,1);
-}
 
 /* Hero Tab */
 .hero_tab {

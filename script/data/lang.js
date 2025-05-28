@@ -13,7 +13,9 @@ function changeLanguage() {
         languageCode = 1
     }
     console.log(`Changing Language to ${languageCode}`)
+
     updateStaticHTMLLangAssets()
+    TIER1_TAB.update()
     Object.keys(TIER1_RES_ALL).forEach(key => {
         TIER1_RES_ALL[key].changeLanguage()
     })
@@ -52,8 +54,12 @@ const EN_US = {
     ETC_00000007: "Invalid save string.",
     ETC_00000008: "Are you sure you want to wipe your save? This cannot be undone.",
     TAB_00000001: "Tier 1",
-    TAB_00000002: "Manual Actions",
+    TAB_00000002: "Manual Harvesting",
+    TAB_00000003: "Producers",
+    TAB_00000004: "Storage",
     TAB_00000001_DESC: "You find yourself awake in some kind of dark corner, with a section of the place overflowing with unknown green goo of sorts.",
+    RES_10101001_BUY: "Extract ${qty} Biomass",
+    RES_20101003_BUY: "Scavenge ${qty} Scrap(s)",
 }
 
 const KO_KR = {
@@ -82,7 +88,16 @@ const KO_KR = {
     ETC_00000008: "세이브 파일을 초기화 하시겠습니까? 삭제 시 복구가 불가능합니다.",
     TAB_00000001: "1티어",
     TAB_00000002: "수동 채취",
+    TAB_00000003: "생산 건물",
+    TAB_00000004: "보관 건물",
     TAB_00000001_DESC: "정신을 차려보니 어떤 한 어두운 구석에서 자신을 발견한 당신, 근처에 무언가 끈적한 녹색 고체가 흘러 나오는 구간이 있는 것 같습니다.",
+    RES_10101001_BUY: "바이오매스 ${qty}개 추출",
+    RES_20101003_BUY: "고철 ${qty}개 줍기",
+}
+
+const LANG_VARS = {
+    RES_10101001_BUY: {qty: "${qty}"},
+    RES_20101003_BUY: {qty: "${qty}"},
 }
 
 var langObj

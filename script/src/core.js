@@ -104,10 +104,6 @@ function importSave() {
     }
 }
 
-function init() {
-    TAB_ALL.tierOneTab.createSubElementActionBar("manual", "")
-}
-
 function update() {
     updateTier1()
 }
