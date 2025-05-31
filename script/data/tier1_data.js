@@ -27,125 +27,35 @@
  * - Low Nobility Attire * Luxury Good / Tier 1
  * - Low Tech Munitions * Ammo / Tier 1
  */
-const TIER1_RESOURCE_TYPE = {
-    /* Types
-    * 01 - Raw
-    * 02 - Component
-    * 03 - Processed
-    * 04 - Fuel
-    * 05 - Ammo
-    * 06 - Fabric
-    * 07 - Food
-    * 08 - Inferior Good
-    * 09 - Normal Good
-    * 10 - Luxury Good
-    * 11 - Weapon
-    */
 
-    /* ClassID
-    * 1xxtt000 ~ Bio Materials | xx (Tier) | tt (Type)
-    * 2xxtt000 ~ Basic Materials | xx (Tier) | tt (Type)
-    * 3xxtt000 ~ Advanced Materials | xx (Tier) | tt (Type)
-    * 4xxtt000 ~ Crafted Goods | xx (Tier) | tt (Type)
-    * 10100000 : Power
-    */
+/* Types
+ * 01 - Raw
+ * 02 - Component
+ * 03 - Processed
+ * 04 - Fuel
+ * 05 - Ammo
+ * 06 - Fabric
+ * 07 - Food
+ * 08 - Inferior Good
+ * 09 - Normal Good
+ * 10 - Luxury Good
+ * 11 - Weapon
+ */
+
+/* ClassID
+ * 1xxtt000 ~ Bio Materials | xx (Tier) | tt (Type)
+ * 2xxtt000 ~ Basic Materials | xx (Tier) | tt (Type)
+ * 3xxtt000 ~ Advanced Materials | xx (Tier) | tt (Type)
+ * 4xxtt000 ~ Crafted Goods | xx (Tier) | tt (Type)
+ * 10100000 : Power
+ */
+
+const TIER1_RESOURCE = {
     power: {
         classID: 10100000,
         name: "Power",
         type: "power",
-        color: "#dee04b"
-    },
-    biomass: {
-        classID: 10101001,
-        name: "Biomass",
-        type: "raw",
-        color: "#7ac538"
-    },
-    nutrientPaste: {
-        classID: 10107001,
-        name: "Nutrient Paste",
-        type: "food",
-        color: "#297e29"
-    },
-    redberries: {
-        classID: 10101002,
-        name: "Redberries",
-        type: "raw",
-        color: "#c94e4e"
-    },
-    scrap: {
-        classID: 20101003,
-        name: "Scrap",
-        type: "raw",
-        color: "#948a8a"
-    },
-    metal: {
-        classID: 20103001,
-        name: "Metal",
-        type: "processed",
-        color: "#5f4f4f"
-    },
-    basicCircuitry: {
-        classID: 30102001,
-        name: "Basic Circuitry",
-        type: "component",
-        color: "#afafaf"
-    },
-    chemfuel: {
-        classID: 30104001,
-        name: "Chemfuel",
-        type: "fuel",
-        color: "#792e2e"
-    },
-    basicChemicals: {
-        classID: 30102002,
-        name: "Basic Chemicals",
-        type: "component",
-        color: "#7777aa"
-    },
-    survivalRifle: {
-        classID: 40111001,
-        name: "Survival Rifle",
-        type: "raw",
-        color: "#555555"
-    },
-    redberryShine: {
-        classID: 40110001,
-        name: "Redberry Shine",
-        type: "luxury_good",
-        color: "#841e7e"
-    },
-    synthfiber: {
-        classID: 40106002,
-        name: "Synthfiber",
-        type: "fabric",
-        color: "#247e7e"
-    },
-    uniform: {
-        classID: 40109001,
-        name: "Uniform",
-        type: "normal_good",
-        color: "#444e2e"
-    },
-    lowNobilityAttire: {
-        classID: 40110002,
-        name: "Low Nobility Attire",
-        type: "luxury_good",
-        color: "#741ea4"
-    },
-    lowTechMunitions: {
-        classID: 40105001,
-        name: "Low Tech Munitions",
-        type: "ammo",
-        color: "#657575"
-    },
-}
-
-const TIER1_RESOURCE_DATA = {
-    power: {
-        classID: 10100000,
-        name: "Power",
-        type: "power",
+        color: "#dee04b",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -160,6 +70,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 10101001,
         name: "Biomass",
         type: "raw",
+        color: "#7ac538",
         cur: 0,
         max: { base: 10 },
         passiveRate: { },
@@ -174,6 +85,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 10107001,
         name: "Nutrient Paste",
         type: "food",
+        color: "#297e29",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -188,6 +100,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 10101002,
         name: "Redberries",
         type: "raw",
+        color: "#c94e4e",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -202,6 +115,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 20101003,
         name: "Scrap",
         type: "raw",
+        color: "#948a8a",
         cur: 0,
         max: { base: 10 },
         passiveRate: {},
@@ -216,6 +130,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 20103001,
         name: "Metal",
         type: "processed",
+        color: "#5f4f4f",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -229,6 +144,8 @@ const TIER1_RESOURCE_DATA = {
     basicCircuitry: {
         classID: 30102001,
         name: "Basic Circuitry",
+        type: "component",
+        color: "#afafaf",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -243,6 +160,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 30104001,
         name: "Chemfuel",
         type: "fuel",
+        color: "#792e2e",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -257,6 +175,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 30102002,
         name: "Basic Chemicals",
         type: "component",
+        color: "#7777aa",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -271,6 +190,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 40111001,
         name: "Survival Rifle",
         type: "raw",
+        color: "#555555",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -285,6 +205,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 40110001,
         name: "Redberry Shine",
         type: "luxury_good",
+        color: "#841e7e",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -299,6 +220,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 40106002,
         name: "Synthfiber",
         type: "fabric",
+        color: "#247e7e",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -313,6 +235,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 40109001,
         name: "Uniform",
         type: "normal_good",
+        color: "#444e2e",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -327,6 +250,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 40110002,
         name: "Low Nobility Attire",
         type: "luxury_good",
+        color: "#741ea4",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -341,6 +265,7 @@ const TIER1_RESOURCE_DATA = {
         classID: 40105001,
         name: "Low Tech Munitions",
         type: "ammo",
+        color: "#657575",
         cur: 0,
         max: {},
         passiveRate: {},
@@ -353,7 +278,7 @@ const TIER1_RESOURCE_DATA = {
     }
 };
 
-const TIER1_BUILDING_DATA = {
+const TIER1_BUILDING = {
     /* ClassID
     * 5rrtt000 ~
     */
@@ -361,6 +286,7 @@ const TIER1_BUILDING_DATA = {
         classID: 50101001,
         name: "Biomass Barrel",
         type: "storage",
+        color: "#7ac538",
         count: 0,
         baseCost: {
             scrap: 10
@@ -381,8 +307,9 @@ const TIER1_BUILDING_DATA = {
     },
     scrapStack: {
         classID: 50101002,
-        name: "Stack of Scraps",
+        name: "Scrap Stack",
         type: "storage",
+        color: "#948a8a",
         count: 0,
         baseCost: {
             biomass: 10
@@ -403,24 +330,7 @@ const TIER1_BUILDING_DATA = {
     },
 }
 
-
 // ---- Global Constant ----
 
-const TIER1_RES_KEYS = Object.keys(TIER1_RESOURCE_TYPE)
-const TIER1_BUILDING_KEYS = Object.keys(TIER1_BUILDING_DATA)
-
-const TIER1_RES_ALL = {}
-const TIER1_BUILDING_ALL = {}
-
-// -------------------------
-
-// temporary logic
-// Initialize all resources into a RES_ALL where it can be fetched through class keys
-// later change this into {} format so that the key can be used to bind resource bars to categories(type)
-let htmlElement = document.getElementById("res_bar")
-TIER1_RES_KEYS.forEach(resourceKey => {
-    TIER1_RES_ALL[resourceKey] = new Resource(TIER1_RESOURCE_TYPE[resourceKey], htmlElement, new ResourceData(TIER1_RESOURCE_DATA[resourceKey]))
-})
-TIER1_BUILDING_KEYS.forEach(buildingKey => {
-    TIER1_BUILDING_ALL[buildingKey] = new Building()
-})
+const TIER1_RES_KEYS = Object.keys(TIER1_RESOURCE)
+const TIER1_BUILDING_KEYS = Object.keys(TIER1_BUILDING)

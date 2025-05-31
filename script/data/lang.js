@@ -15,9 +15,19 @@ function changeLanguage() {
     console.log(`Changing Language to ${languageCode}`)
 
     updateStaticHTMLLangAssets()
-    TIER1_TAB.update()
-    Object.keys(TIER1_RES_ALL).forEach(key => {
-        TIER1_RES_ALL[key].changeLanguage()
+    let resKeys = Object.keys(TIER1_RESOURCE)
+    resKeys.forEach(key => {
+        changeLanguageResourceDisplay(TIER1_RESOURCE[key])
+    })
+
+    resKeys = ["biomass", "scrap"]
+    resKeys.forEach(key => {
+        changeLanguageResourceButton(TIER1_RESOURCE[key])
+    })
+
+    let bKeys = Object.keys(TIER1_BUILDING)
+    bKeys.forEach(key => {
+        changeLanguageResourceButton(TIER1_BUILDING[key], true)
     })
 }
 
@@ -27,6 +37,9 @@ function updateStaticHTMLLangAssets() {
     document.getElementById("exportSaveBtn").innerHTML = langObj['ETC_00000003']
     document.getElementById("wipeSaveBtn").innerHTML = langObj['ETC_00000004']
     document.getElementById("defaultTab").innerHTML = langObj['TAB_00000001']
+    document.getElementById("t1manual_text").innerHTML = langObj['TAB_00000002']
+    document.getElementById("t1producer_text").innerHTML = langObj['TAB_00000003']
+    document.getElementById("t1storage_text").innerHTML = langObj['TAB_00000004']
 }
 
 const EN_US = {
@@ -60,6 +73,8 @@ const EN_US = {
     TAB_00000001_DESC: "You find yourself awake in some kind of dark corner, with a section of the place overflowing with unknown green goo of sorts.",
     RES_10101001_BUY: "Extract ${qty} Biomass",
     RES_20101003_BUY: "Scavenge ${qty} Scrap(s)",
+    BLD_50101001_BUY: "Make Biomass Barrel\n(T1/Cost: ${building_cost_0} Scraps)",
+    BLD_50101002_BUY: "Make a Stack of Scraps\n(T1/Cost: ${building_cost_0} Biomass)",
 }
 
 const KO_KR = {
@@ -93,11 +108,15 @@ const KO_KR = {
     TAB_00000001_DESC: "정신을 차려보니 어떤 한 어두운 구석에서 자신을 발견한 당신, 근처에 무언가 끈적한 녹색 고체가 흘러 나오는 구간이 있는 것 같습니다.",
     RES_10101001_BUY: "바이오매스 ${qty}개 추출",
     RES_20101003_BUY: "고철 ${qty}개 줍기",
+    BLD_50101001_BUY: "바이오매스 보관용 통 만들기\n(1티어/가격: 고철 ${building_cost_0}개)",
+    BLD_50101002_BUY: "고철더미 만들기\n(1티어/가격: 바이오매스 ${building_cost_0}개)",
 }
 
 const LANG_VARS = {
     RES_10101001_BUY: {qty: "${qty}"},
     RES_20101003_BUY: {qty: "${qty}"},
+    BLD_50101001_BUY: {building_cost_0: "${building_cost_0}"},
+    BLD_50101002_BUY: {building_cost_0: "${building_cost_0}"},
 }
 
 var langObj
@@ -106,4 +125,5 @@ if(languageCode == 1) {
 } else {
     langObj = KO_KR
 }
+
 updateStaticHTMLLangAssets()

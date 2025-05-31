@@ -1,155 +1,167 @@
-class Resource {
-    #resArr
-    #resData
-    #buildingData
-    #htmlElement
-    #displayObj = {}
+/**
+ * Calculates the passive gain 
+ * @param {*} resData TIER1_RESOURCE, TIER2_RESOURCE...
+ * @param {*} resKey biomass, power, ...
+ */
+function updateResource(resData, resKey, isActive=false) {
+    let key = "passiveRate"
+    if(isActive)
+        key = "activeRate"
 
-    #unlocked = false
-    /**
-     * 
-     * @param {Object} resArr TIER1_RESOURCE_TYPE[resource key]
-     * @param {HTMLElement} htmlElement HTMLElement which displays this resource
-     * @param {ResourceData} resData ResourceData object
-     */
-    constructor(resArr, htmlElement, resData, buildingData) {
-        this.#resArr = resArr
-        this.#resData = resData
-        this.#htmlElement = htmlElement
-        this.generateResourceDisplay()
-    }
+    let divisor = (1000 / TICK)
+    if(isActive)
+        divisor = 1
 
-    // --------- Initialization Category ---------
-    generateResourceDisplay() {
-        let div = `<div id="${this.#resArr.classID}_div" style="display: none;">`
-        let divEnd = `</div>`
+    const gain = (calculate(resData[resKey], key) + calculate(resData[resKey], key, true)) / divisor
+    const max = calculate(resData[resKey], "max")
 
-        let barStart = `<span id="${this.#resArr.classID}_name" class="name" style="width:40%">${langObj["RES_"+this.#resArr.classID+"_NAME"]}:</span>`
-
-        let bar = `<div id="${this.#resArr.classID}_bar" class="progress-bar"><div id="${this.#resArr.classID}_progress" style="background: ${this.#resArr.color}; width: 100%; height: 100%;"></div>`
-        let barText = `<span id="${this.#resArr.classID}_text" class="res-text"></span></div>`
-
-        this.#htmlElement.innerHTML += `${div}${barStart}${bar}${barText}${divEnd}`
-
-        this.#displayObj.div = `${this.#resArr.classID}_div`
-        this.#displayObj.barStart = `${this.#resArr.classID}_name`
-        this.#displayObj.bar = `${this.#resArr.classID}_bar`
-        this.#displayObj.barProgress = `${this.#resArr.classID}_progress`
-        this.#displayObj.barText = `${this.#resArr.classID}_text`
-    }
-
-    // --------- Render Category ---------
-    render() {
-        let current = this.#resData.cur
-        let max = this.calculate("max")
-
-        document.getElementById(this.#displayObj.barText).innerHTML = `${Math.floor(current)} / ${max}`
-        document.getElementById(this.#displayObj.barProgress).style.width = `${(current/max) * 100}%`
-    }
-
-    // --------- Update Category ---------
-    update() {
-        const gain = (this.calculate("passiveRate") + this.calculate("passiveRate", true)) / (1000 / TICK)
-        const max = this.calculate("max")
-
-        if (max === -1) {
-            this.#resData.cur += gain
-        } else {
-            this.#resData.cur = Math.max(0, Math.min(this.#resData.cur + gain, max))
-        }
-    }
-
-    updateResData(key) {
-        if(key === "active1") {
-            // add one unit of active rate income to current
-            let gain = (evaluateResDataSum(this.#resData.activeRate) + evaluateResDataSum(this.#resData.bonuses.activeRate))
-            let max = (evaluateResDataSum(this.#resData.max) + evaluateResDataSum(this.#resData.bonuses.max))
-            this.#resData.cur = Math.min(this.#resData.cur + gain, max)
-        }
-    }
-
-    // --------- Util Category ---------
-    setUnlocked(unlocked) {
-        this.#unlocked = true
-        document.getElementById(this.#displayObj.div).style.display = "flex";
-    }
-
-    getUnlocked() {
-        return this.#unlocked
-    }
-
-    getResData() {
-        return this.#resData
-    }
-
-    getResArr() {
-        return this.#resArr
-    }
-
-    changeLanguage() {
-        document.getElementById(this.#displayObj.barStart).innerHTML = langObj[`RES_${this.#resArr.classID}_NAME`]+":"
-    }
-
-    calculate(resDataKey, isBonus = false) {
-        let x = 0;
-        if(!isBonus) {
-            let keys = Object.keys(this.#resData[resDataKey])
-            keys.forEach(key => {
-                x += this.#resData[resDataKey][key]
-            })
-        } else {
-            let keys = Object.keys(this.#resData.bonuses[resDataKey])
-            keys.forEach(key => {
-                x += this.#resData.bonuses[resDataKey][key]
-            })
-        }
-        return x
-    }
-
-    save() {
-        this.#resData.save()
+    if (max === -1) {
+        resData[resKey].cur += gain
+    } else {
+        resData[resKey].cur = Math.max(0, Math.min(resData[resKey].cur + gain, max))
     }
 }
 
-class ResourceData {
-    constructor(resData) {
-        this.classID = resData.classID
-        this.name = fetch(`${this.classID}_name`, false, true) || resData.name
-        this.cur = fetch(`${this.classID}_cur`) || resData.cur
-        this.max = fetch(`${this.classID}_max`, true) || resData.max
-        this.type = fetch(`${this.classID}_type`, false, true) || resData.type
-        this.passiveRate = fetch(`${this.classID}_passiveRate`, true) || resData.passiveRate
-        this.activeRate = fetch(`${this.classID}_activeRate`, true) || resData.activeRate
-        this.bonuses = this.loadBonuses() || resData.bonuses
-    }
+function updateBuilding(bData, bKey) {
+    let costs = [] // where the costs for all resource types will go
+    let resKeys = Object.keys(bData[bKey].baseCost)
 
-    save() {
-        store(`${this.classID}_name`, this.name)
-        store(`${this.classID}_cur`, this.cur)
-        store(`${this.classID}_max`, this.max, true)
-        store(`${this.classID}_type`, this.type)
-        store(`${this.classID}_passiveRate`, this.passiveRate, true)
-        store(`${this.classID}_activeRate`, this.activeRate, true)
-        RESOURCE_BONUSES_KEYS.forEach(key => {
-            store(`${this.classID}_bonuses_${key}`, this.bonuses[key], true)
+    resKeys.forEach(resKey => {
+        // calculate the cost with cost coefficient per type
+        costs.push(Math.floor(bData[bKey].baseCost[resKey] * Math.pow(bData[bKey].costCoefficient[resKey], bData[bKey].count)))
+    })
+
+    let canPurchase = true
+    let index = 0
+    resKeys.forEach(resKey => {
+        // check if all resource has the enough res
+        if(TIER1_RESOURCE[resKey].cur < costs[index])
+            canPurchase = false
+        index += 1
+    })
+
+    // if there's enough, purchase it
+    if(canPurchase) {
+        bData[bKey].count += 1
+        index = 0
+        resKeys.forEach(resKey => {
+            TIER1_RESOURCE[resKey].cur -= costs[index]
+            index += 1
         })
-    }
 
-    loadBonuses() {
-        let bonuses = {}
-        RESOURCE_BONUSES_KEYS.forEach(key => {
-            bonuses[key] = fetch(`${this.classID}_bonuses_${key}`, true) || {}
+        let bonusKeys = Object.keys(bData[bKey].bonuses)
+        bonusKeys.forEach(bonusKey => {
+            RESOURCE_BONUSES_KEYS.forEach(key => {
+                TIER1_RESOURCE[bonusKey][key][bKey] = bData[bKey].bonuses[bonusKey][key] * bData[bKey].count
+            })
         })
-        return bonuses
+
+        updateBuildingButton(bData[bKey].classID, bData[bKey])
     }
 }
 
-class Building {
-    
+/**
+ * Loads resource data from local storage
+ * @param {*} resData TIER1_RESOURCE, TIER2_RESOURCE...
+ * @param {*} resKey biomass, power, ...
+ */
+function loadResourceFromLocalStorage(resData, resKey) {
+    resData[resKey].name = fetch(`${resData[resKey].classID}_name`, false, true) || resData[resKey].name
+    resData[resKey].cur = fetch(`${resData[resKey].classID}_cur`) || resData[resKey].cur
+    resData[resKey].max = fetch(`${resData[resKey].classID}_max`, true) || resData[resKey].max
+    resData[resKey].type = fetch(`${resData[resKey].classID}_type`, false, true) || resData[resKey].type
+    resData[resKey].passiveRate = fetch(`${resData[resKey].classID}_passiveRate`, true) || resData[resKey].passiveRate
+    resData[resKey].activeRate = fetch(`${resData[resKey].classID}_activeRate`, true) || resData[resKey].activeRate
+    resData[resKey].bonuses = loadResourceBonuses(resData, resKey) || resData[resKey].bonuses
 }
 
-class BuildingData {
+/**
+ * Saves resource data to local storage
+ * @param {*} resData TIER1_RESOURCE, TIER2_RESOURCE...
+ * @param {*} resKey biomass, power, ...
+ */
+function saveResourceToLocalStorage(resData, resKey) {
+    store(`${resData[resKey].classID}_name`, resData[resKey].name)
+    store(`${resData[resKey].classID}_cur`, resData[resKey].cur)
+    store(`${resData[resKey].classID}_max`, resData[resKey].max, true)
+    store(`${resData[resKey].classID}_type`, resData[resKey].type)
+    store(`${resData[resKey].classID}_passiveRate`, resData[resKey].passiveRate, true)
+    store(`${resData[resKey].classID}_activeRate`, resData[resKey].activeRate, true)
+    RESOURCE_BONUSES_KEYS.forEach(key => {
+        store(`${resData[resKey].classID}_bonuses_${key}`, resData[resKey].bonuses[key], true)
+    })
+}
 
+/**
+ * Loads resource data from local storage
+ * @param {*} resData TIER1_RESOURCE, TIER2_RESOURCE...
+ * @param {*} resKey biomass, power, ...
+ */
+function loadBuildingFromLocalStorage(buildingData, buildingKey) {
+    buildingData[buildingKey].name = fetch(`${buildingData[buildingKey].classID}_name`, false, true) || buildingData[buildingKey].name
+    buildingData[buildingKey].count = fetch(`${buildingData[buildingKey].classID}_count`) || buildingData[buildingKey].count
+    buildingData[buildingKey].baseCost = fetch(`${buildingData[buildingKey].classID}_baseCost`, true) || buildingData[buildingKey].baseCost
+    buildingData[buildingKey].costCoefficient = fetch(`${buildingData[buildingKey].classID}_costCoefficient`, true) || buildingData[buildingKey].costCoefficient
+    buildingData[buildingKey].type = fetch(`${buildingData[buildingKey].classID}_type`, false, true) || buildingData[buildingKey].type
+    Object.keys(buildingData[buildingKey].bonuses).forEach(resKey => {
+        BUILDING_BONUSES_KEYS.forEach(key => {
+            buildingData[buildingKey].bonuses[resKey][key] = fetch(`${buildingData[buildingKey].classID}_bonuses_${resKey}_${key}`) || buildingData[buildingKey].bonuses[resKey][key]
+        })
+    })
+}
+
+/**
+ * Saves building data to local storage
+ * @param {*} buildingData TIER1_BUILDING, TIER2_BUILDING...
+ * @param {*} buildingKey barrel, scrapStack, ...
+ */
+function saveBuildingToLocalStorage(buildingData, buildingKey) {
+    store(`${buildingData[buildingKey].classID}_name`, buildingData[buildingKey].name)
+    store(`${buildingData[buildingKey].classID}_count`, buildingData[buildingKey].count)
+    store(`${buildingData[buildingKey].classID}_baseCost`, buildingData[buildingKey].baseCost, true)
+    store(`${buildingData[buildingKey].classID}_costCoefficient`, buildingData[buildingKey].costCoefficient, true)
+    store(`${buildingData[buildingKey].classID}_type`, buildingData[buildingKey].type)
+    Object.keys(buildingData[buildingKey].bonuses).forEach(resKey => {
+        BUILDING_BONUSES_KEYS.forEach(key => {
+            store(`${buildingData[buildingKey].classID}_bonuses_${resKey}_${key}`, buildingData[buildingKey].bonuses[resKey][key])
+        })
+    })
+}
+
+/**
+ * Loads resource bonus
+ * @param {*} resData TIER1_RESOURCE, TIER2_RESOURCE...
+ * @param {*} resKey biomass, power, ...
+ */
+function loadResourceBonuses(resData, resKey) {
+    let bonuses = {}
+    RESOURCE_BONUSES_KEYS.forEach(key => {
+        bonuses[key] = fetch(`${resData[resKey].classID}_bonuses_${key}`, true) || {}
+    })
+    return bonuses
+}
+
+/**
+ * Calculates the sum of all values in a key
+ * @param {*} resData TIER1_RESOURCE['biomass'], TIER2_RESOURCE[...], ...
+ * @param {*} key cur, max, ...
+ * @param {*} isBonus True or False
+ * @returns 
+ */
+function calculate(resData, key, isBonus = false) {
+    const target = isBonus ? resData.bonuses : resData
+    const data = target[key]
+
+    if (typeof data === 'number') {
+        return data
+    }
+    if (typeof data === 'object' && data !== null) {
+        return Object.values(data)
+            .filter(val => typeof val === 'number')
+            .reduce((sum, val) => sum + val, 0)
+    }
+    return 0
 }
 
 const RESOURCE_BONUSES_KEYS = ["max", "passiveRate", "activeRate"]
+const BUILDING_BONUSES_KEYS = ["max", "passiveRate", "activeRate"]

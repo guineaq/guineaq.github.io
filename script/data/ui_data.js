@@ -1,132 +1,152 @@
-class Tab {
-    #parentId
-    #storyId
-    #actionBarId
-    #actionBars
+// Resource Display Section
+function generateResourceDisplay(classID, color, htmlElement) {
+    let div = `<div id="${classID}_div" style="display: none;">`
+    let divEnd = `</div>`
+    let barStart = `<span id="${classID}_name" class="name" style="width:40%">${langObj["RES_" + classID + "_NAME"]}:</span>`
+    let bar = `<div id="${classID}_bar" class="progress-bar"><div id="${classID}_progress" style="background: ${color}; width: 100%;height: 100%;"></div>`
+    let barText = `<span id="${classID}_text" class="res-text"></span></div>`
 
-    constructor(parentId, storyId, actionBarId, actionBars) {
-        this.#parentId = parentId
-        this.#storyId = storyId
-        this.#actionBarId = actionBarId
-        this.#actionBars = actionBars
-
-        this.update()
-    }
-
-    addButton(actionBarId, button) {
-        this.#actionBars[actionBarId].buttons[button.id] = button
-    }
-
-    update() {
-        let actionBarKeys = Object.keys(this.#actionBars)
-        actionBarKeys.forEach(key => {
-            let actionBar = this.#actionBars[key]
-            let el = document.getElementById(actionBar.id)
-
-            el.innerHTML = langObj[actionBar.langObjId]
-            try {
-                let b = Object.keys(actionBar.buttons)
-                b.forEach(btnKey => {
-                    actionBar.buttons[btnKey].update()
-                })
-                b.forEach(btnKey => {
-                    actionBar.buttons[btnKey].updateAfter()
-                })
-            } catch (e) { }
-        })
-    }
+    htmlElement.innerHTML += `${div}${barStart}${bar}${barText}${divEnd}`
 }
 
-class ResourceButton {
-    #res
-    #langObjId
-    #hasLangVars
-    #parentId
-    #isUnlocked
-    #onClick
-    
-    #colorAlreadyBound
+function renderResourceDisplay(resData) {
+    let barText = `${resData.classID}_text`
+    let barProgress = `${resData.classID}_progress`
 
-    constructor(parentId, res, langObjId, hasLangVars, isUnlocked, onClick) {
-        this.#parentId = parentId
-        this.#res = res
-        this.#langObjId = langObjId
-        this.#hasLangVars = hasLangVars
-        this.#isUnlocked = isUnlocked
-        this.#onClick = onClick
-        this.#colorAlreadyBound = false
-    }
+    let cur = calculate(resData, "cur", false)
+    let max = calculate(resData, "max", false)
 
-    update() {
-        if(!this.#isUnlocked && this.#res.getUnlocked()) {
-            this.#isUnlocked = true
-        }
-        let e = document.getElementById(this.#parentId)
-        let unlocked = this.#isUnlocked ? `display: block;` : `display: none;`
-        let baseColor = this.#res.getResArr().color
-
-        e.innerHTML += `<button id="${this.#langObjId}_btn" style="${unlocked}; background-color: ${baseColor};" class="flButton"></button>`
-
-        let btn = document.getElementById(`${this.#langObjId}_btn`)
-
-        let btnString = ""
-        if (this.#hasLangVars) {
-            let langKeys = Object.keys(LANG_VARS[this.#langObjId])
-            btnString = langObj[this.#langObjId]
-
-            langKeys.forEach(key => {
-                btnString = btnString.replace(LANG_VARS[this.#langObjId][key], this.#evaluateLangVarKey(key))
-            })
-        } else {
-            btnString = langObj[this.#langObjId]
-        }
-        btn.innerHTML = `<span>${btnString}</span>`
-        btn.setAttribute("onclick", this.#onClick)
-    }
-
-    updateAfter() {
-        let baseColor = this.#res.getResArr().color
-        let hoverColor = subtractColors(baseColor, "#111111")
-        let activeColor = subtractColors(baseColor, "#202020")
-
-        let btn = document.getElementById(`${this.#langObjId}_btn`)
-
-        removeHoverAndActiveColor(btn)
-        addHoverAndActiveColor(btn, baseColor, hoverColor, activeColor)
-    }
-
-    #evaluateLangVarKey(key) {
-        if (key === "qty") {
-            let resData = this.#res.getResData()
-            return Math.floor(evaluateResDataSum(resData.activeRate) + evaluateResDataSum(resData.bonuses["activeRate"]))
-        }
-    }
+    document.getElementById(barText).innerHTML = `${Math.floor(cur)} / ${max}`
+    document.getElementById(barProgress).style.width = `${(cur / max) * 100}%`
 }
 
-class BuildingButton {
+// Resource Button Section
+function generateResourceButton(classID, resText, resData, resKey, color, htmlElement) {
+    let baseColor = color
 
+    htmlElement.innerHTML += `<button id="${classID}_btn" style="display: none; background-color: ${baseColor}" class="flButton"></button>`
+
+    let langID = `RES_${classID}_BUY`
+    let langKeys = Object.keys(LANG_VARS[langID])
+    let btnString = langObj[langID]
+
+    langKeys.forEach(key => {
+        btnString = btnString.replace(LANG_VARS[langID][key], evaluateLangVarKey(key, resData))
+    })
+
+    let btn = document.getElementById(`${classID}_btn`)
+
+    btn.innerHTML = `<span>${btnString}</span>`
+    btn.setAttribute("onclick", `updateResource(${resText}, "${resKey}", true)`)
 }
 
-class PopulationButton {
+function generateResourceButton2(classID, color) {
+    let btn = document.getElementById(`${classID}_btn`)
 
+    let baseColor = color
+    let hoverColor = subtractColors(baseColor, "#111111")
+    let activeColor = subtractColors(baseColor, "#202020")
+
+    removeHoverAndActiveColor(btn)
+    addHoverAndActiveColor(btn, baseColor, hoverColor, activeColor)
 }
 
-const TIER1_TAB = new Tab("tier1", "t1story", "t1actions", {
-    manual: {
-        id: "t1manual", langObjId: "TAB_00000002", buttons: {
-            buyBiomass: new ResourceButton("t1manual", TIER1_RES_ALL["biomass"], "RES_10101001_BUY", true, true, `TIER1_RES_ALL["biomass"].updateResData("active1")`),
-            buyScrap: new ResourceButton("t1manual", TIER1_RES_ALL["scrap"], "RES_20101003_BUY", true, false, `TIER1_RES_ALL["scrap"].updateResData("active1")`),
-        }
-    },
-    producer: {
-        id: "t1producer", langObjId: "TAB_00000003", buttons: {
+// Building Button Section
+function generateBuildingButton(classID, bText, bData, bKey, color, htmlElement) {
+    let baseColor = color
 
-        }
-    },
-    storage: {
-        id: "t1storage", langObjId: "TAB_00000004", button: {
-            buyBarrel: new BuildingButton(),
-            buyScrapStack: new BuildingButton(),
-        }
+    htmlElement.innerHTML += `<button id="${classID}_btn" style="display: none; background-color: ${baseColor}" class="flButton"></button>`
+
+    let langID = `BLD_${classID}_BUY`
+    let langKeys = Object.keys(LANG_VARS[langID])
+    let btnString = langObj[langID]
+
+    langKeys.forEach(key => {
+        btnString = btnString.replace(LANG_VARS[langID][key], evaluateLangVarKey(key, bData))
+    })
+
+    let btn = document.getElementById(`${classID}_btn`)
+
+    btn.innerHTML = `<span>${btnString}</span>`
+    btn.setAttribute("onclick", `updateBuilding(${bText}, "${bKey}")`)
+}
+
+function generateBuildingButton2(classID, color) {
+    let btn = document.getElementById(`${classID}_btn`)
+
+    let baseColor = color
+    let hoverColor = subtractColors(baseColor, "#111111")
+    let activeColor = subtractColors(baseColor, "#202020")
+
+    removeHoverAndActiveColor(btn)
+    addHoverAndActiveColor(btn, baseColor, hoverColor, activeColor)
+}
+
+function updateBuildingButton(classID, bData) {
+    let langID = `BLD_${classID}_BUY`
+    let langKeys = Object.keys(LANG_VARS[langID])
+    let btnString = langObj[langID]
+
+    langKeys.forEach(key => {
+        btnString = btnString.replace(LANG_VARS[langID][key], evaluateLangVarKey(key, bData))
+    })
+
+    let btn = document.getElementById(`${classID}_btn`)
+
+    btn.innerHTML = `<span>${btnString}</span>`
+}
+
+function getBuildingHtmlElement(key) {
+    if (TIER1_BUILDING[key].type === "storage")
+        return "t1storage"
+    else if (TIER1_BUILDING[key].type === "producer")
+        return "t1producer"
+}
+
+// General UI
+function revealElements(htmlID, isBlock = false) {
+    let style = "flex"
+    if (isBlock)
+        style = "block"
+
+    htmlID.forEach(id => {
+        document.getElementById(id).style.display = style
+    })
+}
+
+// Language Related
+function changeLanguageResourceDisplay(resData) {
+    let barName = `${resData.classID}_name`
+
+    document.getElementById(barName).innerHTML = langObj[`RES_${resData.classID}_NAME`] + ":"
+}
+
+function changeLanguageResourceButton(resData, isBuilding=false) {
+    let btnName = `${resData.classID}_btn`
+    let langID = `RES_${resData.classID}_BUY`
+    if (isBuilding)
+        langID = `BLD_${resData.classID}_BUY`
+    let langKeys = Object.keys(LANG_VARS[langID])
+    let btnString = langObj[langID]
+
+    langKeys.forEach(key => {
+        btnString = btnString.replace(LANG_VARS[langID][key], evaluateLangVarKey(key, resData))
+    })
+
+    document.getElementById(btnName).innerHTML = `<span>${btnString}</span>`
+}
+
+function evaluateLangVarKey(key, resData) {
+    if (key === "qty") {
+        return Math.floor(calculate(resData, "activeRate") + calculate(resData, "activeRate", true))
     }
-})
+    if (key === "building_cost_0" || key === "building_cost_1") {
+        let index = key.split("_")[2]
+        let keys = Object.keys(resData.baseCost)
+
+        let baseCost = resData.baseCost[keys[index]]
+        let costCoefficient = resData.costCoefficient[keys[index]]
+        
+        return Math.floor(Math.pow(costCoefficient, resData.count) * baseCost)
+    }
+}

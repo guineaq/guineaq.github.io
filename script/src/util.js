@@ -1,10 +1,13 @@
 // LocalStorage function
-function fetch(key, isJSON = false, isString = false) {
+function fetch(key, isJSON = false, isString = false, isBoolean = false) {
     if (!isJSON)
-        if (isString)
-            return window.localStorage.getItem(key);
+        if (!isString)
+            if(isBoolean)
+                return window.localStorage.getItem(key) === "true"
+            else
+                return Number(window.localStorage.getItem(key));
         else
-            return Number(window.localStorage.getItem(key));
+            return window.localStorage.getItem(key);
     else
         return JSON.parse(window.localStorage.getItem(key));
 }
@@ -73,15 +76,9 @@ function removeHoverAndActiveColor(button) {
     button.removeEventListener('mouseup', button._onMouseUp);
 }
 
-function evaluateResDataSum(resData) {
-    if (typeof resData === 'object' && resData !== null && Object.keys(resData).length === 0) {
-        return 0; // normalization in case empty to avoid error
-    } else {
-        let sum = 0;
-        let dataKeys = Object.keys(resData)
-        dataKeys.forEach(key => {
-            sum += resData[key]
-        })
-        return sum
-    }
+// Logical Util Functions
+function getResourceKeyByClassID(resData, classID) {
+    return Object.keys(resData).find(key =>
+        resData[key].classID === classID
+    )
 }

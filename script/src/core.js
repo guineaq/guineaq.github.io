@@ -1,7 +1,6 @@
 // Tab Management Simple
 
 var TIER1_ENABLED = true
-var TIER2_ENABLED = false
 
 function openTab(ev, tabName) {
     var i, tabcontent, tablinks
@@ -117,5 +116,10 @@ function save() {
 }
 
 // Ticks
+window.onload = () => {
+    initializeTier1()
+}
+
 window.setInterval(render, TICK);
 window.setInterval(update, TICK);
+window.setInterval(save, 60000);
